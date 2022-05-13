@@ -11,6 +11,10 @@ function Nav() {
   const navigate = useNavigate();
   const ref = useRef(null);
 
+  const handleChangeNavigate = (event, newValue) => {
+    setValue(newValue);
+  };
+
   useEffect(() => {
     navigate(routes[value].path);
     ref.current.ownerDocument.documentElement.scrollTop = 0;
@@ -26,9 +30,7 @@ function Nav() {
         <BottomNavigation
           showLabels
           value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
+          onChange={handleChangeNavigate}
         >
           {routes.map(({ label, icon, id, path }, index) => (
             <BottomNavigationAction

@@ -51,7 +51,6 @@ function Profile() {
           displayName={user.displayName}
           avatarSrc={user.photoURL}
         />
-        <Button>aerEF</Button>
         <Typography
           variant="h1"
           align="center"
