@@ -8,7 +8,7 @@ import { AuthContextProvider } from "./context/AuthContext";
 import RequiredAuth from "./pages/RequiredAuth";
 import { ThemeProvider } from "@mui/material";
 import myTheme from "./theme.js";
-import { ErrorContainer } from "./context/ErrorHandlerContext";
+import ErrorContainer from "./components/Error/ErrorContainer";
 
 function RouteSwitch() {
   return (
