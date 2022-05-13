@@ -38,8 +38,6 @@ function Nav() {
               label={label}
               icon={icon}
               arial-label={label}
-              disableRipple
-              disableTouchRipple
               value={index}
             />
           ))}

@@ -46,6 +46,26 @@ const themeOptions = {
         fontWeight: 300,
       },
     },
+    MuiBottomNavigationAction: {
+      styleOverrides: {
+        root: {
+          borderTop: "3px solid white",
+          "&.Mui-selected": {
+            color: "#4B92F5",
+            borderTop: "3px solid #4B92F5",
+          },
+          "&.MuiBottomNavigationAction-label": {
+            color: "blue",
+          },
+        },
+        label: {
+          fontSize: "0.75rem",
+          "&.Mui-selected": {
+            fontSize: "0.75rem",
+          },
+        },
+      },
+    },
   },
 };
 

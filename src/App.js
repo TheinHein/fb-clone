@@ -1,11 +1,15 @@
 import Nav from "./components/Nav";
 import { Outlet } from "react-router-dom";
+import { ThemeProvider } from "@emotion/react";
+import myTheme from "./theme";
 
 function App() {
   return (
     <>
-      <Outlet />
-      <Nav />
+      <ThemeProvider theme={myTheme}>
+        <Outlet />
+        <Nav />
+      </ThemeProvider>
     </>
   );
 }
