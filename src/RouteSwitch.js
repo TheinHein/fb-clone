@@ -3,7 +3,7 @@ import App from "./App";
 import Page from "./components/Page";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import { routes } from "./utils";
+import { routes } from "./data/routes";
 import { AuthContextProvider } from "./context/AuthContext";
 import RequiredAuth from "./pages/RequiredAuth";
 import { ThemeProvider } from "@mui/material";

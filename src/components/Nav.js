@@ -4,7 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { routes } from "../utils";
+import { routes } from "../data/routes";
 
 function Nav() {
   const [value, setValue] = useState(0);

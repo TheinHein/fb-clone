@@ -1,6 +1,6 @@
 import Shortcuts from "./Shortcuts";
 import { Typography, Stack } from "@mui/material";
-import Post from "../Post";
+import Post from "../Home/Post";
 import { useAuthContext } from "../../context/AuthContext";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 
