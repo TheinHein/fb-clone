@@ -9,7 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Home from "./components/Home";
 import Friends from "./components/Friends";
-import Profile from "./components/Profile";
+import Profile from "./components/Profile/Profile";
 import Notifications from "./components/Notifications";
 import Menu from "./components/Menu";
 

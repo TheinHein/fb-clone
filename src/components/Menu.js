@@ -1,5 +1,11 @@
-import { Avatar, Box, Card, CardHeader, CardContent } from "@mui/material";
-import BaseButton from "./BaseButton";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardHeader,
+  CardContent,
+  Button,
+} from "@mui/material";
 import MenuButtons from "./MenuButtons";
 import SimpleAccordion from "./SimpleAccordion";
 import signOutFromFirebase from "../signOutFromFirebase";
@@ -30,13 +36,9 @@ function Menu() {
       <MenuButtons />
       <SimpleAccordion />
       <CardContent>
-        <BaseButton
-          size="small"
-          label={"Log out"}
-          color="neutral"
-          btnColor="rgba(0,0,0,0.1)"
-          onClick={handleClickSignOut}
-        />
+        <Button fullWidth variant="text" onClick={handleClickSignOut}>
+          Log Out
+        </Button>
       </CardContent>
     </Box>
   );

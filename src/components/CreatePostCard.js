@@ -5,12 +5,11 @@ import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import SwipeableTemporaryDrawer from "./SwipeableTemporaryDrawer";
 import CreatePostDrawer from "./CreatePostDrawer";
-import AddPhotosBtn from "./AddPhotosBtn";
+// import AddPhotosBtn from "./AddPhotosBtn";
 import WhatsOnYourMindBtn from "./WhatsOnYourMindBtn";
 import ActionBtns from "./ActionBtns";
 import { reelRoomGroup } from "../actions";
 import { useAuthContext } from "../context/AuthContext";
-import { useEffect } from "react";
 
 export default function CreatePostCard() {
   const context = useAuthContext();
@@ -43,7 +42,7 @@ export default function CreatePostCard() {
             )}
           />
         }
-        action={<AddPhotosBtn />}
+        // action={<AddPhotosBtn />}
       />
       <Divider sx={{ width: "95%", margin: "0 auto" }} />
       <CardActions sx={{ backgroundColor: "#white" }}>

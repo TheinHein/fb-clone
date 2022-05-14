@@ -1,10 +1,3 @@
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
@@ -29,19 +22,4 @@ const about = [
   },
 ];
 
-function About() {
-  return (
-    <List dense disablePadding>
-      {about.map(({ name, icon, id }) => (
-        <ListItem key={id} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>{icon}</ListItemIcon>
-            <ListItemText primary={name} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
-  );
-}
-
-export default About;
+export default about;

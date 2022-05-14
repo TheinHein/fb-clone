@@ -15,7 +15,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useAuthContext } from "../context/AuthContext";
 import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActualOutlined";
 import { useTheme } from "@emotion/react";
-import About from "./About";
+import About from "./Profile/About";
 import SwipeableTemporaryDrawer from "./SwipeableTemporaryDrawer";
 import SelectPhotoDrawer from "./SelectPhotoDrawer";
 
