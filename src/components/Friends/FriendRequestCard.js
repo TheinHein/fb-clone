@@ -1,7 +1,7 @@
 import FriendCard from "./FriendCard";
 import FriendRequestButtons from "./FriendRequestButtons";
-import { useAuthContext } from "../context/AuthContext";
-import { db } from "../firebase";
+import { useAuthContext } from "../../context/AuthContext";
+import { db } from "../../firebase";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 function FriendRequestCard({ friend, removeFromPendingRequest }) {

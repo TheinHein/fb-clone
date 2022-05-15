@@ -27,6 +27,7 @@ export const useGetFriendsPosts = () => {
                     prev.concat({
                       displayName: friend.data().displayName,
                       photoURL: friend.data().photoURL,
+                      userId: friend.id,
                       ...post.data(),
                       id: post.id,
                     }),

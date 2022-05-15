@@ -1,7 +1,8 @@
 import { Stack } from "@mui/material";
+import { Fragment } from "react";
 import { useGetFriendsPosts } from "../../hooks/useGetFriendsPosts";
 import CreatePostCard from "../CreatePostCard";
-import Post from "./Post";
+import PostContainer from "./PostContainer";
 
 function Home() {
   const { posts, loading } = useGetFriendsPosts();
@@ -9,9 +10,15 @@ function Home() {
   return (
     <Stack spacing={1} m={1}>
       <CreatePostCard />
-      {posts.map((post) => (
-        <Post post={post} loading={loading} />
-      ))}
+      {loading ? (
+        <PostContainer loading />
+      ) : (
+        <>
+          {posts.map((post) => (
+            <PostContainer post={post} loading={loading} key={post.id} />
+          ))}
+        </>
+      )}
     </Stack>
   );
 }

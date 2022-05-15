@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 
-function Bod({ content }) {
+function BodCard({ content }) {
   return (
     <Box
       sx={{
@@ -15,4 +15,4 @@ function Bod({ content }) {
   );
 }
 
-export default Bod;
+export default BodCard;

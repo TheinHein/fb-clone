@@ -1,4 +1,4 @@
-import PeopleYouMayKnowCard from "./PeopleYouMayKnowCard";
+import PeopleYouMayKnowCard from "./Friends/PeopleYouMayKnowCard";
 import { Box } from "@mui/material";
 
 function SearchDrawerResults({ results }) {

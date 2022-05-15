@@ -1,5 +1,5 @@
 import SwipeableTemporaryDrawer from "../SwipeableTemporaryDrawer";
-import EditProfileDrawer from "../EditProfileDrawer";
+import EditProfileDrawer from "../EditProfile/EditProfileDrawer";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -30,12 +30,12 @@ function CoverPhoto() {
               fullWidth
               startIcon={<EditIcon />}
               endIcon={"Edit Profile"}
-              onClick={() => toggleDrawer(true)}
+              onClick={toggleDrawer}
               variant="grey"
             />
           )}
           drawer={(toggleDrawer) => (
-            <EditProfileDrawer toggleDrawer={() => toggleDrawer(false)} />
+            <EditProfileDrawer toggleDrawer={toggleDrawer} />
           )}
         />
         <Button variant="grey">

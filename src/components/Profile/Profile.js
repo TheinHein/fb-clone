@@ -6,7 +6,7 @@ import Bod from "./Bod";
 
 function Profile() {
   return (
-    <Stack spacing={2} divider={<Divider />} p="15px">
+    <Stack spacing={1} m={1} divider={<Divider />}>
       <CoverPhoto />
       <About />
       <Friends />

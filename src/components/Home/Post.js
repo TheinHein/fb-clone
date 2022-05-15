@@ -10,22 +10,39 @@ import {
   Skeleton,
   Button,
   Stack,
+  IconButton,
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
-import ActionBtns from "../ActionBtns";
-import { likeCommentShare } from "../../actions";
-import Reaction from "../Reaction";
-import Bod from "../Bod";
+import BodCard from "../Profile/BodCard";
 import PostStatus from "../PostStatus";
 import Counter from "../Counter";
 import ClearBtn from "../ClearBtn";
-import HorMoreBtn from "../HorMoreBtn";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import CommentContainer from "./CommentContainer";
+import CommentsContainer from "./CommentsContainer";
+import { useAuthContext } from "../../context/AuthContext";
+import useGetUserDataFromFirestore from "../../hooks/useGetUserDataFromFirestore";
 
-export default function Post({ post, loading }) {
-  const { photoURL, fileURL, text, content, timestamp, displayName } = post;
+export default function Post({ post = {}, loading, handleLike }) {
+  const {
+    photoURL,
+    fileURL,
+    text,
+    content,
+    timestamp,
+    displayName,
+    id,
+    userId,
+    likes,
+  } = post;
+
+  const context = useAuthContext();
+  const userData = useGetUserDataFromFirestore(context.user.id);
+
   return (
     <Card>
       <CardHeader
+        sx={{ paddingBottom: 1 }}
         avatar={
           loading ? (
             <Skeleton
@@ -56,7 +73,10 @@ export default function Post({ post, loading }) {
           loading ? (
             <Skeleton animation="wave" height={10} width="20%" />
           ) : (
-            <PostStatus timestamp={timestamp} icon={<PeopleIcon />} />
+            <PostStatus
+              timestamp={timestamp}
+              icon={<PeopleIcon sx={{ fontSize: "1rem" }} />}
+            />
           )
         }
         action={
@@ -67,13 +87,15 @@ export default function Post({ post, loading }) {
             </Stack>
           ) : (
             <>
-              <HorMoreBtn />
+              <IconButton>
+                <MoreHorizIcon />
+              </IconButton>
               <ClearBtn />
             </>
           )
         }
       />
-      <CardContent>
+      <CardContent sx={{ paddingTop: "0" }}>
         <Typography>
           {loading ? (
             <>
@@ -88,7 +110,7 @@ export default function Post({ post, loading }) {
             text
           )}
         </Typography>
-        {content && <Bod content={content} />}
+        {content && <BodCard content={content} />}
       </CardContent>
 
       {fileURL && (
@@ -118,29 +140,63 @@ export default function Post({ post, loading }) {
           </>
         ) : (
           <>
-            <Reaction />
+            <div>
+              {userData.likedPosts &&
+              userData.likedPosts.some((p) => p.id === post.id)
+                ? `You and ${likes - 1} others`
+                : likes}{" "}
+              likes
+            </div>
             <Counter name={"Comments"} counts={2} />
           </>
         )}
       </CardActions>
-      <Divider sx={{ width: "95%", margin: "0 auto" }} />
+      <Divider sx={{ width: "97%", margin: "0 auto" }} />
       <CardActions>
         {loading ? (
-          <Stack direction="row" spacing={2}>
-            <Skeleton height={35} width={150}>
+          <Stack direction="row" justifyContent="space-evenly" width={"100%"}>
+            <Skeleton>
               <Button />
             </Skeleton>
-            <Skeleton height={35} width={150}>
+            <Skeleton>
               <Button />
             </Skeleton>
-            <Skeleton height={35} width={150}>
+            <Skeleton>
               <Button />
             </Skeleton>
           </Stack>
         ) : (
-          <ActionBtns color={"gray"} actions={likeCommentShare} />
+          <Button
+            fullWidth
+            variant="muted"
+            onClick={handleLike}
+            disabled={
+              userData.likedPosts &&
+              userData.likedPosts.some((p) => p.id === post.id)
+            }
+          >
+            Like
+          </Button>
         )}
       </CardActions>
+      <Divider sx={{ width: "97%", margin: "0 auto" }} />
+      <CommentsContainer postId={id} userId={userId} />
+      {loading ? (
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          width={"100%"}
+          p={1}
+        >
+          <Skeleton variant="circular">
+            <Avatar />
+          </Skeleton>
+          <Skeleton width={"80%"} sx={{ borderRadius: "9999px" }} />
+          <Skeleton variant="circular" width={40} height={40} />
+        </Stack>
+      ) : (
+        <CommentContainer postId={id} userId={userId} />
+      )}
     </Card>
   );
 }

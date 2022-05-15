@@ -1,8 +1,10 @@
-import { Box, Divider, IconButton, Typography } from "@mui/material";
+import { Divider, Box, IconButton, Typography, Stack } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import PhotoPickerContainer from "./PhotoPickerContainer";
+import About from "../Profile/About";
+import ProfilePic from "./ProfilePic";
+import CoverPhoto from "./CoverPhoto";
 
-function SelectPhotoDrawer({ toggleDrawer }) {
+function EditProfileDrawer({ toggleDrawer }) {
   return (
     <>
       <Box
@@ -29,19 +31,28 @@ function SelectPhotoDrawer({ toggleDrawer }) {
             left: "50%",
             transform: "translateX(-50%)",
           }}
-          variant="h3"
+          variant="h2"
         >
-          Select Profile Picture
+          Edit Profile
         </Typography>
       </Box>
       <Divider sx={{ width: "100%" }} />
-
-      <PhotoPickerContainer
-        toggleDrawer={toggleDrawer}
-        id={"profile-pic-picker"}
-      />
+      <Stack
+        m="0 auto"
+        p={1}
+        spacing={1}
+        width={{ md: "50%" }}
+        divider={<Divider />}
+      >
+        <ProfilePic />
+        <CoverPhoto />
+        <Typography>Bio</Typography>
+        <Typography>Describe yourself...</Typography>
+        <Typography>Details</Typography>
+        <About />
+      </Stack>
     </>
   );
 }
 
-export default SelectPhotoDrawer;
+export default EditProfileDrawer;

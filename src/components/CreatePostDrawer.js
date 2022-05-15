@@ -41,6 +41,8 @@ function CreatePostDrawer({ toggleDrawer }) {
         timestamp: serverTimestamp(),
         by: doc(db, `users/${context.user.id}`),
         fileURL: file.file ? LOADING_IMAGE_URL : "",
+        likes: 0,
+        totalComments: 0,
       }
     );
     toggleDrawer();

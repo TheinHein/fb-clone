@@ -1,11 +1,11 @@
 import {
-  IconButton,
   Box,
   Input,
-  Paper,
   Typography,
   Skeleton,
   Button,
+  Avatar,
+  Stack,
 } from "@mui/material";
 import React from "react";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
@@ -13,7 +13,7 @@ import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 function PhotoPicker(props) {
   const { onChange, id, photo, onSave } = props;
   return (
-    <>
+    <Stack p={1} m="0 auto" width={{ md: "50%" }} spacing={3}>
       <label htmlFor={id}>
         <Input
           onChange={onChange}
@@ -22,26 +22,22 @@ function PhotoPicker(props) {
           type="file"
           style={{ visibility: "hidden" }}
         />
-        <IconButton aria-label="upload picture" component="span">
-          <PhotoLibraryIcon sx={{ color: "green" }} />
-        </IconButton>
+        <Button
+          aria-label="upload picture"
+          startIcon={<PhotoLibraryIcon />}
+          endIcon="Choose a photo"
+          variant="blue"
+          component="span"
+        />
       </label>
       {photo.file && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-            alignItems: "center",
-          }}
-        >
-          <Typography>Preview profile picture</Typography>
+        <Stack spacing={3} alignItems="center">
+          <Typography variant="h3">Preview profile picture</Typography>
           {photo.fileURI ? (
-            <Paper
+            <Avatar
               sx={{ width: "300px", height: "300px", borderRadius: "50%" }}
               src={photo.fileURI}
               alt={photo.file.name}
-              component="img"
             />
           ) : (
             <Skeleton
@@ -52,9 +48,9 @@ function PhotoPicker(props) {
             />
           )}
           <Button onClick={onSave}>Save</Button>
-        </Box>
+        </Stack>
       )}
-    </>
+    </Stack>
   );
 }
 

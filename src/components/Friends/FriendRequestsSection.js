@@ -1,16 +1,13 @@
-import { useTheme } from "@emotion/react";
-import { Box, Chip, Typography } from "@mui/material";
-import { useAuthContext } from "../context/AuthContext";
+import { Button, Stack, Typography } from "@mui/material";
+import { useAuthContext } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import useGetUserDataFromFirestore from "../hooks/useGetUserDataFromFirestore";
-import BaseButton from "./BaseButton";
+import { db } from "../../firebase";
+import useGetUserDataFromFirestore from "../../hooks/useGetUserDataFromFirestore";
 import FriendRequestCard from "./FriendRequestCard";
 import _ from "lodash";
 
 function FriendRequestsSection() {
-  const theme = useTheme();
   const context = useAuthContext();
   const user = useGetUserDataFromFirestore(context.user.id);
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -28,22 +25,13 @@ function FriendRequestsSection() {
   }, [user.pendingRequests]);
 
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Typography>Friend Requests</Typography>
-        <Chip
-          clickable
-          label="See All"
-          sx={{ bgcolor: "white", color: "#4B92F5" }}
-          arial-label="see all friend requests"
-        />
-      </Box>
+    <Stack spacing={2}>
+      <Stack direction="row" justifyContent="space-between">
+        <Typography variant="h3">Friend Requests</Typography>
+        <Button arial-label="see all friend requests" size="small">
+          See All
+        </Button>
+      </Stack>
       {pendingRequests.map((pendingRequest) => (
         <FriendRequestCard
           friend={pendingRequest}
@@ -51,14 +39,10 @@ function FriendRequestsSection() {
           key={pendingRequest.id}
         />
       ))}
-      <Box>
-        <BaseButton
-          label="See All"
-          labelColor={theme.palette.common.black}
-          btnColor={theme.palette.grey[200]}
-        />
-      </Box>
-    </>
+      <Button fullWidth variant="grey">
+        See All
+      </Button>
+    </Stack>
   );
 }
 

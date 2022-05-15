@@ -1,6 +1,6 @@
 import {
   Avatar,
-  Box,
+  Stack,
   Card,
   CardHeader,
   CardContent,
@@ -8,8 +8,9 @@ import {
 } from "@mui/material";
 import MenuButtons from "./MenuButtons";
 import SimpleAccordion from "./SimpleAccordion";
-import signOutFromFirebase from "../signOutFromFirebase";
-import { useAuthContextUpdater } from "../context/AuthContext";
+import signOutFromFirebase from "../../signOutFromFirebase";
+import { useAuthContextUpdater } from "../../context/AuthContext";
+import { accordionList } from "../../menuBntList";
 
 function Menu() {
   const context = useAuthContextUpdater();
@@ -20,7 +21,7 @@ function Menu() {
   };
 
   return (
-    <Box sx={{ marginBottom: "15px" }}>
+    <Stack p={1}>
       <Card square elevation={0} sx={{ bgcolor: "transparent" }}>
         <CardHeader
           avatar={<Avatar alt="Travis Howard" src="" width={40} height={40} />}
@@ -34,13 +35,19 @@ function Menu() {
         />
       </Card>
       <MenuButtons />
-      <SimpleAccordion />
-      <CardContent>
-        <Button fullWidth variant="text" onClick={handleClickSignOut}>
-          Log Out
-        </Button>
-      </CardContent>
-    </Box>
+      {accordionList.map(({ summary, details }, index) => (
+        <SimpleAccordion
+          summary={summary}
+          details={details}
+          index={index}
+          key={summary.id}
+        />
+      ))}
+
+      <Button fullWidth variant="grey" onClick={handleClickSignOut}>
+        Log Out
+      </Button>
+    </Stack>
   );
 }
 

@@ -44,7 +44,12 @@ const ProfileAvatar = () => {
           <Avatar
             alt={context.user.displayName}
             src={context.user.photoURL}
-            sx={{ width: 200, height: 200, border: "2px solid white" }}
+            sx={{
+              width: 200,
+              height: 200,
+              border: "2px solid white",
+              bgcolor: "rgb(190,190,190)",
+            }}
           />
         </Badge>
       </Box>

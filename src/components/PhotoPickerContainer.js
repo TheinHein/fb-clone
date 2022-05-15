@@ -4,14 +4,19 @@ import PhotoPicker from "./PhotoPicker";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from "../firebase";
 import { updateDoc, doc } from "firebase/firestore";
+import { CircularProgress, Modal, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 
 function PhotoPickerContainer({ toggleDrawer, id }) {
   const context = useAuthContext();
   const update = useAuthContextUpdater();
   const [photo, setFile] = useState({ file: null, fileURI: null });
+  const [loading, setLoading] = useState(false);
 
   const onSave = async () => {
+    setLoading(true);
     await handleFile();
+    setLoading(false);
     toggleDrawer(false);
   };
 
@@ -47,12 +52,32 @@ function PhotoPickerContainer({ toggleDrawer, id }) {
   };
 
   return (
-    <PhotoPicker
-      onChange={handleChangeFile}
-      onSave={onSave}
-      id={id}
-      photo={photo}
-    />
+    <>
+      <PhotoPicker
+        onChange={handleChangeFile}
+        onSave={onSave}
+        id={id}
+        photo={photo}
+      />
+      <Modal open={loading}>
+        <Stack
+          bgcolor="white"
+          position="absolute"
+          top="50%"
+          left="50%"
+          p={3}
+          alignItems="center"
+          borderRadius={2}
+          spacing={2}
+          sx={{ transform: "translate(-50%,-50%)" }}
+        >
+          <Typography id="modal-modal-description" variant="h6" component="h3">
+            Setting profile picture
+          </Typography>
+          <CircularProgress />
+        </Stack>
+      </Modal>
+    </>
   );
 }
 

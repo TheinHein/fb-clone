@@ -1,8 +1,8 @@
 import React from "react";
 import FriendCard from "./FriendCard";
 import PeopleYouMayKnowButtons from "./PeopleYouMayKnowButtons";
-import { useAuthContext } from "../context/AuthContext";
-import { db } from "../firebase";
+import { useAuthContext } from "../../context/AuthContext";
+import { db } from "../../firebase";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 function PeopleYouMayKnowCard({ friend }) {

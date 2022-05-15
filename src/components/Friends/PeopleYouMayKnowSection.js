@@ -5,7 +5,7 @@ import PeopleYouMayKnowCard from "./PeopleYouMayKnowCard";
 function PeopleYouMayKnowSection() {
   return (
     <>
-      <Typography>People You May Know</Typography>
+      <Typography variant="h3">People You May Know</Typography>
       {/* <PeopleYouMayKnowCard />
       <PeopleYouMayKnowCard /> */}
     </>

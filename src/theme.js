@@ -22,27 +22,28 @@ const themeOptions = {
   typography: {
     fontFamily: "Poppins, Helvetica, Arial, sans-serif",
     h1: {
-      fontSize: "1.2rem",
-      fontWeight: 500,
-    },
-    h2: {
       fontSize: "1.5rem",
       fontWeight: 500,
     },
+    h2: {
+      fontSize: "1.3rem",
+      fontWeight: 500,
+    },
     h3: {
-      fontSize: "1.2rem",
+      fontSize: "1.1rem",
       fontWeight: 500,
     },
     body1: {
-      fontSize: "1rem",
-      lineHeight: 1,
+      fontSize: "0.85rem",
+      lineHeight: 1.5,
       fontWeight: 300,
+      letterSpacing: "0.009em",
     },
     button: {
       textTransform: "none",
       fontSize: "0.875rem",
       lineHeight: 1,
-      fontWeight: 500,
+      fontWeight: 400,
     },
   },
   components: {
@@ -86,6 +87,17 @@ const themeOptions = {
           props: { variant: "grey" },
           style: {
             backgroundColor: "rgba(0,0,0,0.1)",
+          },
+        },
+      ],
+    },
+    MuiTypography: {
+      variants: [
+        {
+          props: { variant: "muted" },
+          style: {
+            fontSize: "0.7rem",
+            color: "rgb(100,100,100)",
           },
         },
       ],

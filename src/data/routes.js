@@ -8,10 +8,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Home from "../components/Home/Home";
-import Friends from "../components/Friends";
+import Friends from "../components/Friends/Friends";
 import Profile from "../components/Profile/Profile";
-import Notifications from "../components/Notifications";
-import Menu from "../components/Menu";
+import Notifications from "../components/Notifications/Notifications";
+import Menu from "../components/Menu/Menu";
 
 export const routes = [
   {

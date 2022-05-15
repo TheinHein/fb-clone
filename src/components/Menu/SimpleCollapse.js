@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import BaseButton from "./BaseButton";
+import { Button } from "@mui/material";
 
 export default function SimpleCollapse({ children, collapsedSize }) {
   const [checked, setChecked] = useState(false);
@@ -18,13 +18,9 @@ export default function SimpleCollapse({ children, collapsedSize }) {
           {children}
         </Collapse>
         <Box sx={{ margin: "10px 0" }}>
-          <BaseButton
-            size="small"
-            label={checked ? "See Less" : "See More"}
-            color="neutral"
-            onClick={handleClick}
-            btnColor="rgba(0,0,0,0.1)"
-          />
+          <Button fullWidth variant="grey" onClick={handleClick}>
+            {checked ? "See Less" : "See More"}
+          </Button>
         </Box>
         <div ref={btmRef} />
       </Box>

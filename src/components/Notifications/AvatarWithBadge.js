@@ -8,13 +8,11 @@ function AvatarWithBadge() {
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       badgeContent={
         <NotificationsIcon
-          alt="Remy Sharp"
-          src=""
           sx={{
             width: 25,
             height: 25,
             borderRadius: "100%",
-            bgcolor: "gray",
+            bgcolor: "rgb(100,100,100)",
             color: "white",
             padding: "5px",
           }}
