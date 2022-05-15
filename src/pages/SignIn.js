@@ -6,8 +6,6 @@ import PasswordInput from "../components/PasswordInput.js";
 import InputWithClearBtn from "../components/InputWithClearBtn.js";
 import { useAuthContextUpdater } from "../context/AuthContext.js";
 import { useLocation, useNavigate } from "react-router-dom";
-import setAuthStatePersistence from "../setAuthStatePersistance.js";
-import { signIntoFirebase } from "../signIntoFirebase.js";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import useErrorHandler from "../hooks/useErrorHandler";
 
@@ -22,13 +20,13 @@ function SignIn() {
   let from = location.state?.from?.pathname || "/";
 
   const [user, setUser] = useState({ email: "", password: "" });
+
   const context = useAuthContextUpdater();
 
   const handleSubmitSignIn = async (event) => {
     event.preventDefault();
     try {
-      await setAuthStatePersistence(user, signIntoFirebase);
-      context.handleSignIn();
+      await context.handleSignIn(user);
       navigate(from, { replace: true });
     } catch (error) {
       errorContext.setError("error", error);

@@ -1,11 +1,20 @@
 import { Stack } from "@mui/material";
-import { Fragment } from "react";
-import { useGetFriendsPosts } from "../../hooks/useGetFriendsPosts";
+import { useEffect, useState } from "react";
+import { useAuthContext } from "../../context/AuthContext";
+import FB from "../../FB";
 import CreatePostCard from "../CreatePostCard";
 import PostContainer from "./PostContainer";
 
 function Home() {
-  const { posts, loading } = useGetFriendsPosts();
+  const context = useAuthContext();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    FB.getAllFriendsPosts(context.user.id, setPosts);
+    setLoading(false);
+  }, [context.user.id]);
 
   return (
     <Stack spacing={1} m={1}>

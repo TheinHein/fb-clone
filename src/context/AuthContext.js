@@ -8,6 +8,7 @@ import {
 } from "react";
 import { onAuthStateChanged, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
+import FB from "../FB";
 
 const AuthContext = createContext();
 const AuthContextUpdater = createContext();
@@ -29,7 +30,9 @@ export const AuthContextProvider = ({ children }) => {
     setAuthenticating(false);
   }, []);
 
-  const handleSignIn = useCallback(() => {
+  const handleSignIn = useCallback(async (user) => {
+    await FB.setAuthStatePersistence(user, FB.signIn);
+
     if (auth.currentUser) {
       const { displayName, photoURL, uid } = auth.currentUser;
       setUser({ displayName, photoURL, id: uid });

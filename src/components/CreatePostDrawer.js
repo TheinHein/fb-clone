@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  updateDoc,
-  doc,
-} from "firebase/firestore";
-import { db, storage } from "../firebase";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+
 import {
   Avatar,
   Card,
@@ -25,7 +17,7 @@ import UnstyledInputBasic from "./UnstyledInputBasic";
 import { useAuthContext } from "../context/AuthContext";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import ClearBtn from "./ClearBtn";
-const LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif?a";
+import FB from "../FB";
 
 function CreatePostDrawer({ toggleDrawer }) {
   const context = useAuthContext();
@@ -34,34 +26,10 @@ function CreatePostDrawer({ toggleDrawer }) {
   const [file, setFile] = useState({ file: null, fileURI: null });
 
   const handleClickPost = async () => {
-    const postRef = await addDoc(
-      collection(db, `users/${context.user.id}/posts`),
-      {
-        text: input,
-        timestamp: serverTimestamp(),
-        by: doc(db, `users/${context.user.id}`),
-        fileURL: file.file ? LOADING_IMAGE_URL : "",
-        likes: 0,
-        totalComments: 0,
-      }
-    );
+    FB.createPost(context.user.id, input, file.file);
+
     toggleDrawer();
     setInput("");
-    handleFile(file.file, postRef);
-  };
-
-  const handleFile = async (file, postRef) => {
-    if (file) {
-      const filePath = `${context.user.id}/${postRef.id}/${file.name}`;
-      const newFileRef = ref(storage, filePath);
-      const fileSnapShot = await uploadBytesResumable(newFileRef, file);
-      const publicFileURL = await getDownloadURL(newFileRef);
-
-      await updateDoc(doc(db, `users/${context.user.id}/posts/${postRef.id}`), {
-        fileURL: publicFileURL,
-        storageURI: fileSnapShot.metadata.fullPath,
-      });
-    }
   };
 
   const handleChangeInput = (event) => {

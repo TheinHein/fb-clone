@@ -4,6 +4,7 @@ import {
   getDoc,
   getDocs,
   limit,
+  onSnapshot,
   orderBy,
   query,
   startAfter,
@@ -23,8 +24,7 @@ function CommentsContainer({ postId, userId }) {
       orderBy("timestamp", "desc"),
       limit(1)
     );
-    const querySnapshot = await getDocs(q);
-    handle(querySnapshot);
+    onSnapshot(q, (snapShot) => handle(snapShot));
   }, [postId, userId]);
 
   const fetchMoreComments = useCallback(

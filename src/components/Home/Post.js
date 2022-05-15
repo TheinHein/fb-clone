@@ -38,7 +38,6 @@ export default function Post({ post = {}, loading, handleLike }) {
 
   const context = useAuthContext();
   const userData = useGetUserDataFromFirestore(context.user.id);
-
   return (
     <Card>
       <CardHeader
@@ -140,13 +139,13 @@ export default function Post({ post = {}, loading, handleLike }) {
           </>
         ) : (
           <>
-            <div>
+            {/* <div>
               {userData.likedPosts &&
               userData.likedPosts.some((p) => p.id === post.id)
                 ? `You and ${likes.length - 1} others `
                 : likes.length}
               likes
-            </div>
+            </div> */}
             <Counter name={"Comments"} counts={2} />
           </>
         )}
