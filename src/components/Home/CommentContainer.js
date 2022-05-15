@@ -4,6 +4,7 @@ import {
   serverTimestamp,
   doc,
   runTransaction,
+  getDoc,
 } from "firebase/firestore";
 
 import { useState } from "react";
@@ -21,17 +22,23 @@ function CommentContainer({ postId, userId }) {
 
   const handleSubmitComment = async (event) => {
     event.preventDefault();
-    await addDoc(collection(db, `users/${userId}/posts/${postId}/comments`), {
+    const q = collection(db, `users/${userId}/posts/${postId}/comments`);
+    await addDoc(q, {
       text: comment,
       timestamp: serverTimestamp(),
       by: doc(db, `users/${context.user.id}`),
     });
-    const postDocRef = doc(db, `users/${userId}/posts`, `${postId}`);
-    await runTransaction(db, async (transaction) => {
-      const postDoc = await transaction.get(postDocRef);
-      const newTotalComments = postDoc.data().totalComments + 1;
-      transaction.update(postDocRef, { totalComments: newTotalComments });
-    });
+    // const postDocRef = doc(db, `users/${userId}/posts`, `${postId}`);
+
+    // await runTransaction(db, async (transaction) => {
+    //   const postDoc = await transaction.get(postDocRef);
+    //   console.log(postDoc);
+    //   if (!postDoc.exists()) {
+    //     throw new Error("POST NOT EXIST");
+    //   }
+    //   const newTotalComments = postDoc.data().totalComments + 1;
+    //   transaction.update(postDocRef, { totalComments: newTotalComments });
+    // });
     setComment("");
   };
 

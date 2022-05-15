@@ -143,8 +143,8 @@ export default function Post({ post = {}, loading, handleLike }) {
             <div>
               {userData.likedPosts &&
               userData.likedPosts.some((p) => p.id === post.id)
-                ? `You and ${likes - 1} others`
-                : likes}{" "}
+                ? `You and ${likes.length - 1} others `
+                : likes.length}
               likes
             </div>
             <Counter name={"Comments"} counts={2} />

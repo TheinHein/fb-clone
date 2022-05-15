@@ -4,6 +4,7 @@ import { db } from "../firebase";
 import _ from "lodash";
 import { useAuthContext } from "../context/AuthContext";
 import useGetUserDataFromFirestore from "./useGetUserDataFromFirestore";
+import app from "../FB";
 
 export const useGetFriendsPosts = () => {
   const context = useAuthContext();
@@ -13,37 +14,10 @@ export const useGetFriendsPosts = () => {
   useEffect(() => {
     if (user.friends) {
       setLoading(true);
-      user.friends.forEach((friend) => {
-        onSnapshot(
-          collection(db, `users/${friend.id}/posts`),
-          (querySnapshot) => {
-            querySnapshot.forEach(async (post) => {
-              const friend = await getDoc(
-                doc(db, `users/${post.data().by.id}`)
-              );
-              setPosts((prev) =>
-                _.orderBy(
-                  _.uniqBy(
-                    prev.concat({
-                      displayName: friend.data().displayName,
-                      photoURL: friend.data().photoURL,
-                      userId: friend.id,
-                      ...post.data(),
-                      id: post.id,
-                    }),
-                    "id"
-                  ),
-                  ["timestamp.seconds"],
-                  ["desc"]
-                )
-              );
-            });
-          }
-        );
-      });
+      app.getAllFriendsPosts(context.user.id, setPosts);
       setLoading(false);
     }
-  }, [user.friends]);
+  }, [user.friends, context.user.id]);
 
   return { posts, loading };
 };
