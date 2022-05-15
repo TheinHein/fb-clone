@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import useErrorHandler from "../hooks/useErrorHandler.js";
 import Loading from "./Loading.js";
+import FB from "../FB.js";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -36,10 +37,7 @@ function SignUp() {
     event.preventDefault();
     try {
       setLoading(true);
-      await setAuthStatePersistence(values, signUpToFirebase);
-      await updateUserInFirebase(values);
-      await addUserDataToFirestore({ ...auth.currentUser, ...values });
-      context.handleSignUp();
+      await context.handleSignUp(values);
       navigate("/");
     } catch (error) {
       errorContext.setError("error", error);

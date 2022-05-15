@@ -37,6 +37,8 @@ export default (() => {
   const createUser = async (user) => {
     const { email, password } = user;
     await createUserWithEmailAndPassword(auth, email, password);
+    await updateUserProfile(user);
+    await createUserDoc({ ...auth.currentUser, user });
   };
 
   const signIn = async (user) => {
@@ -55,10 +57,17 @@ export default (() => {
   // Firestore
   // -- users
   const createUserDoc = async (user) => {
+    const { displayName, email, phoneNumber, photoURL, bod, gender } = user;
+
     await setDoc(
       doc(db, "users", user.uid),
       {
-        ...user,
+        displayName,
+        email,
+        phoneNumber,
+        photoURL,
+        bod,
+        gender,
         lowerCaseName: user.displayName.toLowerCase(),
       },
       {
@@ -151,7 +160,6 @@ export default (() => {
     createUser,
     signIn,
     updateUserProfile,
-    createUserDoc,
     getUserData,
     getUsersByName,
     createPost,

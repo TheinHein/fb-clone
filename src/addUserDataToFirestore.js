@@ -20,5 +20,3 @@ const addUserDataToFirestore = async (user) => {
     }
   );
 };
-
-export default addUserDataToFirestore;

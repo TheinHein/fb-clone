@@ -20,7 +20,8 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(existingUser || null);
   const [authenticating, setAuthenticating] = useState(true);
 
-  const handleSignUp = useCallback(() => {
+  const handleSignUp = useCallback(async (user) => {
+    await FB.setAuthStatePersistence(user, FB.createUser);
     const { displayName, photoURL, uid } = auth.currentUser;
     setUser({ displayName, photoURL, id: uid });
     sessionStorage.setItem(
