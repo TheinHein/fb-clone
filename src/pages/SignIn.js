@@ -1,30 +1,35 @@
-import { useTheme } from "@emotion/react";
-import { Grid, Button } from "@mui/material";
-import { useState } from "react";
-import BaseButton from "../components/BaseButton";
+import { Button, Stack, Divider, Typography } from "@mui/material";
+
 import PasswordInput from "../components/PasswordInput.js";
-import InputWithClearBtn from "../components/InputWithClearBtn.js";
 import { useAuthContextUpdater } from "../context/AuthContext.js";
 import { useLocation, useNavigate } from "react-router-dom";
-import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import useErrorHandler from "../hooks/useErrorHandler";
+import { useForm } from "react-hook-form";
+import InputWithClearBtn from "../components/InputWithClearBtn.js";
 
 const ariaLabel = { "aria-label": "description" };
 
 function SignIn() {
   const errorContext = useErrorHandler();
-
   const navigate = useNavigate();
-  const theme = useTheme();
   const location = useLocation();
-  let from = location.state?.from?.pathname || "/";
+  const {
+    handleSubmit,
+    control,
+    resetField,
+    register,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    defaultValues: { email: "", password: "" },
+  });
 
-  const [user, setUser] = useState({ email: "", password: "" });
+  let from = location.state?.from?.pathname || "/";
 
   const context = useAuthContextUpdater();
 
-  const handleSubmitSignIn = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (user) => {
+    console.log(user);
     try {
       await context.handleSignIn(user);
       navigate(from, { replace: true });
@@ -34,61 +39,72 @@ function SignIn() {
   };
 
   return (
-    <>
-      <Grid container>
-        <Grid item md={3} lg={4} />
-        <Grid
-          item
-          xs={12}
-          md={6}
-          lg={4}
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "15px",
-          }}
-          component={"form"}
-          id="sign-in-form"
-          autoComplete="off"
-          onSubmit={handleSubmitSignIn}
-        >
-          <FacebookOutlinedIcon
-            sx={{
-              fontSize: 100,
-              color: theme.palette.primary.main,
-              margin: "20px",
-            }}
-          />
-          <InputWithClearBtn
-            name={"email"}
-            type={"email"}
-            placeholder={"Email"}
-            value={user.email}
-            setValue={setUser}
-            required={true}
-          />
-          <PasswordInput
-            name={"password"}
-            password={user.password}
-            setPassword={setUser}
-            required={true}
-          />
-          <BaseButton
-            label={"Login"}
-            form="sign-in-form"
-            type="submit"
-            disabled={!user.email || !user.password}
-          />
-          <BaseButton
-            label="Create an account"
-            btnColor={theme.palette.success.light}
-            onClick={() => navigate("/sign-up")}
-          />
-        </Grid>
-        <Grid item md={3} lg={4} />
-      </Grid>
-    </>
+    <Stack
+      component={"form"}
+      id="sign-in-form"
+      autoComplete="off"
+      onSubmit={handleSubmit(onSubmit)}
+      spacing={3}
+      mx="auto"
+      my={10}
+      alignItems="center"
+      width={{ sm: "50%", md: "40%", lg: "30%" }}
+      noValidate
+    >
+      <Typography variant="h1" sx={{ color: "#1878f3" }}>
+        facebook
+      </Typography>
+
+      <InputWithClearBtn
+        name="email"
+        type={"email"}
+        getValues={getValues}
+        placeholder={"Email"}
+        control={control}
+        errors={errors}
+        resetField={resetField}
+        {...register("email", {
+          required: "Email is required",
+          pattern: {
+            value: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+            message: "Invalid email",
+          },
+        })}
+      />
+
+      <PasswordInput
+        control={control}
+        {...register("password", {
+          required: "Password is required",
+        })}
+        errors={errors}
+      />
+
+      <Button
+        fullWidth
+        variant="contained"
+        form="sign-in-form"
+        type="submit"
+        // disabled={!user.email || !user.password}
+      >
+        Log in
+      </Button>
+
+      <Button>Forgot password?</Button>
+
+      <Divider sx={{ width: "100%" }}>
+        <Typography variant="body2">or</Typography>
+      </Divider>
+
+      <Button
+        variant="contained"
+        color="success"
+        onClick={() => navigate("/sign-up")}
+        sx={{ width: "fit-content" }}
+      >
+        Create new account
+      </Button>
+    </Stack>
   );
 }
 

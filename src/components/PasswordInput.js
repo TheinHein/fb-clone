@@ -1,45 +1,41 @@
-import { useState } from "react";
-import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
+import { useState, forwardRef } from "react";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import FormControl from "@mui/material/FormControl";
+import { Controller } from "react-hook-form";
 
-function PasswordInput({ name, password, required, setPassword }) {
+const PasswordInput = forwardRef((props, ref) => {
+  const { errors, control } = props;
   const [showPassword, setShowPassword] = useState(false);
-  const handleChange = (prop) => (event) => {
-    setPassword((prev) => ({ ...prev, [prop]: event.target.value }));
-  };
-
-  const handleClickShowPassword = () => {
-    setShowPassword((prev) => !prev);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   return (
-    <FormControl fullWidth sx={{ m: 1 }} required={required} variant="outlined">
-      <OutlinedInput
-        id={name}
-        placeholder="Password"
-        type={showPassword ? "text" : "password"}
-        value={password}
-        onChange={handleChange(name)}
-        endAdornment={
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="toggle password visibility"
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-              edge="end"
-            >
-              {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </InputAdornment>
-        }
-      />
-    </FormControl>
+    <Controller
+      name="password"
+      control={control}
+      render={({ field }) => (
+        <TextField
+          {...field}
+          fullWidth
+          type={showPassword ? "text" : "password"}
+          variant="outlined"
+          placeholder="Password"
+          error={!!errors.password}
+          helperText={!!errors.password && errors.password.message}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  edge="end"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      )}
+    />
   );
-}
+});
 
 export default PasswordInput;

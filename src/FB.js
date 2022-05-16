@@ -90,6 +90,13 @@ export default (() => {
     return userData;
   };
 
+  const getUserDataByRef = async (userRef) => {
+    const userDocRef = doc(db, `users/${userRef}`);
+    const userDoc = await getDoc(userDocRef);
+    const userData = { ...userDoc.data(), id: userDoc.id };
+    return userData;
+  };
+
   const getUsersByName = (name) => {
     const q = query(
       collection(db, "users"),
@@ -235,54 +242,53 @@ export default (() => {
     });
   };
 
-  const getInitComments = (userId, postId, setComments, setLastVisible) => {
+  const getInitComments = ({ userId, postId, setComments, setLastVisible }) => {
     const q = query(
       collection(db, `users/${userId}/posts/${postId}/comments`),
       orderBy("timestamp", "desc"),
       limit(1)
     );
-    getAllCommentsInQuery(q, setComments, setLastVisible);
+    getAllCommentsInQuery({ q, setComments, setLastVisible });
   };
 
-  const getMoreComments = (
+  const getMoreComments = ({
     userId,
     postId,
     lastVisible,
     setComments,
-    setLastVisible
-  ) => {
+    setLastVisible,
+  }) => {
     const q = query(
       collection(db, `users/${userId}/posts/${postId}/comments`),
       orderBy("timestamp", "desc"),
       startAfter(lastVisible),
       limit(1)
     );
-    getAllCommentsInQuery(q, setComments, setLastVisible);
+    getAllCommentsInQuery({ q, setComments, setLastVisible });
   };
 
-  const getAllCommentsInQuery = (query, setComments, setLastVisible) => {
-    onSnapshot(query, (snapshot) => {
-      setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
-      snapshot.docChanges().forEach(async (change) => {
-        const userData = await getUserData(change.doc.id);
+  const getAllCommentsInQuery = async ({ q, setComments, setLastVisible }) => {
+    const comments = await getDocs(q);
+    setLastVisible(comments.docs[comments.docs.length - 1]);
+    comments.forEach(async (comment) => {
+      const userData = await getUserDataByRef(comment.data().by.id);
 
-        setComments((prev) =>
-          _.orderBy(
-            _.uniqBy(
-              prev.concat({
-                displayName: userData.displayName,
-                photoURL: userData.photoURL,
-                userId: userData.id,
-                ...change.doc.data(),
-                id: change.doc.id,
-              }),
-              "id"
-            ),
-            ["timestamp.seconds"],
-            ["desc"]
-          )
-        );
-      });
+      setComments((prev) =>
+        _.orderBy(
+          _.uniqBy(
+            prev.concat({
+              displayName: userData.displayName,
+              photoURL: userData.photoURL,
+              userId: userData.id,
+              ...comment.data(),
+              id: comment.id,
+            }),
+            "id"
+          ),
+          ["timestamp.seconds"],
+          ["desc"]
+        )
+      );
     });
   };
 

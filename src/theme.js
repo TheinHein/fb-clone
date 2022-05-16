@@ -41,9 +41,10 @@ const themeOptions = {
     },
     button: {
       textTransform: "none",
-      fontSize: "0.875rem",
+      fontSize: "1rem",
       lineHeight: 1,
-      fontWeight: 400,
+      fontWeight: 500,
+      letterSpacing: "0.009em",
     },
   },
   components: {
@@ -71,18 +72,25 @@ const themeOptions = {
       styleOverrides: {
         root: {
           "&.MuiButton-sizeMedium": {
-            height: 35,
+            height: 40,
           },
         },
       },
       variants: [
-        {
-          props: { variant: "blue" },
-          style: {
-            backgroundColor: "#1878f3",
-            color: "white",
-          },
-        },
+        // {
+        //   props: { variant: "blue" },
+        //   style: {
+        //     backgroundColor: "#1878f3",
+        //     color: "white",
+        //     "&.Mui-disabled": {
+        //       color: "white",
+        //       backgroundColor: "rgba(190,190,190)",
+        //     },
+        //     "&:hover": {
+        //       backgroundColor: alpha("#1878f3", 0.7),
+        //     },
+        //   },
+        // },
         {
           props: { variant: "grey" },
           style: {
@@ -97,7 +105,26 @@ const themeOptions = {
           props: { variant: "muted" },
           style: {
             fontSize: "0.7rem",
-            color: "rgb(100,100,100)",
+            color: "rgb(244,244,244)",
+          },
+        },
+      ],
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          height: 40,
+          backgroundColor: "rgb(244,244,244)",
+          borderRadius: "50px",
+          lineHeight: 40,
+        },
+      },
+      variants: [
+        {
+          props: { variant: "login" },
+          style: {
+            backgroundColor: "rgb(244,244,244)",
+            height: 40,
           },
         },
       ],
