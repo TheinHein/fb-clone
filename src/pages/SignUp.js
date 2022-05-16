@@ -6,15 +6,10 @@ import RadioButtons from "../components/RadioButtons.js";
 import PasswordInput from "../components/PasswordInput.js";
 import BaseButton from "../components/BaseButton";
 import { useAuthContextUpdater } from "../context/AuthContext";
-import { signUpToFirebase, updateUserInFirebase } from "../signUpToFirebase.js";
-import { auth } from "../firebase";
-import addUserDataToFirestore from "../addUserDataToFirestore";
-import setAuthStatePersistence from "../setAuthStatePersistance.js";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 import useErrorHandler from "../hooks/useErrorHandler.js";
 import Loading from "./Loading.js";
-import FB from "../FB.js";
 
 function SignUp() {
   const navigate = useNavigate();

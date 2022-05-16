@@ -38,7 +38,7 @@ export default (() => {
     const { email, password } = user;
     await createUserWithEmailAndPassword(auth, email, password);
     await updateUserProfile(user);
-    await createUserDoc({ ...auth.currentUser, user });
+    await createUserDoc({ ...auth.currentUser, ...user });
   };
 
   const signIn = async (user) => {
@@ -57,23 +57,27 @@ export default (() => {
   // Firestore
   // -- users
   const createUserDoc = async (user) => {
-    const { displayName, email, phoneNumber, photoURL, bod, gender } = user;
-
-    await setDoc(
-      doc(db, "users", user.uid),
-      {
-        displayName,
-        email,
-        phoneNumber,
-        photoURL,
-        bod,
-        gender,
-        lowerCaseName: user.displayName.toLowerCase(),
-      },
-      {
-        merge: true,
-      }
-    );
+    const { uid, displayName, email, phoneNumber, photoURL, bod, gender } =
+      user;
+    try {
+      await setDoc(
+        doc(db, "users", uid),
+        {
+          displayName,
+          email,
+          phoneNumber,
+          photoURL,
+          bod,
+          gender,
+          lowerCaseName: user.displayName.toLowerCase(),
+        },
+        {
+          merge: true,
+        }
+      );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getUserData = async (userId) => {
@@ -130,29 +134,31 @@ export default (() => {
 
   const getAllFriendsPosts = async (userId, setPosts) => {
     const userData = await getUserData(userId);
-    userData.friends.forEach(async (friend) => {
-      const friendData = await getUserData(friend.id);
-      const q = query(collection(db, `users/${friend.id}/posts`));
-      onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
-        setPosts(
-          _.orderBy(
-            _.uniqBy(
-              snapshot.docs.map((post) => {
-                return {
-                  displayName: friendData.displayName,
-                  photoURL: friendData.photoURL,
-                  ...post.data(),
-                  id: post.id,
-                };
-              }),
-              "id"
-            ),
-            ["timestamp.seconds"],
-            ["desc"]
-          )
-        );
+    if (userData.friends) {
+      userData.friends.forEach(async (friend) => {
+        const friendData = await getUserData(friend.id);
+        const q = query(collection(db, `users/${friend.id}/posts`));
+        onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
+          setPosts(
+            _.orderBy(
+              _.uniqBy(
+                snapshot.docs.map((post) => {
+                  return {
+                    displayName: friendData.displayName,
+                    photoURL: friendData.photoURL,
+                    ...post.data(),
+                    id: post.id,
+                  };
+                }),
+                "id"
+              ),
+              ["timestamp.seconds"],
+              ["desc"]
+            )
+          );
+        });
       });
-    });
+    }
   };
 
   return {
