@@ -9,10 +9,13 @@ function Home() {
   const context = useAuthContext();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    setLoading(true);
-    FB.getAllFriendsPosts(context.user.id, setPosts);
-    setLoading(false);
+    (async () => {
+      setLoading(true);
+      await FB.getAllFriendsPosts(context.user.id, setPosts);
+      setLoading(false);
+    })();
   }, [context.user.id]);
 
   return (

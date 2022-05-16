@@ -181,17 +181,17 @@ export default function Post({ post = {}, loading, handleLike }) {
       <Divider sx={{ width: "97%", margin: "0 auto" }} />
       <CommentsContainer postId={id} userId={userId} />
       {loading ? (
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          width={"100%"}
-          p={1}
-        >
+        <Stack direction="row" gap={2} width={"100%"} p={1}>
           <Skeleton variant="circular">
             <Avatar />
           </Skeleton>
-          <Skeleton width={"80%"} sx={{ borderRadius: "9999px" }} />
-          <Skeleton variant="circular" width={40} height={40} />
+          <Skeleton width="100%" sx={{ borderRadius: "9999px" }} />
+          <Skeleton
+            variant="circular"
+            width={40}
+            height={40}
+            sx={{ flex: "none" }}
+          />
         </Stack>
       ) : (
         <CommentContainer postId={id} userId={userId} />

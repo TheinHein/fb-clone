@@ -34,7 +34,7 @@ const themeOptions = {
       fontWeight: 500,
     },
     body1: {
-      fontSize: "0.85rem",
+      fontSize: "1rem",
       lineHeight: 1.5,
       fontWeight: 300,
       letterSpacing: "0.009em",
