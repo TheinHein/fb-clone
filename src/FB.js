@@ -19,6 +19,8 @@ import {
   addDoc,
   serverTimestamp,
   updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import _ from "lodash";
@@ -97,7 +99,12 @@ export default (() => {
     return getDocumentsInQuery(q);
   };
 
-  //
+  // -- general
+
+  const updateUserDocument = async (userId, updates) => {
+    const userDocRef = doc(db, "users", userId);
+    await updateDoc(userDocRef, updates);
+  };
 
   const getDocumentsInQuery = async (query) => {
     const documents = await getDocs(query);
@@ -161,6 +168,36 @@ export default (() => {
     }
   };
 
+  // -- users -- friends
+
+  const handleFriendShip = async (userId, friendId, type) => {
+    if (type === "request") {
+      const friendDocRef = doc(db, `users/${friendId}`);
+      const userData = {
+        requestedFriends: arrayUnion(friendDocRef),
+      };
+      await updateUserDocument(userId, userData);
+      const userDocRef = doc(db, `users/${userId}`);
+      const friendData = {
+        pendingRequests: arrayUnion(userDocRef),
+      };
+      await updateUserDocument(friendId, friendData);
+    } else if (type === "accept") {
+      const friendRef = doc(db, `users/${friendId}`);
+      const userData = {
+        friends: arrayUnion(friendRef),
+        pendingRequests: arrayRemove(doc(db, `users/${friendId}`)),
+      };
+      await updateUserDocument(userId, userData);
+      const userRef = doc(db, `users/${userId}`);
+      const friendData = {
+        friends: arrayUnion(userRef),
+        requestedFriends: arrayRemove(doc(db, `users/${userId}`)),
+      };
+      await updateUserDocument(userId, friendData);
+    }
+  };
+
   return {
     setAuthStatePersistence,
     createUser,
@@ -170,5 +207,6 @@ export default (() => {
     getUsersByName,
     createPost,
     getAllFriendsPosts,
+    handleFriendShip,
   };
 })();

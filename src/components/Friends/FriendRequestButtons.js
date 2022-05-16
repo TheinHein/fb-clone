@@ -1,5 +1,4 @@
 import { useTheme } from "@emotion/react";
-import React from "react";
 import BaseButton from "../BaseButton";
 
 function FriendRequestButtons({ acceptFriend }) {
