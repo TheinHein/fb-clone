@@ -116,22 +116,23 @@ export default (() => {
   // -- users -- posts
 
   const createPost = async (userId, text, file) => {
-    const filePath = `${userId}/${postRef.id}/${file.name}`;
-    const newFileRef = ref(storage, filePath);
-    const fileSnapShot = await uploadBytesResumable(newFileRef, file);
-    const publicFileURL = await getDownloadURL(newFileRef);
+    const filePath = file && `${userId}/posts/${file.name}`;
+    const newFileRef = file && ref(storage, filePath);
+    const fileSnapShot = file && (await uploadBytesResumable(newFileRef, file));
+    const publicFileURL = file && (await getDownloadURL(newFileRef));
 
     const post = {
       text,
       likes: [],
       timestamp: serverTimestamp(),
       by: doc(db, `users/${userId}`),
-      fileURL: file ? LOADING_IMAGE_URL : "",
       totalComments: 0,
+      fileURL: file ? publicFileURL : "",
+      storageURI: fileSnapShot.metadata.fullPath,
     };
 
     const postsRef = collection(db, `users/${userId}/posts`);
-    const postRef = await addDoc(postsRef, post);
+    await addDoc(postsRef, post);
   };
 
   const getAllFriendsPosts = async (userId, setPosts) => {
