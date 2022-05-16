@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import React from "react";
 import CommentCard from "./CommentCard";
 
-function Comments({ fetchMoreComments, comments }) {
+function Comments({ comments, lastVisible, handleClickMoreComments }) {
   return (
     <>
       {comments.map((comment) => (
@@ -14,7 +14,7 @@ function Comments({ fetchMoreComments, comments }) {
           timestamp={comment.timestamp}
         />
       ))}
-      <Button onClick={() => fetchMoreComments(3)}>MORE</Button>
+      {lastVisible && <Button onClick={handleClickMoreComments}>MORE</Button>}
     </>
   );
 }

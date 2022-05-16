@@ -22,13 +22,12 @@ import {
   arrayUnion,
   arrayRemove,
   runTransaction,
-  where,
+  limit,
+  startAfter,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import _ from "lodash";
 import { auth, db, storage } from "./firebase";
-
-const LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif?a";
 
 export default (() => {
   // Authentication
@@ -167,7 +166,7 @@ export default (() => {
     }
   };
 
-  // -- users -- friends
+  // -- friends
 
   const handleFriendShip = async (userId, friendId, type) => {
     if (type === "request") {
@@ -236,11 +235,61 @@ export default (() => {
     });
   };
 
+  const getInitComments = (userId, postId, setComments, setLastVisible) => {
+    const q = query(
+      collection(db, `users/${userId}/posts/${postId}/comments`),
+      orderBy("timestamp", "desc"),
+      limit(1)
+    );
+    getAllCommentsInQuery(q, setComments, setLastVisible);
+  };
+
+  const getMoreComments = (
+    userId,
+    postId,
+    lastVisible,
+    setComments,
+    setLastVisible
+  ) => {
+    const q = query(
+      collection(db, `users/${userId}/posts/${postId}/comments`),
+      orderBy("timestamp", "desc"),
+      startAfter(lastVisible),
+      limit(1)
+    );
+    getAllCommentsInQuery(q, setComments, setLastVisible);
+  };
+
+  const getAllCommentsInQuery = (query, setComments, setLastVisible) => {
+    onSnapshot(query, (snapshot) => {
+      setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
+      snapshot.docChanges().forEach(async (change) => {
+        const userData = await getUserData(change.doc.id);
+
+        setComments((prev) =>
+          _.orderBy(
+            _.uniqBy(
+              prev.concat({
+                displayName: userData.displayName,
+                photoURL: userData.photoURL,
+                userId: userData.id,
+                ...change.doc.data(),
+                id: change.doc.id,
+              }),
+              "id"
+            ),
+            ["timestamp.seconds"],
+            ["desc"]
+          )
+        );
+      });
+    });
+  };
+
   return {
     setAuthStatePersistence,
     createUser,
     signIn,
-    updateUserProfile,
     getUserData,
     getUsersByName,
     createPost,
@@ -248,5 +297,7 @@ export default (() => {
     handleFriendShip,
     getAllPendingRequests,
     createComment,
+    getInitComments,
+    getMoreComments,
   };
 })();
