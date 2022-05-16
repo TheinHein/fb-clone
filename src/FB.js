@@ -85,7 +85,7 @@ export default (() => {
   const getUserData = async (userId) => {
     const userDocRef = doc(db, "users", userId);
     const userDoc = await getDoc(userDocRef);
-    const userData = userDoc.data();
+    const userData = { ...userDoc.data(), id: userDoc.id };
     return userData;
   };
 
@@ -183,18 +183,34 @@ export default (() => {
       };
       await updateUserDocument(friendId, friendData);
     } else if (type === "accept") {
-      const friendRef = doc(db, `users/${friendId}`);
+      const friendDocRef = doc(db, `users/${friendId}`);
       const userData = {
-        friends: arrayUnion(friendRef),
+        friends: arrayUnion(friendDocRef),
         pendingRequests: arrayRemove(doc(db, `users/${friendId}`)),
       };
       await updateUserDocument(userId, userData);
-      const userRef = doc(db, `users/${userId}`);
+      const userDocRef = doc(db, `users/${userId}`);
       const friendData = {
-        friends: arrayUnion(userRef),
+        friends: arrayUnion(userDocRef),
         requestedFriends: arrayRemove(doc(db, `users/${userId}`)),
       };
       await updateUserDocument(userId, friendData);
+    }
+  };
+
+  const getAllPendingRequests = async (userId, setPendingRequests) => {
+    const userData = await getUserData(userId);
+    if (userData.pendingRequests) {
+      userData.pendingRequests.forEach(async (friend) => {
+        const friendData = await getUserData(friend.id);
+        const { displayName, photoURL } = friendData;
+        setPendingRequests((prev) =>
+          _.uniqBy(
+            prev.concat({ displayName, photoURL, id: friendData.id }),
+            "id"
+          )
+        );
+      });
     }
   };
 
@@ -208,5 +224,6 @@ export default (() => {
     createPost,
     getAllFriendsPosts,
     handleFriendShip,
+    getAllPendingRequests,
   };
 })();

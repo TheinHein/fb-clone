@@ -1,28 +1,17 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { useAuthContext } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase";
-import useGetUserDataFromFirestore from "../../hooks/useGetUserDataFromFirestore";
 import FriendRequestCard from "./FriendRequestCard";
 import _ from "lodash";
+import FB from "../../FB";
 
 function FriendRequestsSection() {
   const context = useAuthContext();
-  const user = useGetUserDataFromFirestore(context.user.id);
   const [pendingRequests, setPendingRequests] = useState([]);
 
   useEffect(() => {
-    if (user.pendingRequests) {
-      user.pendingRequests.forEach(async (pendingRequests) => {
-        const docSnap = await getDoc(doc(db, "users", pendingRequests.id));
-        const { displayName, photoURL } = docSnap.data();
-        setPendingRequests((prev) =>
-          _.uniqBy(prev.concat({ displayName, photoURL, id: docSnap.id }), "id")
-        );
-      });
-    }
-  }, [user.pendingRequests]);
+    FB.getAllPendingRequests(context.user.id, setPendingRequests);
+  }, [context.user.id]);
 
   return (
     <Stack spacing={2}>
