@@ -127,8 +127,8 @@ export default (() => {
       timestamp: serverTimestamp(),
       by: doc(db, `users/${userId}`),
       totalComments: 0,
-      fileURL: file ? publicFileURL : "",
-      storageURI: fileSnapShot.metadata.fullPath,
+      fileURL: file && publicFileURL,
+      storageURI: file && fileSnapShot.metadata.fullPath,
     };
 
     const postsRef = collection(db, `users/${userId}/posts`);
@@ -143,11 +143,6 @@ export default (() => {
         const q = query(collection(db, `users/${friend.id}/posts`));
         onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
           snapshot.docChanges().forEach((change) => {
-            if (change.type === "modified") {
-              console.log(change.type);
-              console.log(change.doc);
-              console.log(change.doc.data());
-            }
             if (change.type === "added") {
               setPosts((prev) =>
                 _.orderBy(
@@ -221,7 +216,6 @@ export default (() => {
   // -- users -- posts -- comments
 
   const createComment = async (userId, postId, comment) => {
-    console.log(userId, postId);
     const commentsRef = collection(
       db,
       `users/${userId}/posts/${postId}/comments`
