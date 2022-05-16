@@ -14,7 +14,7 @@ function PeopleYouMayKnowCard({ friend }) {
   return (
     <FriendCard
       friend={friend}
-      buttons={<PeopleYouMayKnowButtons addFriend={requestFriend} />}
+      buttons={<PeopleYouMayKnowButtons requestFriend={requestFriend} />}
     />
   );
 }

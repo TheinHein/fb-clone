@@ -1,19 +1,8 @@
-import {
-  collection,
-  addDoc,
-  serverTimestamp,
-  doc,
-  runTransaction,
-  getDoc,
-} from "firebase/firestore";
-
 import { useState } from "react";
 import Comment from "./Comment";
-import { db } from "../../firebase";
-import { useAuthContext } from "../../context/AuthContext";
+import FB from "../../FB";
 
 function CommentContainer({ postId, userId }) {
-  const context = useAuthContext();
   const [comment, setComment] = useState("");
 
   const handleChangeComment = (event) => {
@@ -22,22 +11,7 @@ function CommentContainer({ postId, userId }) {
 
   const handleSubmitComment = async (event) => {
     event.preventDefault();
-    const q = collection(db, `users/${userId}/posts/${postId}/comments`);
-    await addDoc(q, {
-      text: comment,
-      timestamp: serverTimestamp(),
-      by: doc(db, `users/${context.user.id}`),
-    });
-    const postDocRef = doc(db, `users/${userId}/posts`, `${postId}`);
-
-    await runTransaction(db, async (transaction) => {
-      const postDoc = await transaction.get(postDocRef);
-      if (!postDoc.exists()) {
-        throw new Error("POST NOT EXIST");
-      }
-      const newTotalComments = postDoc.data().totalComments + 1;
-      transaction.update(postDocRef, { totalComments: newTotalComments });
-    });
+    await FB.createComment(userId, postId, comment);
     setComment("");
   };
 

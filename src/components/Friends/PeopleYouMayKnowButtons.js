@@ -2,12 +2,12 @@ import { useTheme } from "@emotion/react";
 import React from "react";
 import BaseButton from "../BaseButton";
 
-function PeopleYouMayKnowButtons({ addFriend }) {
+function PeopleYouMayKnowButtons({ requestFriend }) {
   const theme = useTheme();
 
   const handleClickAddFriend = (event) => {
     event.preventDefault();
-    addFriend();
+    requestFriend();
   };
 
   return (

@@ -21,6 +21,8 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
+  runTransaction,
+  where,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import _ from "lodash";
@@ -113,30 +115,23 @@ export default (() => {
 
   // -- users -- posts
 
-  const createPost = async (user, text, file) => {
+  const createPost = async (userId, text, file) => {
+    const filePath = `${userId}/${postRef.id}/${file.name}`;
+    const newFileRef = ref(storage, filePath);
+    const fileSnapShot = await uploadBytesResumable(newFileRef, file);
+    const publicFileURL = await getDownloadURL(newFileRef);
+
     const post = {
       text,
       likes: [],
       timestamp: serverTimestamp(),
-      by: doc(db, `users/${user.id}`),
-      fileURL: LOADING_IMAGE_URL,
+      by: doc(db, `users/${userId}`),
+      fileURL: file ? LOADING_IMAGE_URL : "",
       totalComments: 0,
     };
 
-    const postsRef = collection(db, `users/${user.id}/posts`);
+    const postsRef = collection(db, `users/${userId}/posts`);
     const postRef = await addDoc(postsRef, post);
-
-    if (file) {
-      const filePath = `${user.id}/${postRef.id}/${file.name}`;
-      const newFileRef = ref(storage, filePath);
-      const fileSnapShot = await uploadBytesResumable(newFileRef, file);
-      const publicFileURL = await getDownloadURL(newFileRef);
-
-      await updateDoc(postRef, {
-        fileURL: publicFileURL,
-        storageURI: fileSnapShot.metadata.fullPath,
-      });
-    }
   };
 
   const getAllFriendsPosts = async (userId, setPosts) => {
@@ -146,23 +141,31 @@ export default (() => {
         const friendData = await getUserData(friend.id);
         const q = query(collection(db, `users/${friend.id}/posts`));
         onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
-          setPosts(
-            _.orderBy(
-              _.uniqBy(
-                snapshot.docs.map((post) => {
-                  return {
-                    displayName: friendData.displayName,
-                    photoURL: friendData.photoURL,
-                    ...post.data(),
-                    id: post.id,
-                  };
-                }),
-                "id"
-              ),
-              ["timestamp.seconds"],
-              ["desc"]
-            )
-          );
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "modified") {
+              console.log(change.type);
+              console.log(change.doc);
+              console.log(change.doc.data());
+            }
+            if (change.type === "added") {
+              setPosts((prev) =>
+                _.orderBy(
+                  _.uniqBy(
+                    prev.concat({
+                      displayName: friendData.displayName,
+                      photoURL: friendData.photoURL,
+                      userId: friendData.id,
+                      ...change.doc.data(),
+                      id: change.doc.id,
+                    }),
+                    "id"
+                  ),
+                  ["timestamp.seconds"],
+                  ["desc"]
+                )
+              );
+            }
+          });
         });
       });
     }
@@ -194,7 +197,7 @@ export default (() => {
         friends: arrayUnion(userDocRef),
         requestedFriends: arrayRemove(doc(db, `users/${userId}`)),
       };
-      await updateUserDocument(userId, friendData);
+      await updateUserDocument(friendId, friendData);
     }
   };
 
@@ -214,6 +217,30 @@ export default (() => {
     }
   };
 
+  // -- users -- posts -- comments
+
+  const createComment = async (userId, postId, comment) => {
+    console.log(userId, postId);
+    const commentsRef = collection(
+      db,
+      `users/${userId}/posts/${postId}/comments`
+    );
+    await addDoc(commentsRef, {
+      text: comment,
+      timestamp: serverTimestamp(),
+      by: doc(db, `users/${userId}`),
+    });
+    const postDocRef = doc(db, `users/${userId}/posts`, `${postId}`);
+    await runTransaction(db, async (transaction) => {
+      const postDoc = await transaction.get(postDocRef);
+      if (!postDoc.exists()) {
+        throw new Error("POST NOT EXIST");
+      }
+      const newTotalComments = postDoc.data().totalComments + 1;
+      transaction.update(postDocRef, { totalComments: newTotalComments });
+    });
+  };
+
   return {
     setAuthStatePersistence,
     createUser,
@@ -225,5 +252,6 @@ export default (() => {
     getAllFriendsPosts,
     handleFriendShip,
     getAllPendingRequests,
+    createComment,
   };
 })();

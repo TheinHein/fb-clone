@@ -2,7 +2,6 @@ import { Button, Stack, Typography } from "@mui/material";
 import { useAuthContext } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 import FriendRequestCard from "./FriendRequestCard";
-import _ from "lodash";
 import FB from "../../FB";
 
 function FriendRequestsSection() {
