@@ -6,6 +6,7 @@ import { Controller } from "react-hook-form";
 const InputWithClearBtn = forwardRef((props, ref) => {
   const { name, placeholder, errors, type, control, resetField, getValues } =
     props;
+
   return (
     <Controller
       name={name}

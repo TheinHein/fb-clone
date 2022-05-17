@@ -8,28 +8,41 @@ import { useAuthContextUpdater } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import useErrorHandler from "../hooks/useErrorHandler.js";
 import Loading from "./Loading.js";
+import { useForm } from "react-hook-form";
+
+const defaultValues = {
+  firstName: "",
+  lastName: "",
+  dob: "",
+  gender: "",
+  phoneNumber: "",
+  email: "",
+  password: "",
+};
 
 function SignUp() {
   const navigate = useNavigate();
   const context = useAuthContextUpdater();
-  const [values, setValues] = useState({
-    firstName: "",
-    lastName: "",
-    bod: new Date("2014-08-18T21:11:54"),
-    gender: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-    showPassword: false,
-  });
+
+  const validator = useForm({ defaultValues });
+  const {
+    handleSubmit,
+    control,
+    resetField,
+    register,
+    getValues,
+    formState: { errors },
+    setValue,
+  } = validator;
+
   const errorContext = useErrorHandler();
   const [loading, setLoading] = useState(false);
 
-  const handleSubmitSignup = async (event) => {
-    event.preventDefault();
+  const onSubmit = async (user) => {
+    console.log(user);
     try {
       setLoading(true);
-      await context.handleSignUp(values);
+      await context.handleSignUp(user);
       navigate("/");
     } catch (error) {
       errorContext.setError("error", error);
@@ -48,7 +61,8 @@ function SignUp() {
       component={"form"}
       autoComplete="off"
       id={"sign-up-form"}
-      onSubmit={handleSubmitSignup}
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
     >
       {loading ? (
         <Loading>
@@ -63,58 +77,95 @@ function SignUp() {
           <Typography color="primary" variant="h1">
             Create an account
           </Typography>
+
           <InputWithClearBtn
-            name={"firstName"}
-            placeholder={"First name"}
-            value={values.firstName}
-            setValue={setValues}
-            required={true}
+            name="firstName"
+            type="text"
+            getValues={getValues}
+            placeholder="First name"
+            control={control}
+            errors={errors}
+            resetField={resetField}
+            {...register("firstName", {
+              required: "First name is required",
+            })}
           />
+
           <InputWithClearBtn
-            name={"lastName"}
-            placeholder={"Last name"}
-            value={values.lastName}
-            setValue={setValues}
-            required={true}
+            name="lastName"
+            type="text"
+            getValues={getValues}
+            placeholder="Last name"
+            control={control}
+            errors={errors}
+            resetField={resetField}
+            {...register("lastName", {
+              required: "Last name is required",
+            })}
           />
+
+          <InputWithClearBtn
+            name="email"
+            type="email"
+            getValues={getValues}
+            placeholder="Email"
+            control={control}
+            errors={errors}
+            resetField={resetField}
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value:
+                  /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+                message: "Invalid email",
+              },
+            })}
+          />
+
+          <InputWithClearBtn
+            name="phoneNumber"
+            type="tel"
+            getValues={getValues}
+            placeholder="Mobile number"
+            control={control}
+            errors={errors}
+            resetField={resetField}
+            {...register("phoneNumber", {
+              required: "Mobile number is required",
+            })}
+          />
+
           <DatePicker
-            name={"bod"}
-            value={values.bod}
-            setValue={setValues}
-            required={true}
+            control={control}
+            errors={errors}
+            {...register("dob", {
+              required: "Date of birth is required",
+            })}
+            setValue={setValue}
           />
-          <RadioButtons
-            name={"gender"}
-            value={values.gender}
-            setValue={setValues}
-            required={true}
-          />
-          <InputWithClearBtn
-            name={"email"}
-            placeholder={"Email"}
-            value={values.email}
-            setValue={setValues}
-            required={true}
-          />
-          <InputWithClearBtn
-            name={"phoneNumber"}
-            placeholder={"Mobile Number"}
-            value={values.phoneNumber}
-            setValue={setValues}
-            required={true}
-          />
+
           <PasswordInput
-            name={"password"}
-            password={values.password}
-            setPassword={setValues}
-            required={true}
+            control={control}
+            {...register("password", {
+              required: "Password is required",
+            })}
+            errors={errors}
           />
+
+          <RadioButtons
+            control={control}
+            {...register("gender", {
+              required: "Gender is required",
+            })}
+            errors={errors}
+          />
+
           <Button
             fullWidth
             variant="contained"
             color="success"
-            type={"submit"}
-            form={"sign-up-form"}
+            type="submit"
+            form="sign-up-form"
           >
             Sign Up
           </Button>

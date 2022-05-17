@@ -9,10 +9,18 @@ import InputWithClearBtn from "../components/InputWithClearBtn.js";
 
 const ariaLabel = { "aria-label": "description" };
 
+const defaultValues = {
+  email: "",
+  password: "",
+};
+
 function SignIn() {
   const errorContext = useErrorHandler();
   const navigate = useNavigate();
   const location = useLocation();
+  const validator = useForm({
+    defaultValues,
+  });
   const {
     handleSubmit,
     control,
@@ -20,9 +28,7 @@ function SignIn() {
     register,
     getValues,
     formState: { errors },
-  } = useForm({
-    defaultValues: { email: "", password: "" },
-  });
+  } = validator;
 
   let from = location.state?.from?.pathname || "/";
 
@@ -57,9 +63,9 @@ function SignIn() {
 
       <InputWithClearBtn
         name="email"
-        type={"email"}
+        type="email"
         getValues={getValues}
-        placeholder={"Email"}
+        placeholder="Email"
         control={control}
         errors={errors}
         resetField={resetField}

@@ -60,7 +60,7 @@ export default (() => {
   // Firestore
   // -- users
   const createUserDoc = async (user) => {
-    const { uid, displayName, email, phoneNumber, photoURL, bod, gender } =
+    const { uid, displayName, email, phoneNumber, photoURL, dob, gender } =
       user;
     try {
       await setDoc(
@@ -70,7 +70,7 @@ export default (() => {
           email,
           phoneNumber,
           photoURL,
-          bod,
+          dob,
           gender,
           lowerCaseName: user.displayName.toLowerCase(),
         },
