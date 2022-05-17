@@ -1,14 +1,6 @@
-import {
-  Avatar,
-  Stack,
-  Card,
-  CardHeader,
-  CardContent,
-  Button,
-} from "@mui/material";
+import { Avatar, Stack, Card, CardHeader, Button } from "@mui/material";
 import MenuButtons from "./MenuButtons";
 import SimpleAccordion from "./SimpleAccordion";
-import signOutFromFirebase from "../../signOutFromFirebase";
 import { useAuthContextUpdater } from "../../context/AuthContext";
 import { accordionList } from "../../menuBntList";
 
@@ -16,7 +8,6 @@ function Menu() {
   const context = useAuthContextUpdater();
 
   const handleClickSignOut = () => {
-    signOutFromFirebase();
     context.handleSignOut();
   };
 

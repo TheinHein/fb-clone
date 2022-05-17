@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   setPersistence,
   updateProfile,
+  signOut,
 } from "firebase/auth";
 import {
   collection,
@@ -50,6 +51,10 @@ export default (() => {
     await signInWithEmailAndPassword(auth, email, password);
   };
 
+  const logOut = async () => {
+    await signOut(auth);
+  };
+
   const updateUserProfile = async (user) => {
     const { firstName, lastName, phoneNumber } = user;
     await updateProfile(auth.currentUser, {
@@ -63,25 +68,21 @@ export default (() => {
   const createUserDoc = async (user) => {
     const { uid, displayName, email, phoneNumber, photoURL, dob, gender } =
       user;
-    try {
-      await setDoc(
-        doc(db, "users", uid),
-        {
-          displayName,
-          email,
-          phoneNumber,
-          photoURL,
-          dob,
-          gender,
-          lowerCaseName: user.displayName.toLowerCase(),
-        },
-        {
-          merge: true,
-        }
-      );
-    } catch (e) {
-      console.log(e);
-    }
+    await setDoc(
+      doc(db, "users", uid),
+      {
+        displayName,
+        email,
+        phoneNumber,
+        photoURL,
+        dob,
+        gender,
+        lowerCaseName: user.displayName.toLowerCase(),
+      },
+      {
+        merge: true,
+      }
+    );
   };
 
   const getUserData = async (userId) => {
@@ -124,7 +125,6 @@ export default (() => {
 
   const createPost = async (data) => {
     const { userId, text, file, type } = data;
-
     const filePath = file && `${userId}/posts/${file.name}`;
     const newFileRef = file && ref(storage, filePath);
     const fileSnapShot = file && (await uploadBytesResumable(newFileRef, file));
@@ -181,6 +181,7 @@ export default (() => {
       });
     });
   };
+
   const getAllFriendsPosts = async (userId, setPosts) => {
     const userData = await getUserData(userId);
     if (userData.friends) {
@@ -336,6 +337,7 @@ export default (() => {
     setAuthStatePersistence,
     createUser,
     signIn,
+    logOut,
     getUserData,
     getUsersByName,
     createPost,

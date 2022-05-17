@@ -45,7 +45,8 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, []);
 
-  const handleSignOut = useCallback(() => {
+  const handleSignOut = useCallback(async () => {
+    await FB.logOut();
     setUser(null);
     sessionStorage.setItem("user", JSON.stringify(null));
   }, []);
