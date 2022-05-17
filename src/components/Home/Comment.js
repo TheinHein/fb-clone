@@ -3,7 +3,7 @@ import {
   FormControl,
   IconButton,
   Stack,
-  OutlinedInput,
+  Input,
   InputAdornment,
 } from "@mui/material";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
@@ -24,15 +24,11 @@ function Comment({ comment, onChange, onSubmit, postId }) {
     >
       <Avatar />
       <FormControl fullWidth>
-        <OutlinedInput
+        <Input
+          disableUnderline
           value={comment}
           placeholder="Write a comment..."
           onChange={onChange}
-          sx={{
-            borderRadius: "9999px",
-            bgcolor: "rgba(220,220,220)",
-            height: 35,
-          }}
           endAdornment={
             <>
               <InputAdornment position="end">

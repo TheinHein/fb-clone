@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import { alpha } from "@mui/material";
 
 const themeOptions = {
   palette: {
@@ -82,6 +83,18 @@ const themeOptions = {
       },
       variants: [
         {
+          props: {
+            custom: "sky-blue",
+          },
+          style: {
+            backgroundColor: alpha("#1878f3", 0.2),
+            color: "#1878f3",
+            "&:hover": {
+              backgroundColor: alpha("#1878f3", 0.4),
+            },
+          },
+        },
+        {
           props: { variant: "grey" },
           style: {
             backgroundColor: "rgba(0,0,0,0.1)",
@@ -105,7 +118,15 @@ const themeOptions = {
         root: {
           height: 40,
           backgroundColor: "rgb(244,244,244)",
-          borderRadius: "50px",
+        },
+      },
+    },
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          height: 30,
+          borderRadius: "9999px",
+          padding: "0 10px",
         },
       },
     },

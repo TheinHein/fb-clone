@@ -1,19 +1,13 @@
-import PeopleYouMayKnowCard from "./Friends/PeopleYouMayKnowCard";
-import { Box } from "@mui/material";
+import { Stack } from "@mui/material";
+import UserCard from "./UserCard";
 
 function SearchDrawerResults({ results }) {
   return (
-    <Box
-      sx={{
-        width: "100%",
-        minHeight: "100%",
-        padding: "0px 15px",
-      }}
-    >
+    <Stack>
       {results.map((result) => (
-        <PeopleYouMayKnowCard friend={result} key={result.id} />
+        <UserCard user={result} key={result.id} />
       ))}
-    </Box>
+    </Stack>
   );
 }
 
