@@ -159,13 +159,12 @@ const options = [
   { name: "Only Me", icon: <PersonIcon sx={{ width: 12, height: 12 }} /> },
 ];
 
-export default function UnstyledSelectObjectValues() {
-  const [option, setOption] = React.useState(options[0]);
+export default function UnstyledSelectObjectValues({ option, onChange }) {
   return (
     <div>
-      <CustomSelect value={option} onChange={setOption}>
+      <CustomSelect value={option} onChange={onChange}>
         {options.map((o) => (
-          <StyledOption key={o.name} value={o}>
+          <StyledOption key={o.name} value={o.name}>
             {o.icon}
             {o.name}
           </StyledOption>

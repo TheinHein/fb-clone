@@ -13,6 +13,7 @@ function Home() {
   useEffect(() => {
     (async () => {
       setLoading(true);
+      await FB.getAllGlobalPosts(context.user.id, setPosts);
       await FB.getAllFriendsPosts(context.user.id, setPosts);
       setLoading(false);
     })();

@@ -24,14 +24,22 @@ function CreatePostDrawer({ toggleDrawer }) {
 
   const [input, setInput] = useState("");
   const [file, setFile] = useState({ file: null, fileURI: null });
+  const [type, setType] = useState("Public");
 
   const handleClickPost = async () => {
-    FB.createPost(context.user.id, input, file.file);
+    FB.createPost({
+      userId: context.user.id,
+      text: input,
+      file: file.file,
+      type,
+    });
 
     toggleDrawer();
     setInput("");
   };
-
+  const handleChangeType = (newType) => {
+    setType(newType);
+  };
   const handleChangeInput = (event) => {
     setInput(event.target.value);
   };
@@ -104,7 +112,12 @@ function CreatePostDrawer({ toggleDrawer }) {
             />
           }
           title={context.user.displayName}
-          subheader={<UnstyledSelectObjectValues />}
+          subheader={
+            <UnstyledSelectObjectValues
+              option={type}
+              onChange={handleChangeType}
+            />
+          }
           action={
             <label htmlFor="photoUpload">
               <Input

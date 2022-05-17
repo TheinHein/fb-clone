@@ -24,6 +24,7 @@ import {
   runTransaction,
   limit,
   startAfter,
+  where,
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import _ from "lodash";
@@ -121,7 +122,9 @@ export default (() => {
 
   // -- users -- posts
 
-  const createPost = async (userId, text, file) => {
+  const createPost = async (data) => {
+    const { userId, text, file, type } = data;
+
     const filePath = file && `${userId}/posts/${file.name}`;
     const newFileRef = file && ref(storage, filePath);
     const fileSnapShot = file && (await uploadBytesResumable(newFileRef, file));
@@ -135,12 +138,49 @@ export default (() => {
       totalComments: 0,
       fileURL: file && publicFileURL,
       storageURI: file && fileSnapShot.metadata.fullPath,
+      type,
+      userId,
     };
 
     const postsRef = collection(db, `users/${userId}/posts`);
-    await addDoc(postsRef, post);
+    const postRef = await addDoc(postsRef, post);
+
+    if (type === "Public") {
+      const globalPostDocRef = doc(db, `globalPosts`, postRef.id);
+      await setDoc(globalPostDocRef, post);
+    }
   };
 
+  const getAllGlobalPosts = async (userId, setPosts) => {
+    const q = query(
+      collection(db, "globalPosts"),
+      where("userId", "!=", `${userId}`),
+      limit(5)
+    );
+    onSnapshot(q, (snapshot) => {
+      snapshot.docChanges().forEach(async (change) => {
+        if (change.type === "added") {
+          const userData = await getUserDataByRef(change.doc.data().by.id);
+          setPosts((prev) =>
+            _.orderBy(
+              _.uniqBy(
+                prev.concat({
+                  displayName: userData.displayName,
+                  photoURL: userData.photoURL,
+                  userId: userData.id,
+                  ...change.doc.data(),
+                  id: change.doc.id,
+                }),
+                "id"
+              ),
+              ["timestamp.seconds"],
+              ["desc"]
+            )
+          );
+        }
+      });
+    });
+  };
   const getAllFriendsPosts = async (userId, setPosts) => {
     const userData = await getUserData(userId);
     if (userData.friends) {
@@ -299,6 +339,7 @@ export default (() => {
     getUserData,
     getUsersByName,
     createPost,
+    getAllGlobalPosts,
     getAllFriendsPosts,
     handleFriendShip,
     getAllPendingRequests,
