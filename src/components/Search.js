@@ -1,5 +1,5 @@
 import { useTheme } from "@emotion/react";
-import { Box } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 
 function Search({ children }) {
@@ -28,5 +28,3 @@ function Search({ children }) {
     </Box>
   );
 }
-
-export default Search;

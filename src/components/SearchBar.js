@@ -15,5 +15,3 @@ function SearchBar({ input, handleInputSearch }) {
     </Search>
   );
 }
-
-export default SearchBar;

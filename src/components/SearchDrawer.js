@@ -1,9 +1,16 @@
-import { Divider, Box, IconButton, Paper } from "@mui/material";
+import {
+  Divider,
+  Box,
+  IconButton,
+  Paper,
+  TextField,
+  Stack,
+} from "@mui/material";
 import React, { useState } from "react";
-import SearchBar from "./SearchBar";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import useSearchUsers from "../hooks/useSearchUsers";
 import SearchDrawerResults from "./SearchDrawerResults";
+import SearchIcon from "@mui/icons-material/Search";
 
 function SearchDrawer({ toggleDrawer }) {
   const [input, setInput] = useState("");
@@ -15,16 +22,7 @@ function SearchDrawer({ toggleDrawer }) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper
-        elevation={0}
-        square
-        sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+      <Stack direction="row" alignItems="center" px={1}>
         <IconButton
           size="small"
           edge="start"
@@ -35,8 +33,14 @@ function SearchDrawer({ toggleDrawer }) {
         >
           <ArrowBackIosIcon />
         </IconButton>
-        <SearchBar input={input} handleInputSearch={handleInputSearch} />
-      </Paper>
+        <TextField
+          fullWidth
+          placeholder="Search ..."
+          InputProps={{ startAdornment: <SearchIcon /> }}
+          value={input}
+          onChange={handleInputSearch}
+        />
+      </Stack>
       <Divider />
       <SearchDrawerResults results={users} />
     </Box>

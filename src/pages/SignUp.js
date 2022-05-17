@@ -39,7 +39,6 @@ function SignUp() {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (user) => {
-    console.log(user);
     try {
       setLoading(true);
       await context.handleSignUp(user);
@@ -169,6 +168,7 @@ function SignUp() {
           >
             Sign Up
           </Button>
+
           <Button size="small" onClick={() => navigate("/sign-in")}>
             Already have an account?
           </Button>

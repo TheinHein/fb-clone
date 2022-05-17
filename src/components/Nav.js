@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { routes } from "../data/routes";
 
 function Nav() {
@@ -16,7 +16,6 @@ function Nav() {
   };
 
   useEffect(() => {
-    navigate(routes[value].path);
     ref.current.ownerDocument.documentElement.scrollTop = 0;
   }, [navigate, value]);
 
@@ -39,6 +38,8 @@ function Nav() {
               icon={icon}
               arial-label={label}
               value={index}
+              component={Link}
+              to={`${path}`}
             />
           ))}
         </BottomNavigation>

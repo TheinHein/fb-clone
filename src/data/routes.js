@@ -12,6 +12,7 @@ import Friends from "../components/Friends/Friends";
 import Profile from "../components/Profile/Profile";
 import Notifications from "../components/Notifications/Notifications";
 import Menu from "../components/Menu/Menu";
+import UserProfile from "../pages/UserProfile";
 
 export const routes = [
   {

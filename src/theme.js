@@ -33,6 +33,10 @@ const themeOptions = {
       fontSize: "1.1rem",
       fontWeight: 500,
     },
+    h5: {
+      fontSize: "1rem",
+      fontWeight: 500,
+    },
     body1: {
       fontSize: "1rem",
       lineHeight: 1.5,
@@ -77,20 +81,6 @@ const themeOptions = {
         },
       },
       variants: [
-        // {
-        //   props: { variant: "blue" },
-        //   style: {
-        //     backgroundColor: "#1878f3",
-        //     color: "white",
-        //     "&.Mui-disabled": {
-        //       color: "white",
-        //       backgroundColor: "rgba(190,190,190)",
-        //     },
-        //     "&:hover": {
-        //       backgroundColor: alpha("#1878f3", 0.7),
-        //     },
-        //   },
-        // },
         {
           props: { variant: "grey" },
           style: {
@@ -116,18 +106,8 @@ const themeOptions = {
           height: 40,
           backgroundColor: "rgb(244,244,244)",
           borderRadius: "50px",
-          lineHeight: 40,
         },
       },
-      variants: [
-        {
-          props: { variant: "login" },
-          style: {
-            backgroundColor: "rgb(244,244,244)",
-            height: 40,
-          },
-        },
-      ],
     },
   },
 };

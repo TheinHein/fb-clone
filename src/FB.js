@@ -65,6 +65,7 @@ export default (() => {
 
   // Firestore
   // -- users
+
   const createUserDoc = async (user) => {
     const { uid, displayName, email, phoneNumber, photoURL, dob, gender } =
       user;
@@ -309,27 +310,28 @@ export default (() => {
   };
 
   const getAllCommentsInQuery = async ({ q, setComments, setLastVisible }) => {
-    const comments = await getDocs(q);
-    setLastVisible(comments.docs[comments.docs.length - 1]);
-    comments.forEach(async (comment) => {
-      const userData = await getUserDataByRef(comment.data().by.id);
+    onSnapshot(q, (comments) => {
+      comments.forEach(async (comment) => {
+        setLastVisible(comments.docs[comments.docs.length - 1]);
 
-      setComments((prev) =>
-        _.orderBy(
-          _.uniqBy(
-            prev.concat({
-              displayName: userData.displayName,
-              photoURL: userData.photoURL,
-              userId: userData.id,
-              ...comment.data(),
-              id: comment.id,
-            }),
-            "id"
-          ),
-          ["timestamp.seconds"],
-          ["desc"]
-        )
-      );
+        const userData = await getUserDataByRef(comment.data().by.id);
+        setComments((prev) =>
+          _.orderBy(
+            _.uniqBy(
+              prev.concat({
+                displayName: userData.displayName,
+                photoURL: userData.photoURL,
+                userId: userData.id,
+                ...comment.data(),
+                id: comment.id,
+              }),
+              "id"
+            ),
+            ["timestamp.seconds"],
+            ["desc"]
+          )
+        );
+      });
     });
   };
 
@@ -339,6 +341,7 @@ export default (() => {
     signIn,
     logOut,
     getUserData,
+    getUserDataByRef,
     getUsersByName,
     createPost,
     getAllGlobalPosts,

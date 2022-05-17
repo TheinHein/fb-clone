@@ -9,6 +9,8 @@ import RequiredAuth from "./pages/RequiredAuth";
 import { ThemeProvider } from "@mui/material";
 import myTheme from "./theme.js";
 import ErrorContainer from "./components/Error/ErrorContainer";
+import UserProfile from "./pages/UserProfile";
+import Friends from "./components/Friends/Friends";
 
 function RouteSwitch() {
   return (
@@ -32,7 +34,21 @@ function RouteSwitch() {
                   }
                 />
               ))}
+
+              <Route
+                path="users/:friendId"
+                element={
+                  <RequiredAuth>
+                    <Page
+                      title={"user-profile"}
+                      titleColor={"white"}
+                      component={<UserProfile />}
+                    />
+                  </RequiredAuth>
+                }
+              />
             </Route>
+
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
           </Routes>

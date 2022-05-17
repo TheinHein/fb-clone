@@ -5,12 +5,10 @@ import myTheme from "./theme";
 
 function App() {
   return (
-    <>
-      <ThemeProvider theme={myTheme}>
-        <Outlet />
-        <Nav />
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={myTheme}>
+      <Outlet />
+      <Nav />
+    </ThemeProvider>
   );
 }
 

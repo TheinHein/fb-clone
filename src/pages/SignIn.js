@@ -15,8 +15,6 @@ import InputWithClearBtn from "../components/InputWithClearBtn.js";
 import { useState } from "react";
 import Loading from "./Loading.js";
 
-const ariaLabel = { "aria-label": "description" };
-
 const defaultValues = {
   email: "",
   password: "",
@@ -44,7 +42,6 @@ function SignIn() {
   const context = useAuthContextUpdater();
 
   const onSubmit = async (user) => {
-    console.log(user);
     try {
       setLoading(true);
       await context.handleSignIn(user);
