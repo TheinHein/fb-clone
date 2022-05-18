@@ -38,6 +38,10 @@ const themeOptions = {
       fontSize: "1rem",
       fontWeight: 500,
     },
+    h6: {
+      fontSize: "1rem",
+      fontWeight: 400,
+    },
     body1: {
       fontSize: "1rem",
       lineHeight: 1.5,

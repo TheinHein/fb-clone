@@ -21,11 +21,7 @@ function FriendRequestsSection() {
         </Button>
       </Stack>
       {pendingRequests.map((pendingRequest) => (
-        <FriendRequestCard
-          friend={pendingRequest}
-          removeFromPendingRequest={setPendingRequests}
-          key={pendingRequest.id}
-        />
+        <FriendRequestCard friend={pendingRequest} key={pendingRequest.id} />
       ))}
       <Button fullWidth variant="grey">
         See All

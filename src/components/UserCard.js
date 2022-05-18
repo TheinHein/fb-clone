@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Add from "./Add";
 import BaseUserCard from "./Base/BaseUserCard";
 
 function UserCard({ user, buttons }) {
@@ -9,7 +10,7 @@ function UserCard({ user, buttons }) {
   };
   return (
     <BaseUserCard user={user} handleClickShowProfile={handleClickShowProfile}>
-      <Button variant="contained">Add Friend</Button>
+      <Add friendId={user.id} />
       <Button variant="contained" color="inherit">
         Remove
       </Button>

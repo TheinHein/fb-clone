@@ -215,6 +215,29 @@ export default (() => {
     }
   };
 
+  const updatePostLikes = async ({ ownerId, userId, postId }) => {
+    const postDocRef = doc(db, `users/${ownerId}/posts`, `${postId}`);
+    const globalPostDocRef = doc(db, `globalPosts`, `${postId}`);
+
+    await runTransaction(db, async (transaction) => {
+      const postDoc = await transaction.get(postDocRef);
+      const globalPostDoc = await transaction.get(globalPostDocRef);
+
+      if (postDoc.exists()) {
+        const newLikes = arrayUnion(doc(db, `users/${userId}`));
+        transaction.update(postDocRef, { likes: newLikes });
+      }
+      if (globalPostDoc.exists()) {
+        const newLikes = arrayUnion(doc(db, `users/${userId}`));
+        transaction.update(globalPostDocRef, { likes: newLikes });
+      }
+    });
+
+    await updateUserDocument(userId, {
+      likedPosts: arrayUnion(doc(db, `users/${ownerId}/posts/${postId}`)),
+    });
+  };
+
   // -- friends
 
   const handleFriendShip = async (userId, friendId, type) => {
@@ -284,6 +307,17 @@ export default (() => {
     });
   };
 
+  const getCommentByUserId = ({ ownerId, userId, postId }) => {
+    const userDocRef = doc(db, `users/${userId}`);
+    const q = query(
+      collection(db, `users/${ownerId}/posts/${postId}/comments`),
+      where("by", "==", userDocRef),
+      orderBy("timestamp", "desc"),
+      limit(1)
+    );
+    return getDocumentsInQuery(q);
+  };
+
   const getInitComments = ({ userId, postId, setComments, setLastVisible }) => {
     const q = query(
       collection(db, `users/${userId}/posts/${postId}/comments`),
@@ -344,11 +378,13 @@ export default (() => {
     getUserDataByRef,
     getUsersByName,
     createPost,
+    updatePostLikes,
     getAllGlobalPosts,
     getAllFriendsPosts,
     handleFriendShip,
     getAllPendingRequests,
     createComment,
+    getCommentByUserId,
     getInitComments,
     getMoreComments,
   };

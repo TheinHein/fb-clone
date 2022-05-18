@@ -14,7 +14,7 @@ function Comments({ comments, lastVisible, handleClickMoreComments }) {
           timestamp={comment.timestamp}
         />
       ))}
-      {lastVisible && <Button onClick={handleClickMoreComments}>MORE</Button>}
+      {/* {lastVisible && <Button onClick={handleClickMoreComments}>MORE</Button>} */}
     </>
   );
 }
