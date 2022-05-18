@@ -5,10 +5,10 @@ import {
   ListItemIcon,
   ListItemText,
   Stack,
-  Button,
 } from "@mui/material";
 
 import about from "../../data/about";
+import EditPublicDetails from "../Buttons/EditPublicDetails";
 
 function About() {
   return (
@@ -23,9 +23,7 @@ function About() {
           </ListItem>
         ))}
       </List>
-      <Button fullWidth variant="grey">
-        Edit Public Details
-      </Button>
+      <EditPublicDetails />
     </Stack>
   );
 }

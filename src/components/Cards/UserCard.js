@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Add from "./Buttons/Add";
-import BaseUserCard from "./Base/BaseUserCard";
+import Add from "../Buttons/Add";
+import BaseUserCard from "../Base/BaseUserCard";
 
 function UserCard({ user, buttons }) {
   const navigate = useNavigate();

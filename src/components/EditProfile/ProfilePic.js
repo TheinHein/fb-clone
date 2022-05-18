@@ -1,6 +1,6 @@
 import { Typography, Avatar, Button, Stack } from "@mui/material";
-import SwipeableTemporaryDrawer from "../SwipeableTemporaryDrawer";
-import SelectPhotoDrawer from "../SelectPhotoDrawer";
+import DrawerWithBtn from "../Drawer/DrawerWithBtn";
+import SelectPhotoDrawer from "../Drawer/SelectPhotoDrawer";
 import { useAuthContext } from "../../context/AuthContext";
 
 function ProfilePic() {
@@ -9,7 +9,7 @@ function ProfilePic() {
     <Stack spacing={1} alignItems="center">
       <Stack direction="row" justifyContent="space-between" width="100%">
         <Typography variant="h3">Profile Picture</Typography>
-        <SwipeableTemporaryDrawer
+        <DrawerWithBtn
           anchor={"bottom"}
           button={(toggleDrawer) => (
             <Button size="small" onClick={() => toggleDrawer(true)}>

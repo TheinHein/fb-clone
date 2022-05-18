@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React from "react";
-import BaseUserCard from "./Base/BaseUserCard";
-import Accept from "./Buttons/Accept";
+import BaseUserCard from "../Base/BaseUserCard";
+import Accept from "../Buttons/Accept";
 
 function FriendRequestCard({ friend }) {
   return (

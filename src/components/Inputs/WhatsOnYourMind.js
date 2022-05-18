@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import InputUnstyled from "@mui/base/InputUnstyled";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { styled } from "@mui/system";
+import { useAuthContext } from "../../context/AuthContext";
 
 const grey = {
   50: "#F3F6F9",
@@ -75,13 +76,14 @@ const CustomInput = forwardRef(function CustomInput(props, ref) {
   );
 });
 
-export default function UnstyledInputBasic({ handleChangeInput, user }) {
+export default function WhatsOnYourMind({ handleChangeInput }) {
+  const context = useAuthContext();
   return (
     <CustomInput
       onChange={handleChangeInput}
-      aria-label={`what's on your mind, ${user.displayName}?`}
+      aria-label={`what's on your mind, ${context.user.displayName}?`}
       multiline
-      placeholder={`What's on your mind, ${user.displayName}?`}
+      placeholder={`What's on your mind, ${context.user.displayName}?`}
     />
   );
 }

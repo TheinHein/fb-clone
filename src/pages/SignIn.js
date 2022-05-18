@@ -6,12 +6,12 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import PasswordInput from "../components/PasswordInput.js";
+import PasswordInput from "../components/Inputs/PasswordInput.js";
 import { useAuthContextUpdater } from "../context/AuthContext.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import useErrorHandler from "../hooks/useErrorHandler";
 import { useForm } from "react-hook-form";
-import InputWithClearBtn from "../components/InputWithClearBtn.js";
+import InputWithClearBtn from "../components/Inputs/InputWithClearBtn.js";
 import { useState } from "react";
 import Loading from "./Loading.js";
 

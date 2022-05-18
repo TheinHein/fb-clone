@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button, LinearProgress, Stack, Typography } from "@mui/material";
-import InputWithClearBtn from "../components/InputWithClearBtn.js";
+import InputWithClearBtn from "../components/Inputs/InputWithClearBtn.js";
 import DatePicker from "../components/DatePicker.js";
-import RadioButtons from "../components/RadioButtons.js";
-import PasswordInput from "../components/PasswordInput.js";
+import RadioButtons from "../components/Buttons/RadioButtons.js";
+import PasswordInput from "../components/Inputs/PasswordInput.js";
 import { useAuthContextUpdater } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import useErrorHandler from "../hooks/useErrorHandler.js";

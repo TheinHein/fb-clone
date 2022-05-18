@@ -1,5 +1,5 @@
 import React from "react";
-import BaseMediaCard from "./Base/BaseMediaCard";
+import BaseMediaCard from "../Base/BaseMediaCard";
 
 function PostCard({ post = {}, loading, handleLike }) {
   return (

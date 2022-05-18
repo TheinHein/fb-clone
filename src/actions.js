@@ -1,11 +1,6 @@
 import MovieCreationIcon from "@mui/icons-material/MovieCreation";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import GroupsIcon from "@mui/icons-material/Groups";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-
-import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 
 export const reelRoomGroup = [
   {

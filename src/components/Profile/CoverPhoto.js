@@ -1,11 +1,11 @@
-import SwipeableTemporaryDrawer from "../SwipeableTemporaryDrawer";
-import EditProfileDrawer from "../EditProfile/EditProfileDrawer";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import EditIcon from "@mui/icons-material/Edit";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import DrawerWithBtn from "../Drawer/DrawerWithBtn";
+import EditProfileDrawer from "../Drawer/EditProfileDrawer";
 import ProfileAvatar from "./ProfileAvatar";
 import { useAuthContext } from "../../context/AuthContext";
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
+import EditProfile from "../Buttons/EditProfile";
+import AddToStory from "../Buttons/AddToStory";
+import More from "../Buttons/More";
 
 function CoverPhoto() {
   const context = useAuthContext();
@@ -15,32 +15,16 @@ function CoverPhoto() {
         displayName={context.user.displayName}
         avatarSrc={context.user.photoURL}
       />
-
       <Stack direction="row" spacing={1}>
-        <Button
-          fullWidth
-          startIcon={<AddCircleIcon />}
-          endIcon={"Add to Story"}
-          variant="blue"
-        />
-        <SwipeableTemporaryDrawer
+        <AddToStory />
+        <DrawerWithBtn
           anchor={"right"}
-          button={(toggleDrawer) => (
-            <Button
-              fullWidth
-              startIcon={<EditIcon />}
-              endIcon={"Edit Profile"}
-              onClick={toggleDrawer}
-              variant="grey"
-            />
-          )}
+          button={(toggleDrawer) => <EditProfile toggleDrawer={toggleDrawer} />}
           drawer={(toggleDrawer) => (
             <EditProfileDrawer toggleDrawer={toggleDrawer} />
           )}
         />
-        <Button variant="grey">
-          <MoreHorizIcon />
-        </Button>
+        <More />
       </Stack>
     </Stack>
   );

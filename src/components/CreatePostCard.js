@@ -3,10 +3,9 @@ import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
-import SwipeableTemporaryDrawer from "./SwipeableTemporaryDrawer";
-import CreatePostDrawer from "./CreatePostDrawer";
-// import AddPhotosBtn from "./AddPhotosBtn";
-import WhatsOnYourMindBtn from "./WhatsOnYourMindBtn";
+import DrawerWithBtn from "./Drawer/DrawerWithBtn";
+import CreatePostDrawer from "./Drawer/CreatePostDrawer";
+import WhatsOnYourMindBtn from "./Buttons/WhatsOnYourMindBtn";
 import ActionBtns from "./ActionBtns";
 import { reelRoomGroup } from "../actions";
 import { useAuthContext } from "../context/AuthContext";
@@ -26,7 +25,7 @@ export default function CreatePostCard() {
           />
         }
         title={
-          <SwipeableTemporaryDrawer
+          <DrawerWithBtn
             anchor="bottom"
             button={(toggleDrawer) => (
               <WhatsOnYourMindBtn
@@ -42,7 +41,6 @@ export default function CreatePostCard() {
             )}
           />
         }
-        // action={<AddPhotosBtn />}
       />
       <Divider sx={{ width: "95%", margin: "0 auto" }} />
       <CardActions sx={{ backgroundColor: "#white" }}>

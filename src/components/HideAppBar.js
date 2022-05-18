@@ -2,9 +2,9 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CssBaseline from "@mui/material/CssBaseline";
-import SwipeableTemporaryDrawer from "./SwipeableTemporaryDrawer";
+import DrawerWithBtn from "./Drawer/DrawerWithBtn";
 import { Divider } from "@mui/material";
-import SearchDrawer from "./SearchDrawer";
+import SearchDrawer from "./Drawer/SearchDrawer";
 import HideOnScroll from "./HideOnScroll";
 import Search from "./Buttons/Search";
 
@@ -36,7 +36,7 @@ export default function HideAppBar(props) {
             >
               {title}
             </Typography>
-            <SwipeableTemporaryDrawer
+            <DrawerWithBtn
               anchor="right"
               button={(toggleDrawer) => <Search onClick={toggleDrawer} />}
               drawer={(toggleDrawer) => (

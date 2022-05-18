@@ -1,16 +1,10 @@
-import { Avatar, Stack, Card, CardHeader, Button } from "@mui/material";
+import { Avatar, Stack, Card, CardHeader } from "@mui/material";
 import MenuButtons from "./MenuButtons";
 import SimpleAccordion from "./SimpleAccordion";
-import { useAuthContextUpdater } from "../../context/AuthContext";
 import { accordionList } from "../../menuBntList";
+import Logout from "../Buttons/Logout";
 
 function Menu() {
-  const context = useAuthContextUpdater();
-
-  const handleClickSignOut = () => {
-    context.handleSignOut();
-  };
-
   return (
     <Stack p={1}>
       <Card square elevation={0} sx={{ bgcolor: "transparent" }}>
@@ -35,9 +29,7 @@ function Menu() {
         />
       ))}
 
-      <Button fullWidth variant="grey" onClick={handleClickSignOut}>
-        Log Out
-      </Button>
+      <Logout />
     </Stack>
   );
 }

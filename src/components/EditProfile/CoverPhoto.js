@@ -1,14 +1,14 @@
 import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActualOutlined";
 import { Box, Typography, Stack, Button } from "@mui/material";
-import SwipeableTemporaryDrawer from "../SwipeableTemporaryDrawer";
-import SelectPhotoDrawer from "../SelectPhotoDrawer";
+import DrawerWithBtn from "../Drawer/DrawerWithBtn";
+import SelectPhotoDrawer from "../Drawer/SelectPhotoDrawer";
 
 function CoverPhoto() {
   return (
     <Stack spacing={1}>
       <Stack direction="row" justifyContent="space-between" width="100%">
         <Typography variant="h3">Cover Photo</Typography>
-        <SwipeableTemporaryDrawer
+        <DrawerWithBtn
           anchor={"bottom"}
           button={(toggleDrawer) => (
             <Button size="small" onClick={() => toggleDrawer(true)}>

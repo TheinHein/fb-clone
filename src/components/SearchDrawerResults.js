@@ -1,13 +1,12 @@
-import { Stack } from "@mui/material";
-import UserCard from "./UserCard";
+import UserCard from "./Cards/UserCard";
 
 function SearchDrawerResults({ results }) {
   return (
-    <Stack>
+    <>
       {results.map((result) => (
         <UserCard user={result} key={result.id} />
       ))}
-    </Stack>
+    </>
   );
 }
 

@@ -1,5 +1,4 @@
 import {
-  Box,
   Input,
   Typography,
   Skeleton,
@@ -13,14 +12,14 @@ import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 function PhotoPicker(props) {
   const { onChange, id, photo, onSave } = props;
   return (
-    <Stack p={1} m="0 auto" width={{ md: "50%" }} spacing={3}>
+    <>
       <label htmlFor={id}>
         <Input
           onChange={onChange}
           accept="image/*"
           id={id}
           type="file"
-          style={{ visibility: "hidden" }}
+          style={{ display: "none" }}
         />
         <Button
           aria-label="upload picture"
@@ -50,7 +49,7 @@ function PhotoPicker(props) {
           <Button onClick={onSave}>Save</Button>
         </Stack>
       )}
-    </Stack>
+    </>
   );
 }
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
-export default function SwipeableTemporaryDrawer({ anchor, button, drawer }) {
+export default function DrawerWithBtn({ anchor, button, drawer }) {
   const [state, setState] = useState({
     top: false,
     left: false,

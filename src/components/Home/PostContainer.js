@@ -1,4 +1,4 @@
-import PostCard from "../PostCard";
+import PostCard from "../Cards/PostCard";
 
 function PostContainer({ post = {}, loading }) {
   return <PostCard post={post} loading={loading} />;
