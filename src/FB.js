@@ -93,6 +93,13 @@ export default (() => {
     return userData;
   };
 
+  const getUserDataRT = (userId, setUser) => {
+    const userDocRef = doc(db, "users", userId);
+    onSnapshot(userDocRef, (snapshot) => {
+      setUser({ ...snapshot.data(), id: snapshot.id });
+    });
+  };
+
   const getUserDataByRef = async (userRef) => {
     const userDocRef = doc(db, `users/${userRef}`);
     const userDoc = await getDoc(userDocRef);
@@ -177,6 +184,18 @@ export default (() => {
               ["timestamp.seconds"],
               ["desc"]
             )
+          );
+        } else if (change.type === "modified") {
+          const userData = await getUserDataByRef(change.doc.data().by.id);
+          const update = {
+            displayName: userData.displayName,
+            photoURL: userData.photoURL,
+            userId: userData.id,
+            ...change.doc.data(),
+            id: change.doc.id,
+          };
+          setPosts((prev) =>
+            prev.map((post) => (post.id === change.doc.id ? update : post))
           );
         }
       });
@@ -284,6 +303,22 @@ export default (() => {
     }
   };
 
+  const getAllFriends = async (userId, setFriends) => {
+    const userData = await getUserData(userId);
+    if (userData.friends) {
+      userData.friends.forEach(async (friend) => {
+        const friendData = await getUserData(friend.id);
+        const { displayName, photoURL } = friendData;
+        setFriends((prev) =>
+          _.uniqBy(
+            prev.concat({ displayName, photoURL, id: friendData.id }),
+            "id"
+          )
+        );
+      });
+    }
+  };
+
   // -- users -- posts -- comments
 
   const createComment = async (userId, postId, comment) => {
@@ -375,6 +410,7 @@ export default (() => {
     signIn,
     logOut,
     getUserData,
+    getUserDataRT,
     getUserDataByRef,
     getUsersByName,
     createPost,
@@ -383,6 +419,7 @@ export default (() => {
     getAllFriendsPosts,
     handleFriendShip,
     getAllPendingRequests,
+    getAllFriends,
     createComment,
     getCommentByUserId,
     getInitComments,

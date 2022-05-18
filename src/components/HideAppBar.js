@@ -27,13 +27,7 @@ export default function HideAppBar(props) {
               justifyContent: "space-between",
             }}
           >
-            <Typography
-              variant="h6"
-              role="button"
-              component="div"
-              color={titleColor}
-              sx={{ textAlign: "left", cursor: "pointer" }}
-            >
+            <Typography variant="h3" component="h1" color={titleColor}>
               {title}
             </Typography>
             <DrawerWithBtn

@@ -9,7 +9,7 @@ import BaseDrawer from "../Base/BaseDrawer";
 function SearchDrawer({ toggleDrawer }) {
   const [input, setInput] = useState("");
   const users = useSearchUsers(input);
-
+  console.log(users);
   function handleInputSearch(event) {
     setInput(event.target.value);
   }
@@ -30,7 +30,7 @@ function SearchDrawer({ toggleDrawer }) {
           />
         </>
       }
-      body={<SearchDrawerResults results={users} />}
+      body={<SearchDrawerResults results={users} toggleDrawer={toggleDrawer} />}
     />
   );
 }

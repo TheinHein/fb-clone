@@ -1,7 +1,7 @@
 import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActualOutlined";
 import { Box, Typography, Stack, Button } from "@mui/material";
-import DrawerWithBtn from "../Drawer/DrawerWithBtn";
-import SelectPhotoDrawer from "../Drawer/SelectPhotoDrawer";
+import DrawerWithBtn from "../../Drawer/DrawerWithBtn";
+import SelectPhotoDrawer from "../../Drawer/SelectPhotoDrawer";
 
 function CoverPhoto() {
   return (

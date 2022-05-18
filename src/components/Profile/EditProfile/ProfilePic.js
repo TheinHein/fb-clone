@@ -1,7 +1,7 @@
 import { Typography, Avatar, Button, Stack } from "@mui/material";
-import DrawerWithBtn from "../Drawer/DrawerWithBtn";
-import SelectPhotoDrawer from "../Drawer/SelectPhotoDrawer";
-import { useAuthContext } from "../../context/AuthContext";
+import DrawerWithBtn from "../../Drawer/DrawerWithBtn";
+import SelectPhotoDrawer from "../../Drawer/SelectPhotoDrawer";
+import { useAuthContext } from "../../../context/AuthContext";
 
 function ProfilePic() {
   const context = useAuthContext();

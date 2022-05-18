@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import About from "../Profile/About";
-import ProfilePic from "../EditProfile/ProfilePic";
-import CoverPhoto from "../EditProfile/CoverPhoto";
+import ProfilePic from "../Profile/EditProfile/ProfilePic";
+import CoverPhoto from "../Profile/EditProfile/CoverPhoto";
 import BaseDrawer from "../Base/BaseDrawer";
 import Back from "../Buttons/Back";
 

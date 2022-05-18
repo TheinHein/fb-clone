@@ -1,39 +1,33 @@
 import { useEffect, useState } from "react";
-import {
-  collection,
-  query,
-  orderBy,
-  getDocs,
-  startAt,
-  endAt,
-} from "firebase/firestore";
-import { db } from "../firebase";
+import { useAuthContext } from "../context/AuthContext";
+import FB from "../FB";
+import checkArray from "../utils/checkArray";
 
 function useSearchUsers(input) {
+  const context = useAuthContext();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     if (input !== "") {
       (async () => {
-        const users = await getUsersFromFirestore(input);
+        const allUsers = await FB.getUsersByName(input);
+        let users = allUsers.filter((user) => user.id !== context.user.id);
+        users = users.map((user) =>
+          user.friends &&
+          checkArray({
+            array: user.friends,
+            prop: "id",
+            check: context.user.id,
+          })
+            ? { ...user, friend: true }
+            : { ...user, friend: false }
+        );
         setUsers(users);
       })();
     }
-  }, [input]);
+  }, [input, context.user.id]);
 
   return users;
 }
-
-const getUsersFromFirestore = async (input) => {
-  console.log("Fetching Users");
-  const q = query(
-    collection(db, "users"),
-    orderBy("lowerCaseName"),
-    startAt(input.toLowerCase()),
-    endAt(input.toLowerCase() + "\uf8ff")
-  );
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-};
 
 export default useSearchUsers;

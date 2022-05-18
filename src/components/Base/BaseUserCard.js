@@ -1,11 +1,12 @@
 import { Avatar, AvatarGroup, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function BaseUserCard({ user, children }) {
+function BaseUserCard({ user, children, toggleDrawer }) {
   const navigate = useNavigate();
   const handleClickShowProfile = (event) => {
     event.stopPropagation();
     navigate(`/users/${user.id}`);
+    toggleDrawer && toggleDrawer();
   };
   return (
     <Stack
@@ -15,6 +16,7 @@ function BaseUserCard({ user, children }) {
       spacing={1}
       bgcolor="white"
       onClick={handleClickShowProfile}
+      sx={{ cursor: "pointer" }}
     >
       <Avatar
         alt={user.displayName}

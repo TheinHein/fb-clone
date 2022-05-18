@@ -3,12 +3,12 @@ import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
-import DrawerWithBtn from "./Drawer/DrawerWithBtn";
-import CreatePostDrawer from "./Drawer/CreatePostDrawer";
-import WhatsOnYourMindBtn from "./Buttons/WhatsOnYourMindBtn";
-import ActionBtns from "./ActionBtns";
-import { reelRoomGroup } from "../actions";
-import { useAuthContext } from "../context/AuthContext";
+import DrawerWithBtn from "../Drawer/DrawerWithBtn";
+import CreatePostDrawer from "../Drawer/CreatePostDrawer";
+import WhatsOnYourMindBtn from "../Buttons/WhatsOnYourMindBtn";
+import ActionBtns from "../ActionBtns";
+import { reelRoomGroup } from "../../actions";
+import { useAuthContext } from "../../context/AuthContext";
 
 export default function CreatePostCard() {
   const context = useAuthContext();

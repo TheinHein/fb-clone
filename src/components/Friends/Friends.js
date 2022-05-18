@@ -4,7 +4,7 @@ import PeopleYouMayKnowSection from "./PeopleYouMayKnowSection";
 
 function Friends() {
   return (
-    <Stack spacing={1} m={1} divider={<Divider />}>
+    <Stack spacing={1} divider={<Divider />} bgcolor="white" p={2}>
       <FriendRequestsSection />
       <PeopleYouMayKnowSection />
     </Stack>

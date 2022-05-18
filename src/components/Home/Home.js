@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
-import CreatePostCard from "../CreatePostCard";
+import CreatePostCard from "../Cards/CreatePostCard";
 import PostContainer from "./PostContainer";
 
 function Home() {

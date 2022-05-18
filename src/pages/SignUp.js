@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, LinearProgress, Stack, Typography } from "@mui/material";
 import InputWithClearBtn from "../components/Inputs/InputWithClearBtn.js";
-import DatePicker from "../components/DatePicker.js";
+import DatePicker from "../components/Inputs/DatePicker.js";
 import RadioButtons from "../components/Buttons/RadioButtons.js";
 import PasswordInput from "../components/Inputs/PasswordInput.js";
 import { useAuthContextUpdater } from "../context/AuthContext";

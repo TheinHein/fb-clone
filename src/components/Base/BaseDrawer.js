@@ -3,7 +3,7 @@ import React from "react";
 
 function BaseDrawer({ toggleDrawer, header, body }) {
   return (
-    <Stack divider={<Divider />} px={1}>
+    <Stack divider={<Divider />}>
       <Stack
         direction="row"
         alignItems="center"

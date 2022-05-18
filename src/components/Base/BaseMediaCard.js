@@ -22,7 +22,7 @@ import Time from "../Time";
 import Type from "../Type";
 import Like from "../Buttons/Like";
 import checkArray from "../../utils/checkArray";
-import useGetUserData from "../../hooks/useGetUserData";
+import useGetUserDataRT from "../../hooks/useGetUserDataRT";
 
 import { useState, useEffect } from "react";
 import FB from "../../FB";
@@ -44,7 +44,8 @@ export default function BaseMediaCard({ post = {}, loading }) {
   } = post;
 
   const context = useAuthContext();
-  const userData = useGetUserData(context.user.id);
+  const userData = useGetUserDataRT();
+
   const [comment, setComment] = useState();
 
   useEffect(() => {
@@ -166,7 +167,14 @@ export default function BaseMediaCard({ post = {}, loading }) {
           </>
         ) : (
           <>
-            <Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "gray",
+                fontSize: "0.7rem",
+                textDecoration: "underline",
+              }}
+            >
               {userData.likedPosts &&
               checkArray({
                 array: userData.likedPosts,
@@ -174,7 +182,7 @@ export default function BaseMediaCard({ post = {}, loading }) {
                 check: post.id,
               })
                 ? `You and ${likes.length} others `
-                : likes.length}
+                : likes.length}{" "}
               likes
             </Typography>
             <Counter name={"Comments"} counts={totalComments} />

@@ -1,13 +1,13 @@
 import { Button } from "@mui/material";
 import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
-import useGetUserData from "../../hooks/useGetUserData";
+import useGetUserDataRT from "../../hooks/useGetUserDataRT";
 import checkArray from "../../utils/checkArray";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
 function Like({ post }) {
   const context = useAuthContext();
-  const userData = useGetUserData(context.user.id);
+  const userData = useGetUserDataRT();
 
   const handleClickLike = async () => {
     await FB.updatePostLikes({

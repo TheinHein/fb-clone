@@ -16,16 +16,34 @@ function FriendRequestsSection() {
     <Stack spacing={2}>
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="h3">Friend Requests</Typography>
-        <Button arial-label="see all friend requests" size="small">
-          See All
-        </Button>
+        {pendingRequests.length > 0 && (
+          <Button arial-label="see all friend requests" size="small">
+            See All
+          </Button>
+        )}
       </Stack>
-      {pendingRequests.map((pendingRequest) => (
-        <FriendRequestCard friend={pendingRequest} key={pendingRequest.id} />
-      ))}
-      <Button fullWidth variant="grey">
-        See All
-      </Button>
+      {pendingRequests.length > 0 ? (
+        <>
+          {pendingRequests.map((pendingRequest) => (
+            <FriendRequestCard
+              friend={pendingRequest}
+              key={pendingRequest.id}
+            />
+          ))}
+          <Button fullWidth variant="grey">
+            See All
+          </Button>
+        </>
+      ) : (
+        <>
+          <Typography align="center" variant="h3">
+            No New Requests
+          </Typography>
+          <Typography align="center">
+            Try searching your friends by their name.
+          </Typography>
+        </>
+      )}
     </Stack>
   );
 }
