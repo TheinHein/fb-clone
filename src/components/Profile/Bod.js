@@ -1,6 +1,6 @@
 import Shortcuts from "./Shortcuts";
 import { Typography, Stack } from "@mui/material";
-import Post from "../Home/Post";
+// import Post from "../Home/Post";
 import { useAuthContext } from "../../context/AuthContext";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 
@@ -9,7 +9,7 @@ function Bod() {
   return (
     <Stack bgcolor="white">
       <Shortcuts />
-      <Post
+      {/* <Post
         post={context.user}
         content={
           <>
@@ -26,7 +26,7 @@ function Bod() {
             <Typography>Born on May 5, 1996</Typography>
           </>
         }
-      />
+      /> */}
     </Stack>
   );
 }

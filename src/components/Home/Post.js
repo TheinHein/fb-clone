@@ -21,9 +21,9 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import CommentContainer from "./CommentContainer";
 import CommentsContainer from "./CommentsContainer";
 import { useAuthContext } from "../../context/AuthContext";
-import useGetUserDataFromFirestore from "../../hooks/useGetUserDataFromFirestore";
+import useGetUserData from "../../hooks/useGetUserData";
 
-export default function Post({ post = {}, loading, handleLike }) {
+function Post({ post = {}, loading, handleLike }) {
   const {
     photoURL,
     fileURL,
@@ -37,7 +37,7 @@ export default function Post({ post = {}, loading, handleLike }) {
   } = post;
 
   const context = useAuthContext();
-  const userData = useGetUserDataFromFirestore(context.user.id);
+  const userData = useGetUserData(context.user.id);
   return (
     <Card>
       <CardHeader
