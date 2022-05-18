@@ -21,18 +21,3 @@ export const reelRoomGroup = [
     icon: <GroupsIcon sx={{ color: "blue" }} />,
   },
 ];
-
-export const likeCommentShare = [
-  {
-    name: "Like",
-    icon: <ThumbUpOutlinedIcon />,
-  },
-  {
-    name: "Comment",
-    icon: <ChatBubbleOutlineOutlinedIcon />,
-  },
-  {
-    name: "Share",
-    icon: <ReplyOutlinedIcon />,
-  },
-];

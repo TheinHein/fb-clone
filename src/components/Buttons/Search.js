@@ -1,7 +1,7 @@
 import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-function SearchBtn({ onClick }) {
+function Search({ onClick }) {
   return (
     <IconButton
       size="medium"
@@ -16,4 +16,4 @@ function SearchBtn({ onClick }) {
   );
 }
 
-export default SearchBtn;
+export default Search;

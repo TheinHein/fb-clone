@@ -6,7 +6,7 @@ import SwipeableTemporaryDrawer from "./SwipeableTemporaryDrawer";
 import { Divider } from "@mui/material";
 import SearchDrawer from "./SearchDrawer";
 import HideOnScroll from "./HideOnScroll";
-import SearchBtn from "./SearchBtn";
+import Search from "./Buttons/Search";
 
 export default function HideAppBar(props) {
   const { title, titleColor } = props;
@@ -38,7 +38,7 @@ export default function HideAppBar(props) {
             </Typography>
             <SwipeableTemporaryDrawer
               anchor="right"
-              button={(toggleDrawer) => <SearchBtn onClick={toggleDrawer} />}
+              button={(toggleDrawer) => <Search onClick={toggleDrawer} />}
               drawer={(toggleDrawer) => (
                 <SearchDrawer toggleDrawer={toggleDrawer} />
               )}

@@ -13,18 +13,21 @@ import {
   IconButton,
 } from "@mui/material";
 import Counter from "../Counter";
-import ClearBtn from "../ClearBtn";
+import ClearBtn from "../Buttons/Clear";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import CommentContainer from "../Home/CommentContainer";
 import CommentsContainer from "../Home/CommentsContainer";
 import { useAuthContext } from "../../context/AuthContext";
 import Time from "../Time";
 import Type from "../Type";
-import Like from "../Like";
+import Like from "../Buttons/Like";
 import checkArray from "../../utils/checkArray";
 import useGetUserData from "../../hooks/useGetUserData";
+
 import { useState, useEffect } from "react";
 import FB from "../../FB";
+import Comment from "../Buttons/Comment";
+import Share from "../Buttons/Share";
 
 export default function BaseMediaCard({ post = {}, loading }) {
   const {
@@ -195,12 +198,8 @@ export default function BaseMediaCard({ post = {}, loading }) {
         ) : (
           <>
             <Like post={post} />
-            <Button size="small" fullWidth>
-              Comment
-            </Button>
-            <Button size="small" fullWidth>
-              Share
-            </Button>
+            <Comment />
+            <Share />
           </>
         )}
       </CardActions>

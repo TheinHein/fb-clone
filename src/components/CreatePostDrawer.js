@@ -16,7 +16,7 @@ import UnstyledSelectObjectValues from "./Select";
 import UnstyledInputBasic from "./UnstyledInputBasic";
 import { useAuthContext } from "../context/AuthContext";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
-import ClearBtn from "./ClearBtn";
+import Clear from "./Buttons/Clear";
 import FB from "../FB";
 
 function CreatePostDrawer({ toggleDrawer }) {
@@ -78,7 +78,7 @@ function CreatePostDrawer({ toggleDrawer }) {
           margin: "5px 10px",
         }}
       >
-        <ClearBtn onClick={toggleDrawer} />
+        <Clear onClick={toggleDrawer} />
         <Typography
           variant="h2"
           sx={{
@@ -141,7 +141,7 @@ function CreatePostDrawer({ toggleDrawer }) {
       />
       {file.fileURI && (
         <>
-          <ClearBtn onClick={() => setFile({ file: null, fileURI: null })} />
+          <Clear onClick={() => setFile({ file: null, fileURI: null })} />
           <Box sx={{ width: "60%" }} component={"img"} src={file.fileURI}></Box>
         </>
       )}

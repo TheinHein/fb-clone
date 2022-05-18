@@ -1,8 +1,9 @@
 import { Button } from "@mui/material";
-import { useAuthContext } from "../context/AuthContext";
-import FB from "../FB";
-import useGetUserData from "../hooks/useGetUserData";
-import checkArray from "../utils/checkArray";
+import { useAuthContext } from "../../context/AuthContext";
+import FB from "../../FB";
+import useGetUserData from "../../hooks/useGetUserData";
+import checkArray from "../../utils/checkArray";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
 function Like({ post }) {
   const context = useAuthContext();
@@ -21,6 +22,8 @@ function Like({ post }) {
       size="small"
       fullWidth
       onClick={handleClickLike}
+      startIcon={<ThumbUpOutlinedIcon />}
+      endIcon="Like"
       sx={{
         color:
           userData.likedPosts &&
@@ -31,9 +34,7 @@ function Like({ post }) {
           }) &&
           "red",
       }}
-    >
-      Like
-    </Button>
+    />
   );
 }
 
