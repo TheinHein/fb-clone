@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useAuthContext, useAuthContextUpdater } from "../context/AuthContext";
 import PhotoPicker from "./PhotoPicker";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { db, storage } from "../firebase";
+import { db } from "../firebase";
 import { updateDoc, doc } from "firebase/firestore";
 import { CircularProgress, Modal, Typography } from "@mui/material";
 import { Stack } from "@mui/material";
+import FB from "../FB";
 
 function PhotoPickerContainer({ toggleDrawer, id }) {
   const context = useAuthContext();
@@ -23,15 +23,25 @@ function PhotoPickerContainer({ toggleDrawer, id }) {
   const handleFile = async () => {
     if (photo.file) {
       const filePath = `${context.user.id}/photos/${photo.file.name}`;
-      const newFileRef = ref(storage, filePath);
-      const fileSnapShot = await uploadBytesResumable(newFileRef, photo.file);
-      const publicFileURL = await getDownloadURL(newFileRef);
+
+      const { fileSnapShot, publicFileURL } = await FB.uploadFile({
+        filePath,
+        file: photo.file,
+      });
 
       await updateDoc(doc(db, "users", `${context.user.id}`), {
         photoURL: publicFileURL,
         storagePhotoURI: fileSnapShot.metadata.fullPath,
       });
       update.handleUpdate({ photoURL: publicFileURL });
+
+      const data = {
+        userId: context.user.id,
+        file: photo.file,
+        type: "Friends",
+        activity: "profile picture",
+      };
+      await FB.createPost(data);
     }
   };
 
@@ -69,12 +79,12 @@ function PhotoPickerContainer({ toggleDrawer, id }) {
           alignItems="center"
           borderRadius={2}
           spacing={2}
-          sx={{ transform: "translate(-50%,-50%)" }}
+          sx={{ transform: "translate(-50%,-50%)", width: "280px" }}
         >
           <Typography id="modal-modal-description" variant="h6" component="h3">
             Setting profile picture
           </Typography>
-          <CircularProgress />
+          <CircularProgress sx={{ padding: "5px" }} />
         </Stack>
       </Modal>
     </>

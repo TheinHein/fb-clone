@@ -48,9 +48,13 @@ const themeOptions = {
       fontWeight: 300,
       letterSpacing: "0.009em",
     },
+    body2: {
+      fontSize: "0.8rem",
+      fontWeight: 300,
+    },
     button: {
       textTransform: "none",
-      fontSize: "1rem",
+      fontSize: "0.85rem",
       lineHeight: 1,
       fontWeight: 500,
       letterSpacing: "0.009em",
@@ -78,6 +82,9 @@ const themeOptions = {
       },
     },
     MuiButton: {
+      // defaultProps: {
+      //   disableElevation: true,
+      // },
       styleOverrides: {
         root: {
           "&.MuiButton-sizeMedium": {
@@ -116,6 +123,17 @@ const themeOptions = {
           },
         },
       ],
+    },
+    MuiFilledInput: {
+      defaultProps: {
+        disableUnderline: true,
+      },
+      styleOverrides: {
+        root: {
+          height: "auto",
+          background: "white",
+        },
+      },
     },
     MuiInputBase: {
       styleOverrides: {

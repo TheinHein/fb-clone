@@ -1,9 +1,9 @@
 import {
   Avatar,
   Button,
-  Paper,
   CircularProgress,
   Divider,
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -13,46 +13,49 @@ import { useParams } from "react-router-dom";
 import FB from "../FB";
 import Loading from "./Loading";
 import { useAuthContext } from "../context/AuthContext";
-import _ from "lodash";
+import PostCard from "../components/Cards/PostCard";
+import { useNavigate } from "react-router-dom";
+import FriendCardSM from "../components/Cards/FriendCardSM";
 
 function UserProfile() {
   const params = useParams();
   const context = useAuthContext();
-  const [mutualFriends, setMutualFriends] = useState(0);
-
   const [userData, setUserData] = useState({});
-
+  const [mutualFriends, setMutualFriends] = useState(0);
   const [friends, setFriends] = useState([]);
-
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    (async () => {
-      const user = await FB.getUserData(context.user.id);
-      if (userData.friends) {
-        userData.friends.forEach(async (friend) => {
-          const friendData = await FB.getUserDataByRef(friend.id);
-          setFriends((prev) => _.uniqBy(prev.concat(friendData)), "id");
+  const navigate = useNavigate();
 
-          if (user.friends) {
-            user.friends.some((f) => {
-              return (
-                f.id === friend.id && setMutualFriends((prev) => (prev += 1))
-              );
-            });
-          }
-        });
-      }
-    })();
-  }, [context.user.id, userData.friends]);
+  useEffect(() => {
+    if (userData.friends)
+      (async () => {
+        if (userData.friends.some((friend) => friends.includes(friend))) {
+          setMutualFriends((prev) => (prev += 1));
+        }
+      })();
+  }, [userData.friends, friends]);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
       const userData = await FB.getUserData(params.friendId);
       setUserData(userData);
+      await FB.getAllFriends(userData, setFriends);
       setLoading(false);
     })();
   }, [params.friendId]);
+
+  useEffect(() => {
+    (async () => {
+      await FB.getAllPosts(params.friendId, setPosts);
+    })();
+  }, [params.friendId]);
+
+  const handleClickShowProfile = (friendId) => {
+    navigate(`/users/${friendId}`);
+    setFriends([]);
+  };
 
   return (
     <>
@@ -93,34 +96,48 @@ function UserProfile() {
           <Typography>Works at</Typography>
           <>
             <Typography variant="h3">Friends</Typography>
-            <Typography>
-              {userData.friends ? `${userData.friends.length}` : "0"} (
-              {mutualFriends} mutual)
+            <Typography variant="body2">
+              {friends ? `${friends.length}` : "0"} ({mutualFriends} mutual)
             </Typography>
-            <Stack
-              direction="row"
-              rowGap={2}
-              columnGap={2}
-              flexWrap="wrap"
-              justifyContent="center"
-            >
+            <Stack direction="row" rowGap={2} columnGap={2} flexWrap="wrap">
               {friends.map((friend) => (
-                <Paper key={friend.id} sx={{ borderRadius: 1 }}>
-                  <Avatar
-                    variant="square"
-                    sx={{
-                      width: 140,
-                      height: 140,
-                      borderRadius: "8px 8px 0 0",
-                    }}
-                  />
-                  <Typography variant="h5" sx={{ p: 2, pt: 1, pl: 1 }}>
-                    {friend.displayName}
-                  </Typography>
-                </Paper>
+                <FriendCardSM
+                  key={friend.id}
+                  friend={friend}
+                  handleClickShowProfile={handleClickShowProfile}
+                />
               ))}
             </Stack>
           </>
+          <Stack>
+            <Typography variant="h3">Posts</Typography>
+            {posts.length > 0 ? (
+              <>
+                {posts.map((post) => (
+                  <PostCard
+                    post={{
+                      ...post,
+                      displayName: userData.displayName,
+                      photoURL: userData.photoURL,
+                    }}
+                    loading={loading}
+                    key={post.id}
+                  />
+                ))}
+              </>
+            ) : (
+              <Paper
+                sx={{
+                  padding: "100px 0",
+                  margin: "10px 0",
+                }}
+              >
+                <Typography variant="h3" align="center">
+                  No Post Yet
+                </Typography>
+              </Paper>
+            )}
+          </Stack>
         </Stack>
       )}
     </>

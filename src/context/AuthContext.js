@@ -28,6 +28,13 @@ export const AuthContextProvider = ({ children }) => {
       "user",
       JSON.stringify({ displayName, photoURL, id: uid })
     );
+
+    const data = {
+      activity: "dob",
+      type: "Friends",
+      userId: uid,
+    };
+    await FB.createPost(data);
     setAuthenticating(false);
   }, []);
 

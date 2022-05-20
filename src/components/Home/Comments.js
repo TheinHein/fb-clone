@@ -2,9 +2,12 @@ import { Button } from "@mui/material";
 import React from "react";
 import CommentCard from "./CommentCard";
 
-function Comments({ comments, lastVisible, handleClickMoreComments }) {
+function Comments({ comments, handleClickMoreComments }) {
   return (
     <>
+      <Button sx={{ width: "fit-content" }} onClick={handleClickMoreComments}>
+        View previous comments
+      </Button>
       {comments.map((comment) => (
         <CommentCard
           key={comment.id}
@@ -14,7 +17,6 @@ function Comments({ comments, lastVisible, handleClickMoreComments }) {
           timestamp={comment.timestamp}
         />
       ))}
-      {/* {lastVisible && <Button onClick={handleClickMoreComments}>MORE</Button>} */}
     </>
   );
 }

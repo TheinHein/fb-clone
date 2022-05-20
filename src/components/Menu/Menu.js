@@ -3,14 +3,26 @@ import MenuButtons from "./MenuButtons";
 import SimpleAccordion from "./SimpleAccordion";
 import { accordionList } from "../../menuBntList";
 import Logout from "../Buttons/Logout";
+import { useAuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Menu() {
+  const context = useAuthContext();
+  const navigate = useNavigate();
   return (
     <Stack p={1}>
       <Card square elevation={0} sx={{ bgcolor: "transparent" }}>
         <CardHeader
-          avatar={<Avatar alt="Travis Howard" src="" width={40} height={40} />}
-          title="Thein Than Hein"
+          onClick={() => navigate("/profile")}
+          avatar={
+            <Avatar
+              alt={context.user.displayName}
+              src={context.user.photoURL}
+              width={40}
+              height={40}
+            />
+          }
+          title={context.user.displayName}
           subheader="See your profile"
           sx={{
             "& .MuiCardHeader-subheader": {

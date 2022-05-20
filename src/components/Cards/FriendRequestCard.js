@@ -7,7 +7,7 @@ function FriendRequestCard({ friend }) {
   return (
     <BaseUserCard user={friend}>
       <Accept friendId={friend.id} />
-      <Button variant="contained" color="inherit">
+      <Button fullWidth variant="contained" color="inherit">
         Delete
       </Button>
     </BaseUserCard>

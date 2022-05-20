@@ -9,7 +9,6 @@ import BaseDrawer from "../Base/BaseDrawer";
 function SearchDrawer({ toggleDrawer }) {
   const [input, setInput] = useState("");
   const users = useSearchUsers(input);
-  console.log(users);
   function handleInputSearch(event) {
     setInput(event.target.value);
   }

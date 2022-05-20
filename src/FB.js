@@ -129,17 +129,51 @@ export default (() => {
     return documents.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   };
 
+  const getDocumentsInQueryRT = async (query, setDocs) => {
+    onSnapshot(query, (snapshot) => {
+      snapshot.docChanges().forEach(async (change) => {
+        const userData = await getUserDataByRef(change.doc.data().by.id);
+        if (change.type === "added") {
+          setDocs((prev) =>
+            _.orderBy(
+              _.uniqBy(
+                prev.concat({
+                  displayName: userData.displayName,
+                  photoURL: userData.photoURL,
+                  userId: userData.id,
+                  ...change.doc.data(),
+                  id: change.doc.id,
+                }),
+                "id"
+              ),
+              ["timestamp.seconds"],
+              ["desc"]
+            )
+          );
+        }
+      });
+    });
+  };
+
   // -- users -- posts
 
-  const createPost = async (data) => {
-    const { userId, text, file, type } = data;
-    const filePath = file && `${userId}/posts/${file.name}`;
+  const uploadFile = async (data) => {
+    const { filePath, file } = data;
     const newFileRef = file && ref(storage, filePath);
     const fileSnapShot = file && (await uploadBytesResumable(newFileRef, file));
     const publicFileURL = file && (await getDownloadURL(newFileRef));
+    return { fileSnapShot, publicFileURL };
+  };
+
+  const createPost = async (data) => {
+    const { userId, text = "", file = "", type, activity = "" } = data;
+    const filePath = file && `${userId}/posts/${file.name}`;
+    const { fileSnapShot, publicFileURL } =
+      file && (await uploadFile({ filePath, file }));
 
     const post = {
-      text,
+      text: text && text,
+      activity: activity && activity,
       likes: [],
       timestamp: serverTimestamp(),
       by: doc(db, `users/${userId}`),
@@ -157,6 +191,18 @@ export default (() => {
       const globalPostDocRef = doc(db, `globalPosts`, postRef.id);
       await setDoc(globalPostDocRef, post);
     }
+  };
+
+  const getPost = async (userId, postId) => {
+    const postDocRef = doc(db, `users/${userId}/posts`, postId);
+    const postDoc = await getDoc(postDocRef);
+    const postData = { ...postDoc.data(), id: postDoc.id };
+    return postData;
+  };
+
+  const getAllPosts = async (userId, setPosts) => {
+    const q = query(collection(db, `users/${userId}/posts`), limit(5));
+    return await getDocumentsInQueryRT(q, setPosts);
   };
 
   const getAllGlobalPosts = async (userId, setPosts) => {
@@ -303,8 +349,7 @@ export default (() => {
     }
   };
 
-  const getAllFriends = async (userId, setFriends) => {
-    const userData = await getUserData(userId);
+  const getAllFriends = async (userData, setFriends) => {
     if (userData.friends) {
       userData.friends.forEach(async (friend) => {
         const friendData = await getUserData(friend.id);
@@ -321,17 +366,17 @@ export default (() => {
 
   // -- users -- posts -- comments
 
-  const createComment = async (userId, postId, comment) => {
+  const createComment = async ({ ownerId, postId, comment, userId }) => {
     const commentsRef = collection(
       db,
-      `users/${userId}/posts/${postId}/comments`
+      `users/${ownerId}/posts/${postId}/comments`
     );
     await addDoc(commentsRef, {
       text: comment,
       timestamp: serverTimestamp(),
       by: doc(db, `users/${userId}`),
     });
-    const postDocRef = doc(db, `users/${userId}/posts`, `${postId}`);
+    const postDocRef = doc(db, `users/${ownerId}/posts`, `${postId}`);
     await runTransaction(db, async (transaction) => {
       const postDoc = await transaction.get(postDocRef);
       if (!postDoc.exists()) {
@@ -414,6 +459,8 @@ export default (() => {
     getUserDataByRef,
     getUsersByName,
     createPost,
+    getPost,
+    getAllPosts,
     updatePostLikes,
     getAllGlobalPosts,
     getAllFriendsPosts,
@@ -424,5 +471,6 @@ export default (() => {
     getCommentByUserId,
     getInitComments,
     getMoreComments,
+    uploadFile,
   };
 })();

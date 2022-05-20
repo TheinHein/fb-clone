@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Comment from "./Comment";
 import FB from "../../FB";
+import { useAuthContext } from "../../context/AuthContext";
 
-function CommentContainer({ postId, userId }) {
+function CommentContainer({ postId, ownerId }) {
   const [comment, setComment] = useState("");
+  const context = useAuthContext();
 
   const handleChangeComment = (event) => {
     setComment(event.target.value);
@@ -11,7 +13,12 @@ function CommentContainer({ postId, userId }) {
 
   const handleSubmitComment = async (event) => {
     event.preventDefault();
-    await FB.createComment(userId, postId, comment);
+    await FB.createComment({
+      ownerId,
+      userId: context.user.id,
+      postId,
+      comment,
+    });
     setComment("");
   };
 

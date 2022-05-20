@@ -3,6 +3,7 @@ import InputUnstyled from "@mui/base/InputUnstyled";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { styled } from "@mui/system";
 import { useAuthContext } from "../../context/AuthContext";
+import { TextField } from "@mui/material";
 
 const grey = {
   50: "#F3F6F9",
@@ -19,7 +20,7 @@ const grey = {
 
 const StyledInputElement = styled("input")(
   ({ theme }) => `
-  width: 100vw;
+  width: "100%";
   font-family: Poppins, sans-serif;
   font-size: 1rem;
   font-weight: 400;
@@ -42,7 +43,7 @@ const StyledInputElement = styled("input")(
 
 const StyledTextareaElement = styled(TextareaAutosize)(
   ({ theme }) => `
-  width: 100vw;
+  width: "100%";
   font-family: Poppins, sans-serif;
   font-size: 1rem;
   font-weight: 400;
@@ -79,10 +80,14 @@ const CustomInput = forwardRef(function CustomInput(props, ref) {
 export default function WhatsOnYourMind({ handleChangeInput }) {
   const context = useAuthContext();
   return (
-    <CustomInput
+    <TextField
+      sx={{ bgcolor: "white" }}
+      fullWidth
+      autoFocus
+      multiline
+      variant="filled"
       onChange={handleChangeInput}
       aria-label={`what's on your mind, ${context.user.displayName}?`}
-      multiline
       placeholder={`What's on your mind, ${context.user.displayName}?`}
     />
   );

@@ -8,6 +8,7 @@ function Share() {
       fullWidth
       startIcon={<ReplyOutlinedIcon />}
       endIcon="Share"
+      color="inherit"
     />
   );
 }

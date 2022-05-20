@@ -6,13 +6,13 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDErWe-xoR-Fe_sdOQ1RrS8o0XCeiEGJ2U",
-  authDomain: "myfb-79c79.firebaseapp.com",
-  projectId: "myfb-79c79",
-  storageBucket: "myfb-79c79.appspot.com",
-  messagingSenderId: "657380232666",
-  appId: "1:657380232666:web:16c7c5d8065aab7cfac4e3",
-  measurementId: "G-DLKLG7YMDH",
+  apiKey: "AIzaSyBjIOys2CMwELF8_TZ7CTDYmG6uKLkDgXo",
+  authDomain: "fb-clone-60c0a.firebaseapp.com",
+  projectId: "fb-clone-60c0a",
+  storageBucket: "fb-clone-60c0a.appspot.com",
+  messagingSenderId: "949287661871",
+  appId: "1:949287661871:web:c8a1ed3759c52f71de31da",
+  measurementId: "G-0JVCQTZDPK",
 };
 
 // Initialize Firebase

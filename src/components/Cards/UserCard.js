@@ -6,7 +6,7 @@ function UserCard({ user, buttons, toggleDrawer }) {
   return (
     <BaseUserCard user={user} toggleDrawer={toggleDrawer}>
       <Add friendId={user.id} />
-      <Button variant="contained" color="inherit">
+      <Button fullWidth variant="contained" color="inherit">
         Remove
       </Button>
     </BaseUserCard>

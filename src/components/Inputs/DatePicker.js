@@ -7,7 +7,7 @@ import { Controller } from "react-hook-form";
 import { forwardRef } from "react";
 
 const DatePicker = forwardRef((props, ref) => {
-  const { control, errors, setValue } = props;
+  const { control, errors, setValue, getValues } = props;
 
   const handleChange = (newValue) => {
     setValue("dob", newValue);
@@ -22,6 +22,7 @@ const DatePicker = forwardRef((props, ref) => {
           <FormLabel component="legend">Date of Birth</FormLabel>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <MobileDatePicker
+              value={getValues("dob")}
               onChange={handleChange}
               inputFormat="MM/dd/yyyy"
               renderInput={(params) => (

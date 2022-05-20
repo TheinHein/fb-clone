@@ -10,7 +10,7 @@ import { ThemeProvider } from "@mui/material";
 import myTheme from "./theme.js";
 import ErrorContainer from "./components/Error/ErrorContainer";
 import UserProfile from "./pages/UserProfile";
-import Friends from "./components/Friends/Friends";
+import DetailedPost from "./pages/DetailedPost";
 
 function RouteSwitch() {
   return (
@@ -34,19 +34,24 @@ function RouteSwitch() {
                   }
                 />
               ))}
-
-              <Route
-                path="users/:friendId"
-                element={
-                  <RequiredAuth>
-                    <Page
-                      title={"user-profile"}
-                      titleColor={"white"}
-                      component={<UserProfile />}
-                    />
-                  </RequiredAuth>
-                }
-              />
+              <Route path="users">
+                <Route
+                  path=":userId/posts/:postId"
+                  element={
+                    <RequiredAuth>
+                      <DetailedPost />
+                    </RequiredAuth>
+                  }
+                />
+                <Route
+                  path=":friendId"
+                  element={
+                    <RequiredAuth>
+                      <Page component={<UserProfile />} />
+                    </RequiredAuth>
+                  }
+                />
+              </Route>
             </Route>
 
             <Route path="/sign-in" element={<SignIn />} />

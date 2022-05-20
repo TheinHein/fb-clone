@@ -11,6 +11,7 @@ import {
   Button,
   Stack,
   IconButton,
+  Modal,
 } from "@mui/material";
 import Counter from "../Counter";
 import ClearBtn from "../Buttons/Clear";
@@ -28,10 +29,12 @@ import { useState, useEffect } from "react";
 import FB from "../../FB";
 import Comment from "../Buttons/Comment";
 import Share from "../Buttons/Share";
+import { useNavigate } from "react-router-dom";
 
-export default function BaseMediaCard({ post = {}, loading }) {
+export default function BaseMediaCard({ post = {}, loading, children }) {
   const {
     photoURL,
+    activity,
     fileURL,
     text,
     timestamp,
@@ -42,11 +45,11 @@ export default function BaseMediaCard({ post = {}, loading }) {
     userId,
     likes,
   } = post;
-
+  const navigate = useNavigate();
   const context = useAuthContext();
   const userData = useGetUserDataRT();
-
   const [comment, setComment] = useState();
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     if (userData.friends) {
@@ -62,10 +65,25 @@ export default function BaseMediaCard({ post = {}, loading }) {
     }
   }, [userData.friends, post.id, post.userId, context.user.id]);
 
+  const generateText = () => {
+    let text = "";
+    let pronoun = "their";
+
+    if (activity === "profile picture") {
+      text = `updated ${pronoun} profile picture`;
+    }
+    return text;
+  };
+
+  const handleClickDetailedPost = (event) => {
+    navigate(`/users/${post.userId}/posts/${post.id}`);
+  };
+
   return (
     <Card>
       <CardHeader
-        sx={{ paddingBottom: 1 }}
+        sx={{ cursor: "pointer", paddingBottom: 1 }}
+        onClick={handleClickDetailedPost}
         avatar={
           loading ? (
             <Skeleton
@@ -88,7 +106,14 @@ export default function BaseMediaCard({ post = {}, loading }) {
             {loading ? (
               <Skeleton animation="wave" width="40%" height={10} />
             ) : (
-              displayName
+              <>
+                {displayName}{" "}
+                {activity && (
+                  <Typography component="span" variant="body2">
+                    {generateText()}
+                  </Typography>
+                )}
+              </>
             )}
           </Typography>
         }
@@ -124,28 +149,42 @@ export default function BaseMediaCard({ post = {}, loading }) {
           )
         }
       />
-      <CardContent sx={{ paddingTop: "0" }}>
-        <Typography variant="body2">
-          {loading ? (
-            <>
-              <Skeleton
-                animation="wave"
-                height={10}
-                sx={{ marginBottom: 0.5 }}
-              />
-              <Skeleton animation="wave" height={10} width="80%" />
-            </>
-          ) : (
-            text
-          )}
-        </Typography>
-      </CardContent>
-      {fileURL && (
+      {children ? (
+        <>{children} </>
+      ) : (
         <>
-          {loading ? (
-            <Skeleton height={190} animation="wave" variant="rectangular" />
-          ) : (
-            <CardMedia component="img" src={fileURL} alt="sample" />
+          <CardContent sx={{ paddingTop: "0" }}>
+            <Typography variant="body2" noWrap>
+              {loading ? (
+                <>
+                  <Skeleton
+                    animation="wave"
+                    height={10}
+                    sx={{ marginBottom: 0.5 }}
+                  />
+                  <Skeleton animation="wave" height={10} width="80%" />
+                </>
+              ) : (
+                text
+              )}
+            </Typography>
+          </CardContent>
+
+          {fileURL && (
+            <>
+              {loading ? (
+                <Skeleton height={190} animation="wave" variant="rectangular" />
+              ) : (
+                <CardMedia
+                  component="img"
+                  src={fileURL}
+                  alt={"pic"}
+                  onClick={() => setModal(true)}
+                  sx={{ cursor: "pointer" }}
+                  loading="lazy"
+                />
+              )}
+            </>
           )}
         </>
       )}
@@ -181,9 +220,9 @@ export default function BaseMediaCard({ post = {}, loading }) {
                 prop: "id",
                 check: post.id,
               })
-                ? `You and ${likes.length} others `
+                ? `You and ${likes.length !== 0 && likes.length - 1} others `
                 : likes.length}{" "}
-              likes
+              like
             </Typography>
             <Counter name={"Comments"} counts={totalComments} />
           </>
@@ -206,7 +245,7 @@ export default function BaseMediaCard({ post = {}, loading }) {
         ) : (
           <>
             <Like post={post} />
-            <Comment />
+            <Comment postId={id} userId={userId} />
             <Share />
           </>
         )}
@@ -232,6 +271,27 @@ export default function BaseMediaCard({ post = {}, loading }) {
             <CommentContainer postId={id} userId={userId} />
           )}
         </>
+      )}
+      {modal && (
+        <Modal
+          open={modal}
+          onClose={() => setModal(false)}
+          sx={{ bgcolor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+        >
+          <Stack
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+            }}
+          >
+            <CardMedia component="img" src={fileURL} />
+          </Stack>
+        </Modal>
       )}
     </Card>
   );

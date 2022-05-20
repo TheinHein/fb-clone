@@ -21,7 +21,7 @@ function CreatePostDrawer({ toggleDrawer }) {
   const context = useAuthContext();
 
   const [input, setInput] = useState("");
-  const [file, setFile] = useState({ file: null, fileURI: null });
+  const [file, setFile] = useState({ file: "", fileURI: "" });
   const [type, setType] = useState("Public");
 
   const handleClickPost = async () => {

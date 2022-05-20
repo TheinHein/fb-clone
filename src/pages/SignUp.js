@@ -42,6 +42,7 @@ function SignUp() {
     try {
       setLoading(true);
       await context.handleSignUp(user);
+
       navigate("/");
     } catch (error) {
       errorContext.setError("error", error);
@@ -140,6 +141,7 @@ function SignUp() {
             {...register("dob", {
               required: "Date of birth is required",
             })}
+            getValues={getValues}
             setValue={setValue}
           />
 

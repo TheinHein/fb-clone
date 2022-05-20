@@ -18,12 +18,13 @@ function Accept({ friendId }) {
 
   return (
     <Button
+      fullWidth
       variant="contained"
       disabled={accepted}
       onClick={handleClickAcceptFriend}
     >
       {loading ? (
-        <CircularProgress />
+        <CircularProgress sx={{ color: "rgb(190,190,190)", padding: "10px" }} />
       ) : (
         <>{accepted ? "Accepted" : "Confirm"}</>
       )}

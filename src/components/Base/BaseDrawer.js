@@ -16,7 +16,7 @@ function BaseDrawer({ toggleDrawer, header, body }) {
         m="0 auto"
         p={1}
         spacing={1}
-        width={{ xs: "100%", md: "50%" }}
+        width={{ xs: "90%", md: "50%" }}
         divider={<Divider />}
       >
         {body}

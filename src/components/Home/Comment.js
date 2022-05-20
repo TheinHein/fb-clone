@@ -9,10 +9,14 @@ import {
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
+import { useAuthContext } from "../../context/AuthContext";
 
 function Comment({ comment, onChange, onSubmit, postId }) {
+  const context = useAuthContext();
   return (
     <Stack
+      mx="auto"
+      width={{ xs: "100%", md: "60%", lg: "50%" }}
       direction="row"
       alignItems={"center"}
       justifyContent="space-between"
@@ -22,7 +26,7 @@ function Comment({ comment, onChange, onSubmit, postId }) {
       onSubmit={onSubmit}
       id={`comment-form-${postId}`}
     >
-      <Avatar />
+      <Avatar src={context.user.photoURL} />
       <FormControl fullWidth>
         <Input
           disableUnderline
