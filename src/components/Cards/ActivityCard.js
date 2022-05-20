@@ -5,10 +5,12 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
+import FB from "../../FB";
 import useGetUserData from "../../hooks/useGetUserData";
 import BaseMediaCard from "../Base/BaseMediaCard";
+import PostCard from "./PostCard";
 
 function ActivityCard({ post, loading }) {
   const context = useAuthContext();
@@ -21,8 +23,24 @@ function ActivityCard({ post, loading }) {
   const dob =
     user.dob && user.dob.toDate().toLocaleDateString("en-US", options);
   const [modal, setModal] = useState(false);
+  const [sharedPost, setSharedPost] = useState({});
+
+  useEffect(() => {
+    if (post.activity === "share") {
+      (async () => {
+        setSharedPost(await FB.getPostByRef(post.postRef));
+      })();
+    }
+  }, [post.activity, post.postRef]);
+
   return (
     <BaseMediaCard post={post} loading={loading}>
+      {post.activity === "share" && sharedPost && (
+        <Stack spacing={1} p={1}>
+          <Typography variant="body2"> {post.text}</Typography>
+          <PostCard post={sharedPost} loading={loading} share />
+        </Stack>
+      )}
       {post.activity === "profile picture" && (
         <CardMedia
           onClick={() => setModal(true)}

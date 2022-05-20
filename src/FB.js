@@ -117,12 +117,12 @@ export default (() => {
     return getDocumentsInQuery(q);
   };
 
-  // -- general
-
   const updateUserDocument = async (userId, updates) => {
     const userDocRef = doc(db, "users", userId);
     await updateDoc(userDocRef, updates);
   };
+
+  // -- general
 
   const getDocumentsInQuery = async (query) => {
     const documents = await getDocs(query);
@@ -157,16 +157,16 @@ export default (() => {
 
   // -- users -- posts
 
-  const uploadFile = async (data) => {
-    const { filePath, file } = data;
-    const newFileRef = file && ref(storage, filePath);
-    const fileSnapShot = file && (await uploadBytesResumable(newFileRef, file));
-    const publicFileURL = file && (await getDownloadURL(newFileRef));
-    return { fileSnapShot, publicFileURL };
-  };
-
   const createPost = async (data) => {
-    const { userId, text = "", file = "", type, activity = "" } = data;
+    const {
+      userId,
+      text = "",
+      file = "",
+      type,
+      activity = "",
+      postId,
+      ownerId,
+    } = data;
     const filePath = file && `${userId}/posts/${file.name}`;
     const { fileSnapShot, publicFileURL } =
       file && (await uploadFile({ filePath, file }));
@@ -182,6 +182,7 @@ export default (() => {
       storageURI: file && fileSnapShot.metadata.fullPath,
       type,
       userId,
+      postRef: doc(db, `users/${ownerId}/posts/${postId}`),
     };
 
     const postsRef = collection(db, `users/${userId}/posts`);
@@ -198,6 +199,26 @@ export default (() => {
     const postDoc = await getDoc(postDocRef);
     const postData = { ...postDoc.data(), id: postDoc.id };
     return postData;
+  };
+
+  const updatePostSharedBy = async ({ userId, ownerId, postId }) => {
+    const postDocRef = doc(db, `users/${ownerId}/posts`, postId);
+    const update = {
+      sharedBy: arrayUnion(doc(db, `users/${userId}`)),
+    };
+    await updateDoc(postDocRef, update);
+  };
+
+  const getPostByRef = async (ref) => {
+    const postDocRef = doc(db, ref.path);
+    const postDoc = await getDoc(postDocRef);
+    const postData = { ...postDoc.data(), id: postDoc.id };
+    const userData = await getUserData(postData.userId);
+    return {
+      ...postData,
+      displayName: userData.displayName,
+      photoURL: userData.photoURL,
+    };
   };
 
   const getAllPosts = async (userId, setPosts) => {
@@ -449,6 +470,16 @@ export default (() => {
     });
   };
 
+  // Cloud Storage
+
+  const uploadFile = async (data) => {
+    const { filePath, file } = data;
+    const newFileRef = file && ref(storage, filePath);
+    const fileSnapShot = file && (await uploadBytesResumable(newFileRef, file));
+    const publicFileURL = file && (await getDownloadURL(newFileRef));
+    return { fileSnapShot, publicFileURL };
+  };
+
   return {
     setAuthStatePersistence,
     createUser,
@@ -460,7 +491,9 @@ export default (() => {
     getUsersByName,
     createPost,
     getPost,
+    getPostByRef,
     getAllPosts,
+    updatePostSharedBy,
     updatePostLikes,
     getAllGlobalPosts,
     getAllFriendsPosts,

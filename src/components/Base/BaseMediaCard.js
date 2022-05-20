@@ -31,7 +31,12 @@ import Comment from "../Buttons/Comment";
 import Share from "../Buttons/Share";
 import { useNavigate } from "react-router-dom";
 
-export default function BaseMediaCard({ post = {}, loading, children }) {
+export default function BaseMediaCard({
+  post = {},
+  loading,
+  children,
+  share = false,
+}) {
   const {
     photoURL,
     activity,
@@ -206,29 +211,31 @@ export default function BaseMediaCard({ post = {}, loading, children }) {
           </>
         ) : (
           <>
-            <Typography
-              variant="body2"
-              sx={{
-                color: "gray",
-                fontSize: "0.7rem",
-                textDecoration: "underline",
-              }}
-            >
-              {userData.likedPosts &&
-              checkArray({
-                array: userData.likedPosts,
-                prop: "id",
-                check: post.id,
-              })
-                ? `You and ${likes.length !== 0 && likes.length - 1} others `
-                : likes.length}{" "}
-              like
-            </Typography>
+            {likes && (
+              <Typography
+                variant="body2"
+                sx={{
+                  color: "gray",
+                  fontSize: "0.7rem",
+                  textDecoration: "underline",
+                }}
+              >
+                {userData.likedPosts &&
+                checkArray({
+                  array: userData.likedPosts,
+                  prop: "id",
+                  check: post.id,
+                })
+                  ? `You and ${likes.length !== 0 && likes.length - 1} others `
+                  : likes.length}{" "}
+                like
+              </Typography>
+            )}
             <Counter name={"Comments"} counts={totalComments} />
           </>
         )}
       </CardActions>
-      <Divider sx={{ width: "97%", margin: "0 auto" }} />
+      {!share && <Divider sx={{ width: "97%", margin: "0 auto" }} />}
       <CardActions>
         {loading ? (
           <Stack direction="row" justifyContent="space-evenly" width={"100%"}>
@@ -244,13 +251,17 @@ export default function BaseMediaCard({ post = {}, loading, children }) {
           </Stack>
         ) : (
           <>
-            <Like post={post} />
-            <Comment postId={id} userId={userId} />
-            <Share />
+            {!share && (
+              <>
+                <Like post={post} />
+                <Comment postId={id} userId={userId} />
+                <Share postId={id} ownerId={userId} />
+              </>
+            )}
           </>
         )}
       </CardActions>
-      <Divider sx={{ width: "97%", margin: "0 auto" }} />
+      {!share && <Divider sx={{ width: "97%", margin: "0 auto" }} />}
       {comment && comment.length >= 1 && (
         <>
           <CommentsContainer postId={id} userId={userId} />

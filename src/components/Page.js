@@ -1,5 +1,3 @@
-import { Skeleton } from "@mui/material";
-import React from "react";
 import Layout from "./Layout";
 import HideAppBar from "./HideAppBar";
 import LayoutMiddle from "./LayoutMiddle";

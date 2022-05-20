@@ -21,12 +21,14 @@ import Share from "../components/Buttons/Share";
 import CommentContainer from "../components/Home/CommentContainer";
 import CommentsContainer from "../components/Home/CommentsContainer";
 import { Box } from "@mui/system";
+import PostCard from "../components/Cards/PostCard";
 
 function DetailedPost() {
   const { userId, postId } = useParams();
   const [post, setPost] = useState({});
   const [user, setUser] = useState({});
   const navigate = useNavigate();
+  const [sharedPost, setSharedPost] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -42,18 +44,26 @@ function DetailedPost() {
     })();
   }, [userId]);
 
+  useEffect(() => {
+    if (post.activity === "share") {
+      (async () => {
+        setSharedPost(await FB.getPostByRef(post.postRef));
+      })();
+    }
+  }, [post.activity, post.postRef]);
+
   return (
     <>
       <CssBaseline />
       <AppBar position="fixed" elevation={1} color="inherit">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <IconButton onClick={() => navigate(-1)}>
-            <ArrowBackIosNewOutlinedIcon />
-          </IconButton>
           <Stack direction="row" spacing={1}>
+            <IconButton onClick={() => navigate(-1)}>
+              <ArrowBackIosNewOutlinedIcon />
+            </IconButton>
             <Avatar src={user.photoURL} alt={user.displayName} />
             <Stack>
-              <Typography>{user.displayName}</Typography>
+              <Typography variant="h5">{user.displayName}</Typography>
               <Stack
                 direction="row"
                 spacing={1}
@@ -94,10 +104,15 @@ function DetailedPost() {
             />
           )}
         </>
+        {post.activity === "share" && sharedPost && (
+          <Stack spacing={1} p={1}>
+            <PostCard post={sharedPost} loading={false} share />
+          </Stack>
+        )}
         <Stack direction="row" p={1}>
           <Like post={post} />
-          <Comment postId={post.id} userId={user.id} />
-          <Share />
+          <Comment postId={post.id} userId={user.id} disabled />
+          <Share postId={post.id} ownerId={user.id} />
         </Stack>
         <>
           <Typography variant="h5" sx={{ padding: "8px" }}>

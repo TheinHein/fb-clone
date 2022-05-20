@@ -4,7 +4,6 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import RouteSwitch from "./RouteSwitch";
 import { BrowserRouter } from "react-router-dom";
-import TabsRouter from "./components/Sandbox";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

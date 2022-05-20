@@ -9,6 +9,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
 import PostContainer from "../Home/PostContainer";
 import FriendCardSM from "../Cards/FriendCardSM";
+import CreatePostCard from "../Cards/CreatePostCard";
 
 function Profile() {
   const context = useAuthContext();
@@ -69,7 +70,9 @@ function Profile() {
           />
         ))}
       </>
+
       <Bod />
+      <CreatePostCard />
     </Stack>
   );
 }

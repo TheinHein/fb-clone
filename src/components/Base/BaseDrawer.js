@@ -1,7 +1,6 @@
 import { Divider, Stack } from "@mui/material";
-import React from "react";
 
-function BaseDrawer({ toggleDrawer, header, body }) {
+function BaseDrawer({ header, body }) {
   return (
     <Stack divider={<Divider />}>
       <Stack

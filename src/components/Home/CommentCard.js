@@ -10,8 +10,10 @@ function CommentCard({ displayName, timestamp, text, photoURL }) {
       <Avatar src={photoURL} />
       <Stack>
         <Stack bgcolor="rgb(220,220,220)" p={1} spacing={1} borderRadius={2}>
-          <Typography>{displayName}</Typography>
-          <Typography>{text}</Typography>
+          <Typography variant="h5">{displayName}</Typography>
+          <Typography variant="body2" sx={{ paddingLeft: "15px" }}>
+            {text}
+          </Typography>
         </Stack>
         <Stack direction="row" pt={0.5} spacing={1}>
           {timestamp && (
