@@ -82,9 +82,9 @@ const themeOptions = {
       },
     },
     MuiButton: {
-      // defaultProps: {
-      //   disableElevation: true,
-      // },
+      defaultProps: {
+        disableTouchRipple: true,
+      },
       styleOverrides: {
         root: {
           "&.MuiButton-sizeMedium": {

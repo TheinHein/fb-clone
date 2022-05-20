@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import {
-  Avatar,
   IconButton,
   Button,
   Box,
@@ -16,10 +15,10 @@ import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import Clear from "../Buttons/Clear";
 import FB from "../../FB";
 import BaseDrawer from "../Base/BaseDrawer";
+import BaseCardHeader from "../Base/BaseCardHeader";
 
 function CreatePostDrawer({ toggleDrawer }) {
   const context = useAuthContext();
-
   const [input, setInput] = useState("");
   const [file, setFile] = useState({ file: "", fileURI: "" });
   const [type, setType] = useState("Public");
@@ -89,20 +88,20 @@ function CreatePostDrawer({ toggleDrawer }) {
       }
       body={
         <>
-          <Stack direction="row" justifyContent="space-between">
-            <Stack direction="row" spacing={2}>
-              <Avatar
-                aria-label={context.user.displayName}
-                src={context.user.photoURL}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <BaseCardHeader
+              photoURL={context.user.photoURL}
+              displayName={context.user.displayName}
+            >
+              <UnstyledSelectObjectValues
+                option={type}
+                onChange={handleChangeType}
               />
-              <Stack spacing={0.5}>
-                <Typography variant="h5">{context.user.displayName}</Typography>
-                <UnstyledSelectObjectValues
-                  option={type}
-                  onChange={handleChangeType}
-                />
-              </Stack>
-            </Stack>
+            </BaseCardHeader>
             <label htmlFor="photoUpload">
               <Input
                 onChange={handleChangeFile}

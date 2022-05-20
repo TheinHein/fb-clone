@@ -2,6 +2,7 @@ import React from "react";
 import PublicIcon from "@mui/icons-material/Public";
 import PeopleIcon from "@mui/icons-material/People";
 import PersonIcon from "@mui/icons-material/Person";
+import PropTypes from "prop-types";
 
 function Type({ type }) {
   const renderType = () => {
@@ -16,5 +17,9 @@ function Type({ type }) {
 
   return <>{renderType()}</>;
 }
+
+Type.propTypes = {
+  type: PropTypes.string,
+};
 
 export default Type;

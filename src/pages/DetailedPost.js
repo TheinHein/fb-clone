@@ -22,6 +22,8 @@ import CommentContainer from "../components/Home/CommentContainer";
 import CommentsContainer from "../components/Home/CommentsContainer";
 import { Box } from "@mui/system";
 import PostCard from "../components/Cards/PostCard";
+import LikesCounter from "../components/LikesCounter";
+import Counter from "../components/Counter";
 
 function DetailedPost() {
   const { userId, postId } = useParams();
@@ -39,8 +41,8 @@ function DetailedPost() {
 
   useEffect(() => {
     (async () => {
-      const post = await FB.getUserData(userId);
-      setUser(post);
+      const userData = await FB.getUserData(userId);
+      setUser(userData);
     })();
   }, [userId]);
 
@@ -109,6 +111,14 @@ function DetailedPost() {
             <PostCard post={sharedPost} loading={false} share />
           </Stack>
         )}
+        <Stack direction="row" justifyContent="space-between" p={1}>
+          <LikesCounter
+            likedPosts={user.likedPost}
+            postId={post.id}
+            likes={post.likes}
+          />
+          <Counter name="Comments" counts={post.totalComments} />
+        </Stack>
         <Stack direction="row" p={1}>
           <Like post={post} />
           <Comment postId={post.id} userId={user.id} disabled />
