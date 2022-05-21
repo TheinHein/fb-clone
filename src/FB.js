@@ -242,9 +242,28 @@ export default (() => {
     const q = query(
       collection(db, "globalPosts"),
       where("userId", "!=", `${userId}`),
+      orderBy("userId", "desc"),
+      orderBy("timestamp", "desc"),
       limit(1)
     );
     return await getDocumentsInQueryRT(q, setPosts, setLastVisible);
+  };
+
+  const getMoreGlobalPosts = async ({
+    userId,
+    setPosts,
+    lastVisible,
+    setLastVisible,
+  }) => {
+    const q = query(
+      collection(db, "globalPosts"),
+      where("userId", "!=", `${userId}`),
+      orderBy("userId", "desc"),
+      orderBy("timestamp", "desc"),
+      startAfter(lastVisible),
+      limit(5)
+    );
+    getAllCommentsInQuery(q, setPosts, setLastVisible);
   };
 
   const getAllGlobalPosts = async (userId, setPosts) => {
@@ -254,6 +273,45 @@ export default (() => {
       limit(5)
     );
     return await getDocumentsInQueryRT(q, setPosts);
+  };
+
+  const getInitialAllFriendsPosts = async (
+    userId,
+    setPosts,
+    setLastVisible
+  ) => {
+    const userData = await getUserData(userId);
+    if (userData.friends) {
+      userData.friends.forEach(async (friend) => {
+        const q = query(
+          collection(db, `users/${friend.id}/posts`),
+          orderBy("timestamp", "desc"),
+          limit(1)
+        );
+        await getDocumentsInQueryRT(q, setPosts, setLastVisible);
+      });
+    }
+  };
+
+  const getMoreAllFriendsPosts = async ({
+    userId,
+    setPosts,
+    lastVisible,
+    setLastVisible,
+  }) => {
+    const userData = await getUserData(userId);
+    if (userData.friends) {
+      for (let i = 0; i < userData.friends.length; i++) {}
+      userData.friends.forEach(async (friend) => {
+        const q = query(
+          collection(db, `users/${friend.id}/posts`),
+          orderBy("timestamp", "desc"),
+          startAfter(lastVisible),
+          limit(1)
+        );
+        await getDocumentsInQueryRT(q, setPosts, setLastVisible);
+      });
+    }
   };
 
   const getAllFriendsPosts = async (userId, setPosts) => {
@@ -438,8 +496,9 @@ export default (() => {
     updatePostSharedBy,
     updatePostLikes,
     getInitialGlobalPosts,
-    getAllGlobalPosts,
-    getAllFriendsPosts,
+    getMoreGlobalPosts,
+    getInitialAllFriendsPosts,
+    getMoreAllFriendsPosts,
     handleFriendShip,
     getAllPendingRequests,
     getAllFriends,

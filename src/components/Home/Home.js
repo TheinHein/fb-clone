@@ -1,18 +1,19 @@
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
 import CreatePostCard from "../Cards/CreatePostCard";
 import PostContainer from "./PostContainer";
+import _ from "lodash";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Home = () => {
   const context = useAuthContext();
   const [posts, setPosts] = useState([]);
   const [globalPostsLastVisible, setGlobalPostsLastVisible] = useState(0);
   const [friendsPostsLastVisible, setFriendsPostsLastVisible] = useState(0);
-
   const [loading, setLoading] = useState(true);
-  console.log(globalPostsLastVisible);
+
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -21,14 +22,29 @@ const Home = () => {
         setPosts,
         setGlobalPostsLastVisible
       );
-      // await FB.getAllFriendsPosts(
-      //   context.user.id,
-      //   setPosts,
-      //   setFriendsPostsLastVisible
-      // );
+      await FB.getInitialAllFriendsPosts(
+        context.user.id,
+        setPosts,
+        setFriendsPostsLastVisible
+      );
       setLoading(false);
     })();
   }, [context.user.id]);
+
+  const getMorePosts = async () => {
+    await FB.getMoreGlobalPosts({
+      userId: context.user.id,
+      setPosts,
+      lastVisible: globalPostsLastVisible,
+      setLastVisible: setGlobalPostsLastVisible,
+    });
+    await FB.getMoreAllFriendsPosts({
+      userId: context.user.id,
+      setPosts,
+      lastVisible: friendsPostsLastVisible,
+      setLastVisible: setFriendsPostsLastVisible,
+    });
+  };
 
   return (
     <Stack spacing={1} m={1}>
@@ -40,11 +56,18 @@ const Home = () => {
           <PostContainer loading post={{}} />
         </>
       ) : (
-        <>
-          {posts.map((post) => (
-            <PostContainer post={post} loading={loading} key={post.id} />
-          ))}
-        </>
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={getMorePosts}
+          hasMore={globalPostsLastVisible && friendsPostsLastVisible}
+          loader={<PostContainer loading post={{}} />}
+        >
+          <Stack spacing={1}>
+            {posts.map((post) => (
+              <PostContainer post={post} loading={loading} key={post.id} />
+            ))}
+          </Stack>
+        </InfiniteScroll>
       )}
     </Stack>
   );
