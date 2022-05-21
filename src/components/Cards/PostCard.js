@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 const PostCard = (props) => {
   const { post, share, loading } = props;
   const [modal, setModal] = useState(false);
+
   return (
     <BaseMediaCard post={post} loading={loading} share={share}>
       <>

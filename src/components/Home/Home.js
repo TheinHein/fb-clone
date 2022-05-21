@@ -8,12 +8,24 @@ import PostContainer from "./PostContainer";
 const Home = () => {
   const context = useAuthContext();
   const [posts, setPosts] = useState([]);
+  const [globalPostsLastVisible, setGlobalPostsLastVisible] = useState(0);
+  const [friendsPostsLastVisible, setFriendsPostsLastVisible] = useState(0);
+
   const [loading, setLoading] = useState(true);
+  console.log(globalPostsLastVisible);
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await FB.getAllGlobalPosts(context.user.id, setPosts);
-      await FB.getAllFriendsPosts(context.user.id, setPosts);
+      await FB.getInitialGlobalPosts(
+        context.user.id,
+        setPosts,
+        setGlobalPostsLastVisible
+      );
+      // await FB.getAllFriendsPosts(
+      //   context.user.id,
+      //   setPosts,
+      //   setFriendsPostsLastVisible
+      // );
       setLoading(false);
     })();
   }, [context.user.id]);

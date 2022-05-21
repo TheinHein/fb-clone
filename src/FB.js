@@ -129,8 +129,9 @@ export default (() => {
     return documents.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   };
 
-  const getDocumentsInQueryRT = async (query, setDocs) => {
+  const getDocumentsInQueryRT = async (query, setDocs, setLastVisible) => {
     onSnapshot(query, { includeMetadataChanges: true }, (snapshot) => {
+      setLastVisible && setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
       snapshot.docChanges().forEach(async (change) => {
         const userData = await getUserDataByRef(change.doc.data().by.id);
         if (change.type === "added") {
@@ -237,6 +238,15 @@ export default (() => {
     return await getDocumentsInQueryRT(q, setPosts);
   };
 
+  const getInitialGlobalPosts = async (userId, setPosts, setLastVisible) => {
+    const q = query(
+      collection(db, "globalPosts"),
+      where("userId", "!=", `${userId}`),
+      limit(1)
+    );
+    return await getDocumentsInQueryRT(q, setPosts, setLastVisible);
+  };
+
   const getAllGlobalPosts = async (userId, setPosts) => {
     const q = query(
       collection(db, "globalPosts"),
@@ -250,30 +260,8 @@ export default (() => {
     const userData = await getUserData(userId);
     if (userData.friends) {
       userData.friends.forEach(async (friend) => {
-        const friendData = await getUserData(friend.id);
         const q = query(collection(db, `users/${friend.id}/posts`));
-        onSnapshot(q, { includeMetadataChanges: true }, (snapshot) => {
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-              setPosts((prev) =>
-                _.orderBy(
-                  _.uniqBy(
-                    prev.concat({
-                      displayName: friendData.displayName,
-                      photoURL: friendData.photoURL,
-                      userId: friendData.id,
-                      ...change.doc.data(),
-                      id: change.doc.id,
-                    }),
-                    "id"
-                  ),
-                  ["timestamp.seconds"],
-                  ["desc"]
-                )
-              );
-            }
-          });
-        });
+        await getDocumentsInQueryRT(q, setPosts);
       });
     }
   };
@@ -304,30 +292,29 @@ export default (() => {
   // -- friends
 
   const handleFriendShip = async (userId, friendId, type) => {
-    if (type === "request") {
-      const friendDocRef = doc(db, `users/${friendId}`);
-      const userData = {
-        requestedFriends: arrayUnion(friendDocRef),
-      };
-      await updateUserDocument(userId, userData);
-      const userDocRef = doc(db, `users/${userId}`);
-      const friendData = {
-        pendingRequests: arrayUnion(userDocRef),
-      };
-      await updateUserDocument(friendId, friendData);
-    } else if (type === "accept") {
-      const friendDocRef = doc(db, `users/${friendId}`);
-      const userData = {
-        friends: arrayUnion(friendDocRef),
-        pendingRequests: arrayRemove(doc(db, `users/${friendId}`)),
-      };
-      await updateUserDocument(userId, userData);
-      const userDocRef = doc(db, `users/${userId}`);
-      const friendData = {
-        friends: arrayUnion(userDocRef),
-        requestedFriends: arrayRemove(doc(db, `users/${userId}`)),
-      };
-      await updateUserDocument(friendId, friendData);
+    const friendDocRef = doc(db, `users/${friendId}`);
+    const userDocRef = doc(db, `users/${userId}`);
+    switch (type) {
+      case "request":
+        await updateUserDocument(userId, {
+          requestedFriends: arrayUnion(friendDocRef),
+        });
+        await updateUserDocument(friendId, {
+          pendingRequests: arrayUnion(userDocRef),
+        });
+        break;
+      case "accept":
+        await updateUserDocument(userId, {
+          friends: arrayUnion(friendDocRef),
+          pendingRequests: arrayRemove(doc(db, `users/${friendId}`)),
+        });
+        await updateUserDocument(friendId, {
+          friends: arrayUnion(userDocRef),
+          requestedFriends: arrayRemove(doc(db, `users/${userId}`)),
+        });
+        break;
+      default:
+        return;
     }
   };
 
@@ -402,7 +389,7 @@ export default (() => {
       orderBy("timestamp", "desc"),
       limit(1)
     );
-    getAllCommentsInQuery({ q, setComments, setLastVisible });
+    getAllCommentsInQuery(q, setComments, setLastVisible);
   };
 
   const getMoreComments = ({
@@ -416,35 +403,13 @@ export default (() => {
       collection(db, `users/${userId}/posts/${postId}/comments`),
       orderBy("timestamp", "desc"),
       startAfter(lastVisible),
-      limit(1)
+      limit(5)
     );
-    getAllCommentsInQuery({ q, setComments, setLastVisible });
+    getAllCommentsInQuery(q, setComments, setLastVisible);
   };
 
-  const getAllCommentsInQuery = async ({ q, setComments, setLastVisible }) => {
-    onSnapshot(q, (comments) => {
-      comments.forEach(async (comment) => {
-        setLastVisible(comments.docs[comments.docs.length - 1]);
-
-        const userData = await getUserDataByRef(comment.data().by.id);
-        setComments((prev) =>
-          _.orderBy(
-            _.uniqBy(
-              prev.concat({
-                displayName: userData.displayName,
-                photoURL: userData.photoURL,
-                userId: userData.id,
-                ...comment.data(),
-                id: comment.id,
-              }),
-              "id"
-            ),
-            ["timestamp.seconds"],
-            ["desc"]
-          )
-        );
-      });
-    });
+  const getAllCommentsInQuery = async (q, setComments, setLastVisible) => {
+    getDocumentsInQueryRT(q, setComments, setLastVisible);
   };
 
   // Cloud Storage
@@ -472,6 +437,7 @@ export default (() => {
     getAllPosts,
     updatePostSharedBy,
     updatePostLikes,
+    getInitialGlobalPosts,
     getAllGlobalPosts,
     getAllFriendsPosts,
     handleFriendShip,

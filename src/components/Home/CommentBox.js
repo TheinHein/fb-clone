@@ -50,7 +50,7 @@ const CommentBox = (props) => {
   );
 };
 
-CommentInput.propTypes = {
+CommentBox.propTypes = {
   comment: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
