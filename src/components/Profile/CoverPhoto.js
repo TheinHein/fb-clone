@@ -1,5 +1,5 @@
-import DrawerWithBtn from "../Drawer/DrawerWithBtn";
-import EditProfileDrawer from "../Drawer/EditProfileDrawer";
+import DrawerBtn from "../Buttons/DrawerBtn";
+import EditProfileDrawer from "../Drawers/EditProfileDrawer";
 import ProfileAvatar from "./ProfileAvatar";
 import { useAuthContext } from "../../context/AuthContext";
 import { Stack } from "@mui/material";
@@ -17,9 +17,9 @@ function CoverPhoto() {
       />
       <Stack direction="row" spacing={1}>
         <AddToStory />
-        <DrawerWithBtn
+        <DrawerBtn
           anchor={"right"}
-          button={(toggleDrawer) => <EditProfile toggleDrawer={toggleDrawer} />}
+          button={(toggleDrawer) => <EditProfile onClick={toggleDrawer} />}
           drawer={(toggleDrawer) => (
             <EditProfileDrawer toggleDrawer={toggleDrawer} />
           )}

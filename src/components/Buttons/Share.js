@@ -1,10 +1,11 @@
 import { Button, Skeleton } from "@mui/material";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import { useState } from "react";
-
 import ShareDialog from "../ShareDialog";
+import PropTypes from "prop-types";
 
-function Share({ postId, ownerId, loading }) {
+const Share = (props) => {
+  const { postId, ownerId, loading } = props;
   const [dialog, setDialog] = useState(false);
 
   const handleClickShareDialog = () => {
@@ -35,6 +36,12 @@ function Share({ postId, ownerId, loading }) {
       />
     </>
   );
-}
+};
+
+Share.propTypes = {
+  postId: PropTypes.string,
+  ownerId: PropTypes.string,
+  loading: PropTypes.bool,
+};
 
 export default Share;

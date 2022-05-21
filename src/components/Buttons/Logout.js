@@ -3,12 +3,13 @@ import React from "react";
 import { useAuthContextUpdater } from "../../context/AuthContext";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
-function Logout() {
+const Logout = () => {
   const context = useAuthContextUpdater();
 
   const handleClickSignOut = () => {
     context.handleSignOut();
   };
+
   return (
     <Button
       fullWidth
@@ -19,6 +20,6 @@ function Logout() {
       endIcon="Log Out"
     />
   );
-}
+};
 
 export default Logout;

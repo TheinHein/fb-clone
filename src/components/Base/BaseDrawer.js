@@ -1,6 +1,9 @@
 import { Divider, Stack } from "@mui/material";
+import PropTypes from "prop-types";
 
-function BaseDrawer({ header, body }) {
+const BaseDrawer = (props) => {
+  const { header, body } = props;
+
   return (
     <Stack divider={<Divider />}>
       <Stack
@@ -22,6 +25,11 @@ function BaseDrawer({ header, body }) {
       </Stack>
     </Stack>
   );
-}
+};
+
+BaseDrawer.propTypes = {
+  header: PropTypes.element.isRequired,
+  body: PropTypes.element.isRequired,
+};
 
 export default BaseDrawer;

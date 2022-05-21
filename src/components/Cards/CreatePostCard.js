@@ -1,35 +1,33 @@
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
-import DrawerWithBtn from "../Drawer/DrawerWithBtn";
-import CreatePostDrawer from "../Drawer/CreatePostDrawer";
+import DrawerBtn from "../Buttons/DrawerBtn";
+import CreatePostDrawer from "../Drawers/CreatePostDrawer";
 import WhatsOnYourMindBtn from "../Buttons/WhatsOnYourMindBtn";
 import ActionBtns from "../ActionBtns";
 import { reelRoomGroup } from "../../actions";
 import { useAuthContext } from "../../context/AuthContext";
+import BaseAvatar from "../Base/BaseAvatar";
 
-export default function CreatePostCard() {
+const CreatePostCard = () => {
   const context = useAuthContext();
 
   return (
     <Card>
       <CardHeader
         avatar={
-          <Avatar
-            aria-label="user's profile"
-            src={context.user.photoURL}
-            width={40}
-            height={40}
+          <BaseAvatar
+            displayName={context.user.displayName}
+            photoURL={context.user.photoURL}
           />
         }
         title={
-          <DrawerWithBtn
+          <DrawerBtn
             anchor="bottom"
             button={(toggleDrawer) => (
               <WhatsOnYourMindBtn
-                handleClickDrawer={toggleDrawer}
+                onClick={toggleDrawer}
                 displayName={context.user.displayName}
               />
             )}
@@ -48,4 +46,6 @@ export default function CreatePostCard() {
       </CardActions>
     </Card>
   );
-}
+};
+
+export default CreatePostCard;

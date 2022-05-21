@@ -1,13 +1,5 @@
 import { useState } from "react";
-
-import {
-  IconButton,
-  Button,
-  Box,
-  Typography,
-  Input,
-  Stack,
-} from "@mui/material";
+import { IconButton, Box, Stack } from "@mui/material";
 import UnstyledSelectObjectValues from "../Select";
 import WhatsOnYourMind from "../Inputs/WhatsOnYourMind";
 import { useAuthContext } from "../../context/AuthContext";
@@ -16,8 +8,14 @@ import Clear from "../Buttons/Clear";
 import FB from "../../FB";
 import BaseDrawer from "../Base/BaseDrawer";
 import BaseCardHeader from "../Base/BaseCardHeader";
+import Post from "../Buttons/Post";
+import DrawerTitle from "../DrawerTitle";
+import PropTypes from "prop-types";
+import readURI from "../../utils/readURI";
+import BaseFileUploadBtn from "../Base/BaseFileUploadBtn";
 
-function CreatePostDrawer({ toggleDrawer }) {
+const CreatePostDrawer = (props) => {
+  const { toggleDrawer } = props;
   const context = useAuthContext();
   const [input, setInput] = useState("");
   const [file, setFile] = useState({ file: "", fileURI: "" });
@@ -30,60 +28,31 @@ function CreatePostDrawer({ toggleDrawer }) {
       file: file.file,
       type,
     });
-
     toggleDrawer();
     setInput("");
   };
+
   const handleChangeType = (newType) => {
     setType(newType);
   };
+
   const handleChangeInput = (event) => {
     setInput(event.target.value);
   };
 
-  const readURI = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      let reader = new FileReader();
-      reader.onload = function (ev) {
-        setFile((prev) => ({ ...prev, fileURI: ev.target.result }));
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
-
-  function handleChangeFile(event) {
+  const handleChangeFile = (event) => {
     const file = event.target.files[0];
     setFile((prev) => ({ ...prev, file }));
-    readURI(event);
-  }
+    readURI(event, setFile);
+  };
 
   return (
     <BaseDrawer
-      toggleDrawer={toggleDrawer}
       header={
         <>
           <Clear onClick={toggleDrawer} />
-          <Typography
-            variant="h3"
-            sx={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-            }}
-          >
-            Create Post
-          </Typography>
-          <Button
-            disabled={!input}
-            disableElevation
-            variant="text"
-            size="small"
-            color="inherit"
-            aria-label="post"
-            onClick={handleClickPost}
-          >
-            Post
-          </Button>
+          <DrawerTitle title="Create Post" />
+          <Post onClick={handleClickPost} input={input} />
         </>
       }
       body={
@@ -102,39 +71,27 @@ function CreatePostDrawer({ toggleDrawer }) {
                 onChange={handleChangeType}
               />
             </BaseCardHeader>
-            <label htmlFor="photoUpload">
-              <Input
-                onChange={handleChangeFile}
-                accept="image/*"
-                id="photoUpload"
-                type="file"
-                sx={{ display: "none" }}
-              />
+            <BaseFileUploadBtn id="photo-uploader" onChange={handleChangeFile}>
               <IconButton aria-label="upload picture" component="span">
                 <PhotoLibraryIcon sx={{ color: "green" }} />
               </IconButton>
-            </label>
+            </BaseFileUploadBtn>
           </Stack>
-
-          <WhatsOnYourMind
-            input={input}
-            handleChangeInput={handleChangeInput}
-          />
-
+          <WhatsOnYourMind input={input} onChange={handleChangeInput} />
           {file.fileURI && (
             <>
               <Clear onClick={() => setFile({ file: null, fileURI: null })} />
-              <Box
-                sx={{ width: "60%" }}
-                component={"img"}
-                src={file.fileURI}
-              ></Box>
+              <Box sx={{ width: "60%" }} component={"img"} src={file.fileURI} />
             </>
           )}
         </>
       }
     />
   );
-}
+};
+
+CreatePostDrawer.propTypes = {
+  toggleDrawer: PropTypes.func.isRequired,
+};
 
 export default CreatePostDrawer;

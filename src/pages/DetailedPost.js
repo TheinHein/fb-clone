@@ -23,7 +23,7 @@ import CommentsContainer from "../components/Home/CommentsContainer";
 import { Box } from "@mui/system";
 import PostCard from "../components/Cards/PostCard";
 import LikesCounter from "../components/LikesCounter";
-import Counter from "../components/Counter";
+import BaseCounter from "../components/Base/BaseCounter";
 
 function DetailedPost() {
   const { userId, postId } = useParams();
@@ -117,7 +117,7 @@ function DetailedPost() {
             postId={post.id}
             likes={post.likes}
           />
-          <Counter name="Comments" counts={post.totalComments} />
+          <BaseCounter name="Comments" counts={post.totalComments} />
         </Stack>
         <Stack direction="row" p={1}>
           <Like post={post} />
@@ -136,7 +136,6 @@ function DetailedPost() {
         color="inherit"
         position="fixed"
         sx={{ top: "auto", bottom: 0, paddingBottom: "55px", zIndex: "0" }}
-        elevation={0}
       >
         <Toolbar>
           <CommentContainer postId={post.id} ownerId={user.id} />

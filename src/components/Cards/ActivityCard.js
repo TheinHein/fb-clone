@@ -1,27 +1,18 @@
-import {
-  CardContent,
-  CardMedia,
-  Modal,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { CardContent, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
 import useGetUserData from "../../hooks/useGetUserData";
 import BaseMediaCard from "../Base/BaseMediaCard";
+import PhotoViewerModal from "../PhotoViewerModal";
+import ProfilePicture from "../ProfilePicture";
 import PostCard from "./PostCard";
+import PropTypes from "prop-types";
 
-function ActivityCard({ post, loading }) {
+const ActivityCard = (props) => {
+  const { post, loading } = props;
   const context = useAuthContext();
   const user = useGetUserData(context.user.id);
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  const dob =
-    user.dob && user.dob.toDate().toLocaleDateString("en-US", options);
   const [modal, setModal] = useState(false);
   const [sharedPost, setSharedPost] = useState({});
 
@@ -33,60 +24,61 @@ function ActivityCard({ post, loading }) {
     }
   }, [post.activity, post.postRef]);
 
+  const renderCard = (activity) => {
+    switch (activity) {
+      case "share":
+        return (
+          <Stack spacing={1} p={1}>
+            <Typography variant="body2"> {post.text}</Typography>
+            <PostCard post={sharedPost} loading={loading} share />
+          </Stack>
+        );
+      case "profile picture":
+        return (
+          <ProfilePicture
+            onClick={() => setModal(true)}
+            fileURL={post.fileURL}
+          />
+        );
+      case "dob":
+        const options = {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const dob =
+          user.dob && user.dob.toDate().toLocaleDateString("en-US", options);
+        return (
+          <CardContent>
+            <Typography variant="h3" align="center">
+              Born on {dob}
+            </Typography>
+          </CardContent>
+        );
+      default:
+        return;
+    }
+  };
+
   return (
     <BaseMediaCard post={post} loading={loading}>
-      {post.activity === "share" && sharedPost && (
-        <Stack spacing={1} p={1}>
-          <Typography variant="body2"> {post.text}</Typography>
-          <PostCard post={sharedPost} loading={loading} share />
-        </Stack>
-      )}
-      {post.activity === "profile picture" && (
-        <CardMedia
-          onClick={() => setModal(true)}
-          component="img"
-          src={post.fileURL}
-          sx={{
-            margin: "0 auto",
-            width: "90%",
-            aspectRatio: "1/1",
-            borderRadius: "100%",
-            padding: "10px",
-            border: "0.5px solid black",
-            cursor: "pointer",
-          }}
-        />
-      )}
-      {post.activity === "dob" && (
-        <CardContent>
-          <Typography variant="h3" align="center">
-            Born on {dob}
-          </Typography>
-        </CardContent>
-      )}
-      {modal && (
-        <Modal
-          open={modal}
-          onClose={() => setModal(false)}
-          sx={{ bgcolor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
-        >
-          <Stack
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-            }}
-          >
-            <CardMedia component="img" src={post.fileURL} />
-          </Stack>
-        </Modal>
-      )}
+      <>
+        {renderCard(post.activity)}
+        {modal && (
+          <PhotoViewerModal
+            open={modal}
+            onClose={() => setModal(false)}
+            fileURL={post.fileURL}
+          />
+        )}
+      </>
     </BaseMediaCard>
   );
-}
+};
+
+ActivityCard.propTypes = {
+  post: PropTypes.object,
+  loading: PropTypes.bool,
+};
 
 export default ActivityCard;

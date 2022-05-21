@@ -1,7 +1,9 @@
 import { useAuthContext } from "../../context/AuthContext";
 import { TextField } from "@mui/material";
+import PropTypes from "prop-types";
 
-export default function WhatsOnYourMind({ handleChangeInput }) {
+const WhatsOnYourMind = (props) => {
+  const { onChange } = props;
   const context = useAuthContext();
   return (
     <TextField
@@ -10,9 +12,15 @@ export default function WhatsOnYourMind({ handleChangeInput }) {
       autoFocus
       multiline
       variant="filled"
-      onChange={handleChangeInput}
+      onChange={onChange}
       aria-label={`what's on your mind, ${context.user.displayName}?`}
       placeholder={`What's on your mind, ${context.user.displayName}?`}
     />
   );
-}
+};
+
+WhatsOnYourMind.propTypes = {
+  onChange: PropTypes.func.isRequired,
+};
+
+export default WhatsOnYourMind;

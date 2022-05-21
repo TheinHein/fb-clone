@@ -1,12 +1,14 @@
 import { Chip } from "@mui/material";
+import PropTypes from "prop-types";
 
-function WhatsOnYourMindBtn({ handleClickDrawer, displayName }) {
+const WhatsOnYourMindBtn = (props) => {
+  const { onClick, displayName } = props;
   return (
     <Chip
       disableRipple
       disableTouchRipple
       clickable
-      onClick={handleClickDrawer}
+      onClick={onClick}
       label={`What's on your mind, ${displayName} ?`}
       sx={{
         fontWeight: "normal",
@@ -22,6 +24,11 @@ function WhatsOnYourMindBtn({ handleClickDrawer, displayName }) {
       }}
     />
   );
-}
+};
+
+WhatsOnYourMindBtn.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  displayName: PropTypes.string,
+};
 
 export default WhatsOnYourMindBtn;

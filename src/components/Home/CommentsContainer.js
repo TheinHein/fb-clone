@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Comments from "./Comments";
 import FB from "../../FB";
+import PropTypes from "prop-types";
 
-function CommentsContainer({ postId, userId }) {
+const CommentsContainer = (props) => {
+  const { postId, userId } = props;
   const [comments, setComments] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
 
@@ -15,6 +17,7 @@ function CommentsContainer({ postId, userId }) {
       setLastVisible,
     });
   };
+
   useEffect(() => {
     FB.getInitComments({ userId, postId, setComments, setLastVisible });
   }, [userId, postId]);
@@ -23,9 +26,14 @@ function CommentsContainer({ postId, userId }) {
     <Comments
       comments={comments}
       lastVisible={lastVisible}
-      handleClickMoreComments={handleClickMoreComments}
+      onClick={handleClickMoreComments}
     />
   );
-}
+};
+
+CommentsContainer.propTypes = {
+  postId: PropTypes.string,
+  userId: PropTypes.string,
+};
 
 export default CommentsContainer;

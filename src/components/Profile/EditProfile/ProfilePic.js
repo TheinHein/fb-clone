@@ -1,15 +1,16 @@
-import { Typography, Avatar, Button, Stack } from "@mui/material";
-import DrawerWithBtn from "../../Drawer/DrawerWithBtn";
-import SelectPhotoDrawer from "../../Drawer/SelectPhotoDrawer";
+import { Typography, Button, Stack } from "@mui/material";
+import DrawerBtn from "../../Buttons/DrawerBtn";
+import SelectPhotoDrawer from "../../Drawers/SelectPhotoDrawer";
 import { useAuthContext } from "../../../context/AuthContext";
+import BaseAvatar from "../../Base/BaseAvatar";
 
 function ProfilePic() {
   const context = useAuthContext();
   return (
-    <Stack spacing={1} alignItems="center">
+    <Stack alignItems="center">
       <Stack direction="row" justifyContent="space-between" width="100%">
         <Typography variant="h3">Profile Picture</Typography>
-        <DrawerWithBtn
+        <DrawerBtn
           anchor={"bottom"}
           button={(toggleDrawer) => (
             <Button size="small" onClick={() => toggleDrawer(true)}>
@@ -21,9 +22,11 @@ function ProfilePic() {
           )}
         />
       </Stack>
-      <Avatar
-        sx={{ width: "150px", height: "150px" }}
-        src={context.user.photoURL}
+      <BaseAvatar
+        displayName={context.user.displayName}
+        photoURL={context.user.photoURL}
+        width={150}
+        height={150}
       />
     </Stack>
   );

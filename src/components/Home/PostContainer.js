@@ -1,7 +1,9 @@
 import ActivityCard from "../Cards/ActivityCard";
 import PostCard from "../Cards/PostCard";
+import PropTypes from "prop-types";
 
-function PostContainer({ post = {}, loading }) {
+const PostContainer = (props) => {
+  const { post, loading } = props;
   return (
     <>
       {post.activity ? (
@@ -11,6 +13,15 @@ function PostContainer({ post = {}, loading }) {
       )}
     </>
   );
-}
+};
+
+PostContainer.defaultProps = {
+  post: {},
+};
+
+PostContainer.propTypes = {
+  post: PropTypes.object,
+  loading: PropTypes.bool,
+};
 
 export default PostContainer;

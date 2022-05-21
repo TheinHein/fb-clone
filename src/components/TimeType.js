@@ -1,8 +1,8 @@
 import { Skeleton, Stack } from "@mui/material";
 import PropTypes from "prop-types";
-import Time from "../Time";
-import Type from "../Type";
-import BaseDot from "./BaseDot";
+import Time from "./Time";
+import Type from "./Type";
+import BaseDot from "./Base/BaseDot";
 
 function TimeType(props) {
   const { timestamp, type, loading } = props;
@@ -29,6 +29,7 @@ function TimeType(props) {
 TimeType.propTypes = {
   timestamp: PropTypes.object,
   type: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 export default TimeType;

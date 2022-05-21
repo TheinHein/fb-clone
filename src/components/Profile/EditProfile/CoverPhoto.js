@@ -1,14 +1,14 @@
 import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActualOutlined";
 import { Box, Typography, Stack, Button } from "@mui/material";
-import DrawerWithBtn from "../../Drawer/DrawerWithBtn";
-import SelectPhotoDrawer from "../../Drawer/SelectPhotoDrawer";
+import DrawerBtn from "../../Buttons/DrawerBtn";
+import SelectPhotoDrawer from "../../Drawers/SelectPhotoDrawer";
 
 function CoverPhoto() {
   return (
-    <Stack spacing={1}>
+    <>
       <Stack direction="row" justifyContent="space-between" width="100%">
         <Typography variant="h3">Cover Photo</Typography>
-        <DrawerWithBtn
+        <DrawerBtn
           anchor={"bottom"}
           button={(toggleDrawer) => (
             <Button size="small" onClick={() => toggleDrawer(true)}>
@@ -35,7 +35,7 @@ function CoverPhoto() {
           sx={{ color: "white", fontSize: "20px" }}
         />
       </Box>
-    </Stack>
+    </>
   );
 }
 

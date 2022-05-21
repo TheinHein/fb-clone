@@ -1,16 +1,18 @@
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
+import PropTypes from "prop-types";
 
-function Add({ friendId }) {
+const Add = (props) => {
+  const { friendId } = props;
   const context = useAuthContext();
-  const [isAdded, setIsAdded] = useState(false);
+  const [added, setAdded] = useState(false);
 
   const handleClickAddFriend = async (event) => {
     event.stopPropagation();
     await FB.handleFriendShip(context.user.id, friendId, "request");
-    setIsAdded(true);
+    setAdded(true);
   };
 
   return (
@@ -18,11 +20,15 @@ function Add({ friendId }) {
       fullWidth
       variant="contained"
       onClick={handleClickAddFriend}
-      disabled={isAdded}
+      disabled={added}
     >
-      {isAdded ? "Requested" : "Add Friend"}
+      {added ? "Requested" : "Add Friend"}
     </Button>
   );
-}
+};
+
+Add.propTypes = {
+  friendId: PropTypes.string,
+};
 
 export default Add;

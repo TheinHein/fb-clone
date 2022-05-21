@@ -1,13 +1,17 @@
+import { lazy, Suspense } from "react";
+import Loading from "../pages/Loading";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Home from "../components/Home/Home";
-import Friends from "../components/Friends/Friends";
-import Profile from "../components/Profile/Profile";
-import Notifications from "../components/Notifications/Notifications";
-import Menu from "../components/Menu/Menu";
+const Friends = lazy(() => import("../components/Friends/Friends"));
+const Profile = lazy(() => import("../components/Profile/Profile"));
+const Notifications = lazy(() =>
+  import("../components/Notifications/Notifications")
+);
+const Menu = lazy(() => import("../components/Menu/Menu"));
 
 export const routes = [
   {
@@ -25,7 +29,11 @@ export const routes = [
     label: "Friends",
     title: "Friends",
     icon: <GroupIcon />,
-    component: <Friends />,
+    component: (
+      <Suspense fallback={<Loading />}>
+        <Friends />
+      </Suspense>
+    ),
   },
   {
     id: "nav-03",
@@ -33,7 +41,11 @@ export const routes = [
     label: "Profile",
     title: "Profile",
     icon: <AccountCircleIcon />,
-    component: <Profile />,
+    component: (
+      <Suspense fallback={<Loading />}>
+        <Profile />
+      </Suspense>
+    ),
   },
   {
     id: "nav-04",
@@ -41,7 +53,11 @@ export const routes = [
     label: "Notifications",
     title: "Notifications",
     icon: <NotificationsIcon />,
-    component: <Notifications />,
+    component: (
+      <Suspense fallback={<Loading />}>
+        <Notifications />
+      </Suspense>
+    ),
   },
   {
     id: "nav-05",
@@ -49,6 +65,10 @@ export const routes = [
     label: "Menu",
     title: "Menu",
     icon: <MenuIcon />,
-    component: <Menu />,
+    component: (
+      <Suspense fallback={<Loading />}>
+        <Menu />
+      </Suspense>
+    ),
   },
 ];

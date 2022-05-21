@@ -13,9 +13,8 @@ import { useParams } from "react-router-dom";
 import FB from "../FB";
 import Loading from "./Loading";
 import { useAuthContext } from "../context/AuthContext";
-import PostCard from "../components/Cards/PostCard";
-import { useNavigate } from "react-router-dom";
 import FriendCardSM from "../components/Cards/FriendCardSM";
+import PostContainer from "../components/Home/PostContainer";
 
 function UserProfile() {
   const params = useParams();
@@ -25,7 +24,6 @@ function UserProfile() {
   const [friends, setFriends] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (userData.friends)
@@ -51,11 +49,6 @@ function UserProfile() {
       await FB.getAllPosts(params.friendId, setPosts);
     })();
   }, [params.friendId]);
-
-  const handleClickShowProfile = (friendId) => {
-    navigate(`/users/${friendId}`);
-    setFriends([]);
-  };
 
   return (
     <>
@@ -101,11 +94,7 @@ function UserProfile() {
             </Typography>
             <Stack direction="row" rowGap={2} columnGap={2} flexWrap="wrap">
               {friends.map((friend) => (
-                <FriendCardSM
-                  key={friend.id}
-                  friend={friend}
-                  handleClickShowProfile={handleClickShowProfile}
-                />
+                <FriendCardSM key={friend.id} friend={friend} />
               ))}
             </Stack>
           </>
@@ -114,7 +103,7 @@ function UserProfile() {
             {posts.length > 0 ? (
               <>
                 {posts.map((post) => (
-                  <PostCard
+                  <PostContainer
                     post={{
                       ...post,
                       displayName: userData.displayName,

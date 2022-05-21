@@ -1,7 +1,9 @@
 import { IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import PropTypes from "prop-types";
 
-function Search({ onClick }) {
+const Search = (props) => {
+  const { onClick } = props;
   return (
     <IconButton
       size="medium"
@@ -14,6 +16,10 @@ function Search({ onClick }) {
       <SearchIcon />
     </IconButton>
   );
-}
+};
+
+Search.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default Search;

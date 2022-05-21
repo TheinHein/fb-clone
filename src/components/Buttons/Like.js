@@ -2,10 +2,12 @@ import { alpha, Button, Skeleton } from "@mui/material";
 import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
 import useGetUserDataRT from "../../hooks/useGetUserDataRT";
-import checkArray from "../../utils/checkArray";
+import _ from "lodash";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import PropTypes from "prop-types";
 
-function Like({ post, loading }) {
+const Like = (props) => {
+  const { post, loading } = props;
   const context = useAuthContext();
   const userData = useGetUserDataRT();
 
@@ -34,17 +36,18 @@ function Like({ post, loading }) {
           sx={{
             bgcolor:
               userData.likedPosts &&
-              checkArray({
-                array: userData.likedPosts,
-                prop: "id",
-                check: post.id,
-              }) &&
+              _.some(userData.likedPosts, ["id", post.id]) &&
               alpha("#1878f3", 0.2),
           }}
         />
       )}
     </>
   );
-}
+};
+
+Like.propTypes = {
+  post: PropTypes.object,
+  loading: PropTypes.bool,
+};
 
 export default Like;

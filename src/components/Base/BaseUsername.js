@@ -1,7 +1,7 @@
 import { Skeleton, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 
-function BaseUsername(props) {
+const BaseUsername = (props) => {
   const { displayName, loading } = props;
   return (
     <>
@@ -14,10 +14,11 @@ function BaseUsername(props) {
       )}
     </>
   );
-}
+};
 
 BaseUsername.propTypes = {
   displayName: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 export default BaseUsername;

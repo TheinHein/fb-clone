@@ -1,7 +1,15 @@
-import { Avatar, AvatarGroup, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import LargeAvatar from "../LargeAvatar";
+import BaseAvatarGroup from "./BaseAvatarGroup";
+import PropTypes from "prop-types";
 
-function BaseUserCard({ user, children, toggleDrawer }) {
+const defaultStyle = {
+  cursor: "pointer",
+};
+
+const BaseUserCard = (props) => {
+  const { user, children, toggleDrawer } = props;
   const navigate = useNavigate();
   const handleClickShowProfile = (event) => {
     event.stopPropagation();
@@ -16,28 +24,13 @@ function BaseUserCard({ user, children, toggleDrawer }) {
       spacing={1}
       bgcolor="white"
       onClick={handleClickShowProfile}
-      sx={{ cursor: "pointer" }}
+      sx={defaultStyle}
     >
-      <Avatar
-        alt={user.displayName}
-        src={user.photoURL}
-        sx={{ width: 80, height: 80 }}
-      />
+      <LargeAvatar displayName={user.displayName} photoURL={user.photoURL} />
       <Stack spacing={1}>
         <Typography variant="h5">{user.displayName}</Typography>
         <Stack direction="row" spacing={1} alignItems="center">
-          <AvatarGroup
-            max={3}
-            sx={{
-              "& .MuiAvatarGroup-avatar": {
-                width: 24,
-                height: 24,
-              },
-            }}
-          >
-            <Avatar alt="sample" src="" />
-            <Avatar alt="sample" src="" />
-          </AvatarGroup>
+          <BaseAvatarGroup users={[]} />
           <Typography variant="body2">2 mutual friends</Typography>
         </Stack>
         <Stack direction="row" spacing={1}>
@@ -46,6 +39,12 @@ function BaseUserCard({ user, children, toggleDrawer }) {
       </Stack>
     </Stack>
   );
-}
+};
+
+BaseUserCard.propTypes = {
+  user: PropTypes.object,
+  children: PropTypes.element.isRequired,
+  toggleDrawer: PropTypes.func,
+};
 
 export default BaseUserCard;

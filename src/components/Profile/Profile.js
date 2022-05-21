@@ -2,7 +2,6 @@ import { Divider, Stack, Typography } from "@mui/material";
 import About from "./About";
 import CoverPhoto from "./CoverPhoto";
 import Friends from "./Friends";
-import Bod from "./Bod";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
@@ -10,10 +9,11 @@ import FB from "../../FB";
 import PostContainer from "../Home/PostContainer";
 import FriendCardSM from "../Cards/FriendCardSM";
 import CreatePostCard from "../Cards/CreatePostCard";
+import useGetUserData from "../../hooks/useGetUserData";
 
 function Profile() {
   const context = useAuthContext();
-  const [userData, setUserData] = useState({});
+  const userData = useGetUserData(context.user.id);
   const [friends, setFriends] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,12 +22,10 @@ function Profile() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const userData = await FB.getUserData(context.user.id);
-      setUserData(userData);
       await FB.getAllFriends(userData, setFriends);
       setLoading(false);
     })();
-  }, [context.user.id]);
+  }, [userData]);
 
   useEffect(() => {
     (async () => {
@@ -71,7 +69,6 @@ function Profile() {
         ))}
       </>
 
-      <Bod />
       <CreatePostCard />
     </Stack>
   );

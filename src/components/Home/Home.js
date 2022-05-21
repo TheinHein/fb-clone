@@ -5,10 +5,10 @@ import FB from "../../FB";
 import CreatePostCard from "../Cards/CreatePostCard";
 import PostContainer from "./PostContainer";
 
-function Home() {
+const Home = () => {
   const context = useAuthContext();
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -22,7 +22,11 @@ function Home() {
     <Stack spacing={1} m={1}>
       <CreatePostCard />
       {loading ? (
-        <PostContainer loading />
+        <>
+          <PostContainer loading post={{}} />
+          <PostContainer loading post={{}} />
+          <PostContainer loading post={{}} />
+        </>
       ) : (
         <>
           {posts.map((post) => (
@@ -32,6 +36,6 @@ function Home() {
       )}
     </Stack>
   );
-}
+};
 
 export default Home;

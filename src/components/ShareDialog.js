@@ -77,7 +77,7 @@ function ShareDialog(props) {
         </Toolbar>
       </AppBar>
       <DialogContent>
-        <WhatsOnYourMind handleChangeInput={handleChangeInput} />
+        <WhatsOnYourMind onChange={handleChangeInput} />
       </DialogContent>
     </Dialog>
   );

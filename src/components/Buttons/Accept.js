@@ -1,9 +1,11 @@
 import { Button, CircularProgress } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
+import PropTypes from "prop-types";
 
-function Accept({ friendId }) {
+const Accept = (props) => {
+  const { friendId } = props;
   const context = useAuthContext();
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,6 +32,10 @@ function Accept({ friendId }) {
       )}
     </Button>
   );
-}
+};
+
+Accept.propTypes = {
+  friendId: PropTypes.string,
+};
 
 export default Accept;

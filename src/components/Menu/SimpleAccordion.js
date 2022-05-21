@@ -24,7 +24,7 @@ export default function SimpleAccordion({ summary, details, index }) {
           <Typography>{summary.name}</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container>
+          <Grid container spacing={1}>
             {details.map(({ id, name }) => (
               <Grid key={id} item xs={index === 0 ? 6 : 12}>
                 {index === 0 ? (

@@ -1,21 +1,20 @@
 import BaseAvatar from "./BaseAvatar";
 import BaseUsername from "./BaseUsername";
 import PropTypes from "prop-types";
-import { CardHeader, Typography } from "@mui/material";
+import { CardHeader } from "@mui/material";
+import BaseActivityText from "./BaseActivityText";
 
-function BaseCardHeader(props) {
-  const { displayName, photoURL, onClick, loading, activity, children } = props;
-  const generateText = () => {
-    let pronoun = "their";
-    if (activity === "profile picture") {
-      return `updated ${pronoun} profile picture`;
-    }
-    return "";
-  };
+const defaultStyle = {
+  cursor: "pointer",
+  paddingBottom: 1,
+};
+
+const BaseCardHeader = (props) => {
+  const { activity, displayName, photoURL, onClick, loading, children } = props;
 
   return (
     <CardHeader
-      sx={{ cursor: "pointer", paddingBottom: 1 }}
+      sx={defaultStyle}
       onClick={onClick}
       avatar={
         <BaseAvatar
@@ -27,23 +26,21 @@ function BaseCardHeader(props) {
       title={
         <>
           <BaseUsername displayName={displayName} loading={loading} />
-          {activity && (
-            <Typography component="span" variant="body2">
-              {generateText()}
-            </Typography>
-          )}
+          {activity && <BaseActivityText activity={activity} />}
         </>
       }
       subheader={children}
     />
   );
-}
+};
 
 BaseCardHeader.propTypes = {
+  activity: PropTypes.string,
   displayName: PropTypes.string,
   photoURL: PropTypes.string,
   onClick: PropTypes.func,
   loading: PropTypes.bool,
   children: PropTypes.element.isRequired,
 };
+
 export default BaseCardHeader;

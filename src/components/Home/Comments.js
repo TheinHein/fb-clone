@@ -1,11 +1,12 @@
 import { Button } from "@mui/material";
-import React from "react";
-import CommentCard from "./CommentCard";
+import CommentCard from "../Cards/CommentCard";
+import PropTypes from "prop-types";
 
-function Comments({ comments, handleClickMoreComments }) {
+const Comments = (props) => {
+  const { comments, onClick } = props;
   return (
     <>
-      <Button sx={{ width: "fit-content" }} onClick={handleClickMoreComments}>
+      <Button sx={{ width: "fit-content" }} onClick={onClick}>
         View previous comments
       </Button>
       {comments.map((comment) => (
@@ -19,6 +20,11 @@ function Comments({ comments, handleClickMoreComments }) {
       ))}
     </>
   );
-}
+};
+
+Comments.propTypes = {
+  comments: PropTypes.array,
+  onClick: PropTypes.func.isRequired,
+};
 
 export default Comments;

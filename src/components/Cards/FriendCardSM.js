@@ -1,25 +1,37 @@
-import { Avatar, Paper, Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import SquareAvatar from "../SquareAvatar";
 
-function FriendCardSM({ friend, handleClickShowProfile }) {
+const defaultStyle = {
+  borderRadius: 1,
+  cursor: "pointer",
+  gap: "5px",
+  display: "flex",
+  flexDirection: "column",
+};
+
+const FriendCardSM = (props) => {
+  const { friend } = props;
+  const navigate = useNavigate();
+
+  const handleClickShowProfile = () => {
+    navigate(`/users/${friend.id}`);
+  };
+
   return (
-    <Paper
-      sx={{ borderRadius: 1, cursor: "pointer" }}
-      onClick={() => handleClickShowProfile(friend.id)}
-    >
-      <Avatar
-        variant="square"
-        src={friend.photoURL}
-        sx={{
-          width: 140,
-          height: 140,
-          borderRadius: "8px 8px 0 0",
-        }}
+    <Paper sx={defaultStyle} onClick={handleClickShowProfile}>
+      <SquareAvatar
+        displayName={friend.displayName}
+        photoURL={friend.photoURL}
       />
-      <Typography variant="h5" sx={{ p: 2, pt: 1, pl: 1 }}>
-        {friend.displayName}
-      </Typography>
+      <Typography variant="h5">{friend.displayName}</Typography>
     </Paper>
   );
-}
+};
+
+FriendCardSM.propTypes = {
+  friend: PropTypes.object,
+};
 
 export default FriendCardSM;

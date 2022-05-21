@@ -16,7 +16,7 @@ export default function SimpleCollapse({ children, collapsedSize }) {
       <Collapse in={checked} collapsedSize={collapsedSize}>
         {children}
       </Collapse>
-      <SeeMore checked={checked} handleClick={handleClick} />
+      <SeeMore checked={checked} onClick={handleClick} />
       <div ref={btmRef} />
     </Stack>
   );

@@ -5,20 +5,22 @@ import SearchDrawerResults from "../SearchDrawerResults";
 import SearchIcon from "@mui/icons-material/Search";
 import Back from "../Buttons/Back";
 import BaseDrawer from "../Base/BaseDrawer";
+import PropTypes from "prop-types";
 
-function SearchDrawer({ toggleDrawer }) {
+const SearchDrawer = (props) => {
+  const { toggleDrawer } = props;
   const [input, setInput] = useState("");
   const users = useSearchUsers(input);
-  function handleInputSearch(event) {
+
+  const handleInputSearch = (event) => {
     setInput(event.target.value);
-  }
+  };
 
   return (
     <BaseDrawer
-      toggleDrawer={toggleDrawer}
       header={
         <>
-          <Back toggleDrawer={toggleDrawer} />
+          <Back onClick={toggleDrawer} />
           <Input
             disableUnderline
             fullWidth
@@ -32,6 +34,10 @@ function SearchDrawer({ toggleDrawer }) {
       body={<SearchDrawerResults results={users} toggleDrawer={toggleDrawer} />}
     />
   );
-}
+};
+
+SearchDrawer.propTypes = {
+  toggleDrawer: PropTypes.func.isRequired,
+};
 
 export default SearchDrawer;

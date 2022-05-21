@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import FB from "../FB";
 
 function useGetUserData(userId) {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import FriendRequestCard from "../Cards/FriendRequestCard";
 import FB from "../../FB";
 
-function FriendRequestsSection() {
+const FriendRequestsSection = () => {
   const context = useAuthContext();
   const [pendingRequests, setPendingRequests] = useState([]);
 
@@ -30,7 +30,7 @@ function FriendRequestsSection() {
               key={pendingRequest.id}
             />
           ))}
-          <Button fullWidth variant="grey">
+          <Button fullWidth variant="contained" color="inherit">
             See All
           </Button>
         </>
@@ -46,6 +46,6 @@ function FriendRequestsSection() {
       )}
     </Stack>
   );
-}
+};
 
 export default FriendRequestsSection;

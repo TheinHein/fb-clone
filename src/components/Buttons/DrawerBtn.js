@@ -1,8 +1,15 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import PropTypes from "prop-types";
 
-export default function DrawerWithBtn({ anchor, button, drawer }) {
+const defaultStyle = {
+  width: "100vw",
+  height: "100vh",
+};
+
+const DrawerBtn = (props) => {
+  const { anchor, button, drawer } = props;
   const [state, setState] = useState({
     top: false,
     left: false,
@@ -31,16 +38,18 @@ export default function DrawerWithBtn({ anchor, button, drawer }) {
         onClose={toggleDrawer(anchor, false)}
         onOpen={toggleDrawer(anchor, true)}
       >
-        <Box
-          sx={{
-            width: "100vw",
-            height: "100vh",
-          }}
-          role="presentation"
-        >
+        <Box sx={defaultStyle} role="presentation">
           {drawer(toggleDrawer(anchor, false))}
         </Box>
       </SwipeableDrawer>
     </>
   );
-}
+};
+
+DrawerBtn.propTypes = {
+  anchor: PropTypes.string.isRequired,
+  button: PropTypes.func.isRequired,
+  drawer: PropTypes.func.isRequired,
+};
+
+export default DrawerBtn;

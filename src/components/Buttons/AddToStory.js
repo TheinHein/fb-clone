@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-function AddToStory() {
+const AddToStory = () => {
   return (
     <Button
       fullWidth
@@ -10,6 +10,6 @@ function AddToStory() {
       variant="contained"
     />
   );
-}
+};
 
 export default AddToStory;

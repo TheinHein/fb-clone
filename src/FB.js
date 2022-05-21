@@ -130,7 +130,7 @@ export default (() => {
   };
 
   const getDocumentsInQueryRT = async (query, setDocs) => {
-    onSnapshot(query, (snapshot) => {
+    onSnapshot(query, { includeMetadataChanges: true }, (snapshot) => {
       snapshot.docChanges().forEach(async (change) => {
         const userData = await getUserDataByRef(change.doc.data().by.id);
         if (change.type === "added") {
@@ -149,6 +149,17 @@ export default (() => {
               ["timestamp.seconds"],
               ["desc"]
             )
+          );
+        } else if (change.type === "modified") {
+          const update = {
+            displayName: userData.displayName,
+            photoURL: userData.photoURL,
+            userId: userData.id,
+            ...change.doc.data(),
+            id: change.doc.id,
+          };
+          setDocs((prev) =>
+            prev.map((post) => (post.id === change.doc.id ? update : post))
           );
         }
       });
@@ -232,41 +243,7 @@ export default (() => {
       where("userId", "!=", `${userId}`),
       limit(5)
     );
-    onSnapshot(q, (snapshot) => {
-      snapshot.docChanges().forEach(async (change) => {
-        if (change.type === "added") {
-          const userData = await getUserDataByRef(change.doc.data().by.id);
-          setPosts((prev) =>
-            _.orderBy(
-              _.uniqBy(
-                prev.concat({
-                  displayName: userData.displayName,
-                  photoURL: userData.photoURL,
-                  userId: userData.id,
-                  ...change.doc.data(),
-                  id: change.doc.id,
-                }),
-                "id"
-              ),
-              ["timestamp.seconds"],
-              ["desc"]
-            )
-          );
-        } else if (change.type === "modified") {
-          const userData = await getUserDataByRef(change.doc.data().by.id);
-          const update = {
-            displayName: userData.displayName,
-            photoURL: userData.photoURL,
-            userId: userData.id,
-            ...change.doc.data(),
-            id: change.doc.id,
-          };
-          setPosts((prev) =>
-            prev.map((post) => (post.id === change.doc.id ? update : post))
-          );
-        }
-      });
-    });
+    return await getDocumentsInQueryRT(q, setPosts);
   };
 
   const getAllFriendsPosts = async (userId, setPosts) => {

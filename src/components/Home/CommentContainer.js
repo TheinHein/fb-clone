@@ -1,10 +1,11 @@
 import { useState } from "react";
-import Comment from "./Comment";
+import CommentBox from "./CommentBox";
 import FB from "../../FB";
 import { useAuthContext } from "../../context/AuthContext";
-import { Avatar, Skeleton, Stack } from "@mui/material";
+import PropTypes from "prop-types";
 
-function CommentContainer({ postId, ownerId, loading }) {
+const CommentContainer = (props) => {
+  const { postId, ownerId, loading } = props;
   const [comment, setComment] = useState("");
   const context = useAuthContext();
 
@@ -24,30 +25,20 @@ function CommentContainer({ postId, ownerId, loading }) {
   };
 
   return (
-    <>
-      {loading ? (
-        <Stack direction="row" gap={2} width={"100%"} p={1}>
-          <Skeleton variant="circular">
-            <Avatar />
-          </Skeleton>
-          <Skeleton width="100%" sx={{ borderRadius: "9999px" }} />
-          <Skeleton
-            variant="circular"
-            width={40}
-            height={40}
-            sx={{ flex: "none" }}
-          />
-        </Stack>
-      ) : (
-        <Comment
-          comment={comment}
-          onChange={handleChangeComment}
-          onSubmit={handleSubmitComment}
-          postId={postId}
-        />
-      )}
-    </>
+    <CommentBox
+      comment={comment}
+      onChange={handleChangeComment}
+      onSubmit={handleSubmitComment}
+      postId={postId}
+      loading={loading}
+    />
   );
-}
+};
+
+CommentContainer.propTypes = {
+  ownerId: PropTypes.string,
+  postId: PropTypes.string,
+  loading: PropTypes.bool,
+};
 
 export default CommentContainer;

@@ -1,27 +1,19 @@
 import { Typography } from "@mui/material";
-import About from "../Profile/About";
 import ProfilePic from "../Profile/EditProfile/ProfilePic";
 import CoverPhoto from "../Profile/EditProfile/CoverPhoto";
 import BaseDrawer from "../Base/BaseDrawer";
 import Back from "../Buttons/Back";
+import DrawerTitle from "../DrawerTitle";
+import PropTypes from "prop-types";
 
-function EditProfileDrawer({ toggleDrawer }) {
+const EditProfileDrawer = (props) => {
+  const { toggleDrawer } = props;
   return (
     <BaseDrawer
-      toggleDrawer={toggleDrawer}
       header={
         <>
-          <Back toggleDrawer={toggleDrawer} />
-          <Typography
-            sx={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-            }}
-            variant="h3"
-          >
-            Edit Profile
-          </Typography>
+          <Back onClick={toggleDrawer} />
+          <DrawerTitle title="Edit Profile" />
         </>
       }
       body={
@@ -31,11 +23,14 @@ function EditProfileDrawer({ toggleDrawer }) {
           <Typography>Bio</Typography>
           <Typography>Describe yourself...</Typography>
           <Typography>Details</Typography>
-          <About />
         </>
       }
     />
   );
-}
+};
+
+EditProfileDrawer.propTypes = {
+  toggleDrawer: PropTypes.func.isRequired,
+};
 
 export default EditProfileDrawer;
