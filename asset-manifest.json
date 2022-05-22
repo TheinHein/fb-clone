@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/facebook-clone/static/css/main.31d6cfe0.css",
-    "main.js": "/facebook-clone/static/js/main.4dfba348.js",
-    "static/js/62.6d0878a6.chunk.js": "/facebook-clone/static/js/62.6d0878a6.chunk.js",
-    "static/js/323.0c33bb37.chunk.js": "/facebook-clone/static/js/323.0c33bb37.chunk.js",
-    "static/js/691.d12879f1.chunk.js": "/facebook-clone/static/js/691.d12879f1.chunk.js",
-    "static/js/200.d8125ddc.chunk.js": "/facebook-clone/static/js/200.d8125ddc.chunk.js",
-    "static/js/787.7df988a9.chunk.js": "/facebook-clone/static/js/787.7df988a9.chunk.js",
-    "static/js/317.6cdbd5ae.chunk.js": "/facebook-clone/static/js/317.6cdbd5ae.chunk.js",
-    "index.html": "/facebook-clone/index.html",
-    "main.4dfba348.js.map": "/facebook-clone/static/js/main.4dfba348.js.map",
-    "62.6d0878a6.chunk.js.map": "/facebook-clone/static/js/62.6d0878a6.chunk.js.map",
-    "323.0c33bb37.chunk.js.map": "/facebook-clone/static/js/323.0c33bb37.chunk.js.map",
-    "691.d12879f1.chunk.js.map": "/facebook-clone/static/js/691.d12879f1.chunk.js.map",
-    "200.d8125ddc.chunk.js.map": "/facebook-clone/static/js/200.d8125ddc.chunk.js.map",
-    "787.7df988a9.chunk.js.map": "/facebook-clone/static/js/787.7df988a9.chunk.js.map",
-    "317.6cdbd5ae.chunk.js.map": "/facebook-clone/static/js/317.6cdbd5ae.chunk.js.map"
+    "main.css": "/fb-clone/static/css/main.31d6cfe0.css",
+    "main.js": "/fb-clone/static/js/main.f77b5bdf.js",
+    "static/js/62.6d0878a6.chunk.js": "/fb-clone/static/js/62.6d0878a6.chunk.js",
+    "static/js/323.0c33bb37.chunk.js": "/fb-clone/static/js/323.0c33bb37.chunk.js",
+    "static/js/691.d12879f1.chunk.js": "/fb-clone/static/js/691.d12879f1.chunk.js",
+    "static/js/200.d8125ddc.chunk.js": "/fb-clone/static/js/200.d8125ddc.chunk.js",
+    "static/js/787.7df988a9.chunk.js": "/fb-clone/static/js/787.7df988a9.chunk.js",
+    "static/js/317.6cdbd5ae.chunk.js": "/fb-clone/static/js/317.6cdbd5ae.chunk.js",
+    "index.html": "/fb-clone/index.html",
+    "main.f77b5bdf.js.map": "/fb-clone/static/js/main.f77b5bdf.js.map",
+    "62.6d0878a6.chunk.js.map": "/fb-clone/static/js/62.6d0878a6.chunk.js.map",
+    "323.0c33bb37.chunk.js.map": "/fb-clone/static/js/323.0c33bb37.chunk.js.map",
+    "691.d12879f1.chunk.js.map": "/fb-clone/static/js/691.d12879f1.chunk.js.map",
+    "200.d8125ddc.chunk.js.map": "/fb-clone/static/js/200.d8125ddc.chunk.js.map",
+    "787.7df988a9.chunk.js.map": "/fb-clone/static/js/787.7df988a9.chunk.js.map",
+    "317.6cdbd5ae.chunk.js.map": "/fb-clone/static/js/317.6cdbd5ae.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.31d6cfe0.css",
-    "static/js/main.4dfba348.js"
+    "static/js/main.f77b5bdf.js"
   ]
 }
