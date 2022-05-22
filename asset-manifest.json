@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/fb-clone/static/css/main.ee7e3655.css",
-    "main.js": "/fb-clone/static/js/main.6ad10aaa.js",
+    "main.js": "/fb-clone/static/js/main.2f95304a.js",
     "static/js/62.6d0878a6.chunk.js": "/fb-clone/static/js/62.6d0878a6.chunk.js",
     "static/js/459.7b449684.chunk.js": "/fb-clone/static/js/459.7b449684.chunk.js",
     "static/js/691.d12879f1.chunk.js": "/fb-clone/static/js/691.d12879f1.chunk.js",
@@ -11,7 +11,7 @@
     "static/js/685.6285f2bb.chunk.js": "/fb-clone/static/js/685.6285f2bb.chunk.js",
     "index.html": "/fb-clone/index.html",
     "main.ee7e3655.css.map": "/fb-clone/static/css/main.ee7e3655.css.map",
-    "main.6ad10aaa.js.map": "/fb-clone/static/js/main.6ad10aaa.js.map",
+    "main.2f95304a.js.map": "/fb-clone/static/js/main.2f95304a.js.map",
     "62.6d0878a6.chunk.js.map": "/fb-clone/static/js/62.6d0878a6.chunk.js.map",
     "459.7b449684.chunk.js.map": "/fb-clone/static/js/459.7b449684.chunk.js.map",
     "691.d12879f1.chunk.js.map": "/fb-clone/static/js/691.d12879f1.chunk.js.map",
@@ -22,6 +22,6 @@
   },
   "entrypoints": [
     "static/css/main.ee7e3655.css",
-    "static/js/main.6ad10aaa.js"
+    "static/js/main.2f95304a.js"
   ]
 }
