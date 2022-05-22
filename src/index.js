@@ -3,15 +3,15 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import RouteSwitch from "./RouteSwitch";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <HashRouter>
+    <BrowserRouter basename="/fb-clone">
       <RouteSwitch />
-    </HashRouter>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
