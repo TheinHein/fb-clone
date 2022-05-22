@@ -15,6 +15,7 @@ import Loading from "./Loading";
 import { useAuthContext } from "../context/AuthContext";
 import FriendCardSM from "../components/Cards/FriendCardSM";
 import PostContainer from "../components/Home/PostContainer";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function UserProfile() {
   const params = useParams();
@@ -24,10 +25,13 @@ function UserProfile() {
   const [friends, setFriends] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [lastVisible, setLastVisible] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     if (userData.friends)
       (async () => {
+        setMutualFriends(0);
         if (userData.friends.some((friend) => friends.includes(friend))) {
           setMutualFriends((prev) => (prev += 1));
         }
@@ -39,6 +43,7 @@ function UserProfile() {
       setLoading(true);
       const userData = await FB.getUserData(params.friendId);
       setUserData(userData);
+      setFriends([]);
       await FB.getAllFriends(userData, setFriends);
       setLoading(false);
     })();
@@ -46,9 +51,25 @@ function UserProfile() {
 
   useEffect(() => {
     (async () => {
-      await FB.getAllPosts(params.friendId, setPosts);
+      setPosts([]);
+      await FB.getInitUserPosts({
+        userId: params.friendId,
+        setPosts,
+        setLastVisible,
+        setHasMore,
+      });
     })();
   }, [params.friendId]);
+
+  const getMorePosts = async () => {
+    await FB.getMoreUserPosts({
+      userId: params.friendId,
+      setPosts,
+      lastVisible,
+      setLastVisible,
+      setHasMore,
+    });
+  };
 
   return (
     <>
@@ -57,7 +78,7 @@ function UserProfile() {
           <CircularProgress />
         </Loading>
       ) : (
-        <Stack divider={<Divider />} p={1} spacing={2} bgcolor="white">
+        <Stack divider={<Divider />} p={1} spacing={2} bgcolor="#F0F2F5">
           <>
             <Avatar
               src={userData.photoURL}
@@ -101,19 +122,30 @@ function UserProfile() {
           <Stack>
             <Typography variant="h3">Posts</Typography>
             {posts.length > 0 ? (
-              <>
-                {posts.map((post) => (
-                  <PostContainer
-                    post={{
-                      ...post,
-                      displayName: userData.displayName,
-                      photoURL: userData.photoURL,
-                    }}
-                    loading={loading}
-                    key={post.id}
-                  />
-                ))}
-              </>
+              <InfiniteScroll
+                dataLength={posts.length}
+                next={getMorePosts}
+                hasMore={hasMore}
+                loader={
+                  <Stack spacing={1}>
+                    <PostContainer loading post={{}} />
+                  </Stack>
+                }
+              >
+                <Stack py={1}>
+                  {posts.map((post) => (
+                    <PostContainer
+                      post={{
+                        ...post,
+                        displayName: userData.displayName,
+                        photoURL: userData.photoURL,
+                      }}
+                      loading={loading}
+                      key={post.id}
+                    />
+                  ))}
+                </Stack>
+              </InfiniteScroll>
             ) : (
               <Paper
                 sx={{

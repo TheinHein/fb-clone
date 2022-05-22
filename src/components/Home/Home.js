@@ -1,32 +1,41 @@
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import FB from "../../FB";
 import CreatePostCard from "../Cards/CreatePostCard";
 import PostContainer from "./PostContainer";
-import _ from "lodash";
 import InfiniteScroll from "react-infinite-scroll-component";
+import _ from "lodash";
 
 const Home = () => {
   const context = useAuthContext();
   const [posts, setPosts] = useState([]);
   const [globalPostsLastVisible, setGlobalPostsLastVisible] = useState(0);
-  const [friendsPostsLastVisible, setFriendsPostsLastVisible] = useState(0);
+  const [friendsPostsLastVisible, setFriendsPostsLastVisible] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
+
+  const handleFriendsPostsLastVisible = (lastVisible) => {
+    setFriendsPostsLastVisible((prev) =>
+      _.uniqBy(prev.concat(lastVisible), "id")
+    );
+  };
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await FB.getInitialGlobalPosts(
-        context.user.id,
+      await FB.getInitialGlobalPosts({
+        userId: context.user.id,
         setPosts,
-        setGlobalPostsLastVisible
-      );
-      await FB.getInitialAllFriendsPosts(
-        context.user.id,
+        setLastVisible: setGlobalPostsLastVisible,
+        setHasMore,
+      });
+      await FB.getInitialAllFriendsPosts({
+        userId: context.user.id,
         setPosts,
-        setFriendsPostsLastVisible
-      );
+        setLastVisible: handleFriendsPostsLastVisible,
+        setHasMore,
+      });
       setLoading(false);
     })();
   }, [context.user.id]);
@@ -37,12 +46,14 @@ const Home = () => {
       setPosts,
       lastVisible: globalPostsLastVisible,
       setLastVisible: setGlobalPostsLastVisible,
+      setHasMore,
     });
     await FB.getMoreAllFriendsPosts({
       userId: context.user.id,
       setPosts,
       lastVisible: friendsPostsLastVisible,
-      setLastVisible: setFriendsPostsLastVisible,
+      setLastVisible: handleFriendsPostsLastVisible,
+      setHasMore,
     });
   };
 
@@ -59,8 +70,12 @@ const Home = () => {
         <InfiniteScroll
           dataLength={posts.length}
           next={getMorePosts}
-          hasMore={globalPostsLastVisible && friendsPostsLastVisible}
-          loader={<PostContainer loading post={{}} />}
+          hasMore={hasMore}
+          loader={
+            <Stack py={1}>
+              <PostContainer loading post={{}} />
+            </Stack>
+          }
         >
           <Stack spacing={1}>
             {posts.map((post) => (

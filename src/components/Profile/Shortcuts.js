@@ -16,6 +16,7 @@ const Shortcuts = () => {
       value={value}
       onChange={handleChange}
       sx={{
+        bgcolor: "white",
         padding: "10px",
         display: "flex",
         alignItems: "center",

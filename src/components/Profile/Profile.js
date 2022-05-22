@@ -10,6 +10,8 @@ import PostContainer from "../Home/PostContainer";
 import FriendCardSM from "../Cards/FriendCardSM";
 import CreatePostCard from "../Cards/CreatePostCard";
 import useGetUserData from "../../hooks/useGetUserData";
+import Shortcuts from "./Shortcuts";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function Profile() {
   const context = useAuthContext();
@@ -17,11 +19,14 @@ function Profile() {
   const [friends, setFriends] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [lastVisible, setLastVisible] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       setLoading(true);
+      setFriends([]);
       await FB.getAllFriends(userData, setFriends);
       setLoading(false);
     })();
@@ -29,7 +34,15 @@ function Profile() {
 
   useEffect(() => {
     (async () => {
-      await FB.getAllPosts(context.user.id, setPosts);
+      setLoading(true);
+      setPosts([]);
+      await FB.getInitUserPosts({
+        userId: context.user.id,
+        setPosts,
+        setLastVisible,
+        setHasMore,
+      });
+      setLoading(false);
     })();
   }, [context.user.id]);
 
@@ -38,8 +51,18 @@ function Profile() {
     setFriends([]);
   };
 
+  const getMorePosts = async () => {
+    await FB.getMoreUserPosts({
+      userId: context.user.id,
+      setPosts,
+      lastVisible,
+      setLastVisible,
+      setHasMore,
+    });
+  };
+
   return (
-    <Stack spacing={1} divider={<Divider />} bgcolor="white" p={1}>
+    <Stack spacing={1} divider={<Divider />} bgcolor="#F0F2F5" p={1}>
       <CoverPhoto />
       <About />
       <>
@@ -56,20 +79,33 @@ function Profile() {
       </>
       <>
         <Typography variant="h3">Posts</Typography>
-        {posts.map((post) => (
-          <PostContainer
-            post={{
-              ...post,
-              displayName: userData.displayName,
-              photoURL: userData.photoURL,
-            }}
-            loading={loading}
-            key={post.id}
-          />
-        ))}
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={getMorePosts}
+          hasMore={hasMore}
+          loader={
+            <Stack py={1}>
+              <PostContainer loading post={{}} />
+            </Stack>
+          }
+        >
+          <Stack spacing={1}>
+            {posts.map((post) => (
+              <PostContainer
+                post={{
+                  ...post,
+                  displayName: userData.displayName,
+                  photoURL: userData.photoURL,
+                }}
+                loading={loading}
+                key={post.id}
+              />
+            ))}
+          </Stack>
+        </InfiniteScroll>
+        <Shortcuts />
+        <CreatePostCard />
       </>
-
-      <CreatePostCard />
     </Stack>
   );
 }

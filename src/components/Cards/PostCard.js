@@ -23,18 +23,25 @@ const PostCard = (props) => {
             )}
           </Typography>
         </CardContent>
-        {post.fileURL && (
+        {loading ? (
+          <Skeleton height={190} variant="rectangular" />
+        ) : (
           <>
-            {loading ? (
-              <Skeleton height={190} variant="rectangular" />
-            ) : (
+            {post.fileURL && (
               <CardMedia
                 component="img"
                 src={post.fileURL}
-                alt={"pic"}
+                alt={post.fileURL}
                 onClick={() => setModal((prev) => !prev)}
-                sx={{ cursor: "pointer" }}
+                sx={{
+                  cursor: "pointer",
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "auto",
+                }}
                 loading="lazy"
+                width="500"
+                height="500"
               />
             )}
           </>

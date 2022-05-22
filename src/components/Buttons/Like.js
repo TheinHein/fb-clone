@@ -33,6 +33,9 @@ const Like = (props) => {
           onClick={handleClickLike}
           startIcon={<ThumbUpOutlinedIcon />}
           endIcon="Like"
+          disabled={
+            userData.likedPosts && _.some(userData.likedPosts, ["id", post.id])
+          }
           sx={{
             bgcolor:
               userData.likedPosts &&

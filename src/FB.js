@@ -129,9 +129,15 @@ export default (() => {
     return documents.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   };
 
-  const getDocumentsInQueryRT = async (query, setDocs, setLastVisible) => {
+  const getDocumentsInQueryRT = async ({
+    query,
+    setDocs,
+    setLastVisible,
+    setHasMore,
+  }) => {
     onSnapshot(query, { includeMetadataChanges: true }, (snapshot) => {
       setLastVisible && setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
+      if (snapshot.empty) setHasMore && setHasMore(false);
       snapshot.docChanges().forEach(async (change) => {
         const userData = await getUserDataByRef(change.doc.data().by.id);
         if (change.type === "added") {
@@ -233,12 +239,48 @@ export default (() => {
     };
   };
 
-  const getAllPosts = async (userId, setPosts) => {
-    const q = query(collection(db, `users/${userId}/posts`), limit(5));
-    return await getDocumentsInQueryRT(q, setPosts);
+  const getInitUserPosts = async ({
+    userId,
+    setPosts,
+    setLastVisible,
+    setHasMore,
+  }) => {
+    const q = query(collection(db, `users/${userId}/posts`), limit(2));
+    return await getDocumentsInQueryRT({
+      query: q,
+      setDocs: setPosts,
+      setLastVisible,
+      setHasMore,
+    });
   };
 
-  const getInitialGlobalPosts = async (userId, setPosts, setLastVisible) => {
+  const getMoreUserPosts = async ({
+    userId,
+    setPosts,
+    lastVisible,
+    setLastVisible,
+    setHasMore,
+  }) => {
+    const q = query(
+      query(collection(db, `users/${userId}/posts`), limit(5)),
+      orderBy("timestamp", "desc"),
+      startAfter(lastVisible),
+      limit(5)
+    );
+    getDocumentsInQueryRT({
+      query: q,
+      setDocs: setPosts,
+      setLastVisible,
+      setHasMore,
+    });
+  };
+
+  const getInitialGlobalPosts = async ({
+    userId,
+    setPosts,
+    setLastVisible,
+    setHasMore,
+  }) => {
     const q = query(
       collection(db, "globalPosts"),
       where("userId", "!=", `${userId}`),
@@ -246,7 +288,12 @@ export default (() => {
       orderBy("timestamp", "desc"),
       limit(1)
     );
-    return await getDocumentsInQueryRT(q, setPosts, setLastVisible);
+    return await getDocumentsInQueryRT({
+      query: q,
+      setDocs: setPosts,
+      setLastVisible,
+      setHasMore,
+    });
   };
 
   const getMoreGlobalPosts = async ({
@@ -254,6 +301,7 @@ export default (() => {
     setPosts,
     lastVisible,
     setLastVisible,
+    setHasMore,
   }) => {
     const q = query(
       collection(db, "globalPosts"),
@@ -263,23 +311,20 @@ export default (() => {
       startAfter(lastVisible),
       limit(5)
     );
-    getAllCommentsInQuery(q, setPosts, setLastVisible);
+    getDocumentsInQueryRT({
+      query: q,
+      setDocs: setPosts,
+      setLastVisible,
+      setHasMore,
+    });
   };
 
-  const getAllGlobalPosts = async (userId, setPosts) => {
-    const q = query(
-      collection(db, "globalPosts"),
-      where("userId", "!=", `${userId}`),
-      limit(5)
-    );
-    return await getDocumentsInQueryRT(q, setPosts);
-  };
-
-  const getInitialAllFriendsPosts = async (
+  const getInitialAllFriendsPosts = async ({
     userId,
     setPosts,
-    setLastVisible
-  ) => {
+    setLastVisible,
+    setHasMore,
+  }) => {
     const userData = await getUserData(userId);
     if (userData.friends) {
       userData.friends.forEach(async (friend) => {
@@ -288,7 +333,12 @@ export default (() => {
           orderBy("timestamp", "desc"),
           limit(1)
         );
-        await getDocumentsInQueryRT(q, setPosts, setLastVisible);
+        await getDocumentsInQueryRT({
+          query: q,
+          setDocs: setPosts,
+          setLastVisible,
+          setHasMore,
+        });
       });
     }
   };
@@ -298,28 +348,23 @@ export default (() => {
     setPosts,
     lastVisible,
     setLastVisible,
+    setHasMore,
   }) => {
     const userData = await getUserData(userId);
     if (userData.friends) {
-      for (let i = 0; i < userData.friends.length; i++) {}
       userData.friends.forEach(async (friend) => {
         const q = query(
           collection(db, `users/${friend.id}/posts`),
           orderBy("timestamp", "desc"),
-          startAfter(lastVisible),
+          startAfter(lastVisible[userData.friends.indexOf(friend)]),
           limit(1)
         );
-        await getDocumentsInQueryRT(q, setPosts, setLastVisible);
-      });
-    }
-  };
-
-  const getAllFriendsPosts = async (userId, setPosts) => {
-    const userData = await getUserData(userId);
-    if (userData.friends) {
-      userData.friends.forEach(async (friend) => {
-        const q = query(collection(db, `users/${friend.id}/posts`));
-        await getDocumentsInQueryRT(q, setPosts);
+        await getDocumentsInQueryRT({
+          query: q,
+          setDocs: setPosts,
+          setLastVisible,
+          setHasMore,
+        });
       });
     }
   };
@@ -467,7 +512,7 @@ export default (() => {
   };
 
   const getAllCommentsInQuery = async (q, setComments, setLastVisible) => {
-    getDocumentsInQueryRT(q, setComments, setLastVisible);
+    getDocumentsInQueryRT({ query: q, setDocs: setComments, setLastVisible });
   };
 
   // Cloud Storage
@@ -492,7 +537,8 @@ export default (() => {
     createPost,
     getPost,
     getPostByRef,
-    getAllPosts,
+    getInitUserPosts,
+    getMoreUserPosts,
     updatePostSharedBy,
     updatePostLikes,
     getInitialGlobalPosts,

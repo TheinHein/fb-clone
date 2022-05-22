@@ -33,20 +33,22 @@ const BaseMediaCard = (props) => {
         />
       </BaseCardHeader>
       {children}
-      <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
-        <LikesCounter
-          likedPosts={userData.likedPosts}
-          postId={post.id}
-          likes={post.likes}
-        />
-        <BaseCounter
-          name={"Comments"}
-          counts={post.totalComments}
-          loading={loading}
-        />
-      </CardActions>
       {!share && (
         <>
+          <CardActions
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <LikesCounter
+              likedPosts={userData.likedPosts}
+              postId={post.id}
+              likes={post.likes}
+            />
+            <BaseCounter
+              name={"Comments"}
+              counts={post.totalComments}
+              loading={loading}
+            />
+          </CardActions>
           <Divider sx={{ width: "97%", margin: "0 auto" }} />
           <LikeCommentShareBtns post={post} loading={loading} />
           <Divider sx={{ width: "97%", margin: "0 auto" }} />

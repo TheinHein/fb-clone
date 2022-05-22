@@ -4,7 +4,7 @@ import React from "react";
 function Layout({ top, left, middle, right }) {
   return (
     <Grid container sx={{ pb: 7 }}>
-      <Grid item xs={12}>
+      <Grid component="nav" item xs={12}>
         {top}
       </Grid>
       <Grid container spacing={{ xs: 0, md: 2 }}>
